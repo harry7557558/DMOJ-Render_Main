@@ -194,43 +194,6 @@ vec2 calcCOM(const std::vector<spline3> &V) {  // center of mass
 
 
 // bounding box
-
-vec2 getFunctionRange(double c0, double c1, double c2, double c3) {  // cubic polynomial in [0,1]
-	vec2 r(c0, c0 + c1 + c2 + c3);
-	if (r.x > r.y) std::swap(r.x, r.y);
-
-	if (c3*c3 < 1e-12) {
-		if (c2*c2 < 1e-12) return r;
-		double t = -c1 / (2.*c2);
-		if (t > 0. && t < 1.) {
-			double y = c0 + t * (c1 + t * c2);
-			return vec2(min(r.x, y), max(r.y, y));
-		}
-		return r;
-	}
-
-	double a = 3.*c3, b = -c2, c = c1;
-	double delta = b * b - a * c;
-	if (delta <= 0.) return r;
-	delta = sqrt(delta);
-	double t = (b - delta) / a;
-	if (t > 0. && t < 1.) {
-		double y = c0 + t * (c1 + t * (c2 + t * c3));
-		r = vec2(min(r.x, y), max(r.y, y));
-	}
-	t = (b + delta) / a;
-	if (t > 0. && t < 1.) {
-		double y = c0 + t * (c1 + t * (c2 + t * c3));
-		r = vec2(min(r.x, y), max(r.y, y));
-	}
-	return r;
-}
-void splineBoundingBox(const spline3 &sp, vec2 &Min, vec2 &Max) {
-	vec2 x = getFunctionRange(sp.c0.x, sp.c1.x, sp.c2.x, sp.c3.x);
-	vec2 y = getFunctionRange(sp.c0.y, sp.c1.y, sp.c2.y, sp.c3.y);
-	Min = vec2(x.x, y.x), Max = vec2(x.y, y.y);
-}
-
 void getBoundingBox(const std::vector<spline3> &sp, vec2 &Min, vec2 &Max) {
 	Min = vec2(INFINITY), Max = -Min;
 	for (int i = 0, n = sp.size(); i < n; i++) {
@@ -238,6 +201,17 @@ void getBoundingBox(const std::vector<spline3> &sp, vec2 &Min, vec2 &Max) {
 		splineBoundingBox(sp[i], tMin, tMax);
 		Min = pMin(Min, tMin), Max = pMax(Max, tMax);
 	}
+}
+
+
+// intersection
+double splineIntersect(const std::vector<spline3> &sp, vec2 ro, vec2 rd, int *Count = NULL) {
+	double t, mt = INFINITY;
+	for (int i = 0, l = sp.size(); i < l; i++) {
+		t = splineIntersect(sp[i], ro, rd, Count);
+		if (t < mt) mt = t;
+	}
+	return mt;
 }
 
 
@@ -264,3 +238,4 @@ void mirrorShape_y(std::vector<spline3> &sp) {  // useful in converting screen a
 
 
 #endif  // _INC_DMOJ_LOGO
+

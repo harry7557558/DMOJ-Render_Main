@@ -19,6 +19,7 @@ double mod(double x, double m) { return x - m * floor(x / m); }
 #define min(x,y) ((x)<(y)?(x):(y))
 #endif
 
+
 class vec2 {
 public:
 	double x, y;
@@ -66,6 +67,49 @@ public:
 
 
 
+class vec3 {
+public:
+	double x, y, z;
+	explicit vec3() {}
+	explicit vec3(const double &a) :x(a), y(a), z(a) {}
+	explicit vec3(const double &x, const double &y, const double &z) :x(x), y(y), z(z) {}
+	explicit vec3(const vec2 &v, const double &z) :x(v.x), y(v.y), z(z) {}
+	vec3 operator - () const { return vec3(-x, -y, -z); }
+	vec3 operator + (const vec3 &v) const { return vec3(x + v.x, y + v.y, z + v.z); }
+	vec3 operator - (const vec3 &v) const { return vec3(x - v.x, y - v.y, z - v.z); }
+	vec3 operator * (const vec3 &v) const { return vec3(x * v.x, y * v.y, z * v.z); }
+	vec3 operator * (const double &k) const { return vec3(k * x, k * y, k * z); }
+	double sqr() const { return x * x + y * y + z * z; } 	// non-standard
+	friend double length(vec3 v) { return sqrt(v.x*v.x + v.y*v.y + v.z*v.z); }
+	friend vec3 normalize(vec3 v) { return v * (1. / sqrt(v.x*v.x + v.y*v.y + v.z*v.z)); }
+	friend double dot(vec3 u, vec3 v) { return u.x*v.x + u.y*v.y + u.z*v.z; }
+	friend vec3 cross(vec3 u, vec3 v) { return vec3(u.y*v.z - u.z*v.y, u.z*v.x - u.x*v.z, u.x*v.y - u.y*v.x); }
+#if 1
+	void operator += (const vec3 &v) { x += v.x, y += v.y, z += v.z; }
+	void operator -= (const vec3 &v) { x -= v.x, y -= v.y, z -= v.z; }
+	void operator *= (const vec3 &v) { x *= v.x, y *= v.y, z *= v.z; }
+	friend vec3 operator * (const double &a, const vec3 &v) { return vec3(a*v.x, a*v.y, a*v.z); }
+	void operator *= (const double &a) { x *= a, y *= a, z *= a; }
+	vec3 operator / (const double &a) const { return vec3(x / a, y / a, z / a); }
+	void operator /= (const double &a) { x /= a, y /= a, z /= a; }
+#endif
+	vec2 xy() const { return vec2(x, y); }
+	vec2 xz() const { return vec2(x, z); }
+	vec2 yz() const { return vec2(y, z); }
+#if 1
+	bool operator == (const vec3 &v) const { return x == v.x && y == v.y && z == v.z; }
+	bool operator != (const vec3 &v) const { return x != v.x || y != v.y || z != v.z; }
+	vec3 operator / (const vec3 &v) const { return vec3(x / v.x, y / v.y, z / v.z); }
+	friend vec3 abs(const vec3 &a) { return vec3(abs(a.x), abs(a.y), abs(a.z)); }
+	friend vec3 floor(const vec3 &a) { return vec3(floor(a.x), floor(a.y), floor(a.z)); }
+	friend vec3 ceil(const vec3 &a) { return vec3(ceil(a.x), ceil(a.y), ceil(a.z)); }
+	friend vec3 mod(const vec3 &a, double m) { return vec3(mod(a.x, m), mod(a.y, m), mod(a.z, m)); }
+#endif
+};
+
+
+
+
 #endif  // _INC_GEOMETRY
 
 
@@ -84,7 +128,9 @@ public:
 	vec2 c0, c1, c2, c3;  // c(t) = c3 t³ + c2 t² + c1 t + c0
 	spline3() {}
 	spline3(vec2 c0, vec2 c1 = vec2(0.), vec2 c2 = vec2(0.), vec2 c3 = vec2(0.)) :c0(c0), c1(c1), c2(c2), c3(c3) {}
-
+	vec2 eval(double t) const {
+		return c0 + t * (c1 + t * (c2 + t * c3));
+	}
 };
 
 spline3 spline3_fromBezier3(vec2 A, vec2 B, vec2 C, vec2 D) {
@@ -95,6 +141,104 @@ spline3 spline3_fromBezier2(vec2 A, vec2 B, vec2 C) {
 }
 spline3 spline3_fromSegment(vec2 A, vec2 B) {
 	return spline3(A, B - A);
+}
+
+
+
+// range
+
+vec2 getFunctionRange(double c0, double c1, double c2, double c3) {  // cubic polynomial in [0,1]
+	vec2 r(c0, c0 + c1 + c2 + c3);
+	if (r.x > r.y) { double t = r.x; r.x = r.y; r.y = t; }
+
+	if (c3*c3 < 1e-12) {
+		if (c2*c2 < 1e-12) return r;
+		double t = -c1 / (2.*c2);
+		if (t > 0. && t < 1.) {
+			double y = c0 + t * (c1 + t * c2);
+			return vec2(min(r.x, y), max(r.y, y));
+		}
+		return r;
+	}
+
+	double a = 3.*c3, b = -c2, c = c1;
+	double delta = b * b - a * c;
+	if (delta <= 0.) return r;
+	delta = sqrt(delta);
+	double t = (b - delta) / a;
+	if (t > 0. && t < 1.) {
+		double y = c0 + t * (c1 + t * (c2 + t * c3));
+		r = vec2(min(r.x, y), max(r.y, y));
+	}
+	t = (b + delta) / a;
+	if (t > 0. && t < 1.) {
+		double y = c0 + t * (c1 + t * (c2 + t * c3));
+		r = vec2(min(r.x, y), max(r.y, y));
+	}
+	return r;
+}
+void splineBoundingBox(const spline3 &sp, vec2 &Min, vec2 &Max) {
+	vec2 x = getFunctionRange(sp.c0.x, sp.c1.x, sp.c2.x, sp.c3.x);
+	vec2 y = getFunctionRange(sp.c0.y, sp.c1.y, sp.c2.y, sp.c3.y);
+	Min = vec2(x.x, y.x), Max = vec2(x.y, y.y);
+}
+
+
+
+// intersection - return shortest positive distance
+// text intersection for bounding box before calling this function when performance matters
+
+double splineIntersect(const spline3 &sp, vec2 ro, vec2 rd, int *count = NULL) {
+	// cubic equation coefficients
+	vec2 n = rd.rot();
+	double a = dot(n, sp.c3), b = dot(n, sp.c2), c = dot(n, sp.c1), d = dot(n, sp.c0 - ro);
+
+	// test if a root is valid
+	double mt = INFINITY;
+	auto testRoot = [&](double t) {
+		if (!(t > 0. && t < 1.)) return;
+		t = dot(rd, sp.eval(t) - ro);  // requires rd to be normalized
+		if (t > 1e-8) {
+			if (count) (*count)++;
+			if (t < mt) mt = t;
+		}
+	};
+
+	// degenerated case
+	if (a*a < 1e-16) {
+		if (b*b < 1e-16) {
+			testRoot(-d / c);
+			return mt;
+		}
+		double delta = c * c - 4.*b*d;
+		if (delta > 0.) {
+			delta = sqrt(delta);
+			testRoot((-c - delta) / (2.*b));
+			testRoot((-c + delta) / (2.*b));
+		}
+		return mt;
+	}
+
+	// cubic solver - may have room for optimization
+	b /= a, c /= a, d /= a;
+	const double _3 = 1. / 3;
+	double p = c - _3 * b*b, q = b * (b*b / 13.5 - _3 * c) + d;
+	b *= _3, p *= _3, q *= -.5; a = q * q + p * p * p;
+	if (a >= 0.) {  // one real root
+		a = sqrt(a);
+		double t = cbrt(q + a) + cbrt(q - a) - b;
+		testRoot(t);
+	}
+	else {  // three real roots
+		c = pow(q*q - a, 1. / 6);
+		double u = _3 * atan(sqrt(-a) / q); if (u < 0.) u += PI / 3;
+		d = c * sin(u), c *= cos(u);
+		testRoot(2.*c - b);
+		c = -c, d *= sqrt(3.);
+		testRoot(u = c - d - b);
+		testRoot(u + 2. * d);
+	}
+	return mt;
 }
 
 
