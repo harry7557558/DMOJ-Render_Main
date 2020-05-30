@@ -1,19 +1,7 @@
 // Fit a path consist of splines into a trigonometric series
-// Make sure to include "svg.cpp" before including this file
 
+#include "Fit.h"
 
-// numerical integration, T can be scalar/vector/matrix
-template<typename Fun>
-auto NIntegral(Fun f, double a, double b, int n) {
-	n *= 2;
-	double u = (b - a) / n;
-	auto s = f(a)*0.0;
-	for (int i = 1; i < n; i += 2) s += f(a + u * i);
-	s *= 2.0;
-	for (int i = 2; i < n; i += 2) s += f(a + u * i);
-	s = 2.0 * s + f(a) + f(b);
-	return s * (u / 3.0);
-}
 
 
 
@@ -58,22 +46,7 @@ void fitFourierSeries(const std::vector<spline3> &sp, int N, vec2 *A, vec2 *B, b
 
 
 
-// To-do:
-// Add polar-angle-based Fourier series
-// Use a ray intersector to evaluate r(θ)
 
-
-// calculate the line-based center of mass (hollow shape)
-vec2 calcLineCOM(const std::vector<spline3> &sp) {
-	vec3 R(0.0);
-	for (int i = 0, l = sp.size(); i < l; i++) {
-		R += NIntegral([&](double t)->vec3 {
-			double l = length(sp[i].c1 + t * (2.*sp[i].c2 + t * 3.*sp[i].c3));
-			return vec3(sp[i].eval(t)*l, l);
-		}, 0, 1, 40);
-	}
-	return R.xy() / R.z;
-}
 
 // [slow] angle-based Fourier series - let P be the origin, fit r(θ)
 #include <chrono>
@@ -104,9 +77,10 @@ void fitFourierSeries_angle(const std::vector<spline3> &sp, vec2 P, int N, vec2 
 		printf("Time Elapsed: %lfms\n", 1000.*std::chrono::duration<double>(std::chrono::high_resolution_clock::now() - t0).count());
 		printf("r(t)=%lf", C[0].x);
 		for (int k = 1; k < N; k++) {
-			//printf("%+lf*cos(%d*t)%+lf*sin(%d*t)", C[k].x, k, C[k].y, k);
-			if (k % 5 == 0) printf("%+lf*cos(%d*t)", C[k].x, k);  // to treat DMOJ logo
+			printf("%+lf*cos(%d*t)%+lf*sin(%d*t)", C[k].x, k, C[k].y, k);
+			//if (k % 5 == 0) printf("%+lf*cos(%d*t)", C[k].x, k);  // to treat DMOJ logo
 		}
 		printf("\n");
 	}
 }
+

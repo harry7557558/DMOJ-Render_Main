@@ -145,6 +145,7 @@ spline3 spline3_fromSegment(vec2 A, vec2 B) {
 
 
 
+
 // range
 
 vec2 getFunctionRange(double c0, double c1, double c2, double c3) {  // cubic polynomial in [0,1]
@@ -185,6 +186,7 @@ void splineBoundingBox(const spline3 &sp, vec2 &Min, vec2 &Max) {
 
 
 
+
 // intersection - return shortest positive distance
 // text intersection for bounding box before calling this function when performance matters
 
@@ -196,7 +198,7 @@ double splineIntersect(const spline3 &sp, vec2 ro, vec2 rd, int *count = NULL) {
 	// test if a root is valid
 	double mt = INFINITY;
 	auto testRoot = [&](double t) {
-		if (!(t > 0. && t < 1.)) return;
+		if (!(t >= 0. && t < 1.)) return;
 		t = dot(rd, sp.eval(t) - ro);  // requires rd to be normalized
 		if (t > 1e-8) {
 			if (count) (*count)++;
@@ -246,4 +248,67 @@ double splineIntersect(const spline3 &sp, vec2 ro, vec2 rd, int *count = NULL) {
 #endif  // _INC_SPLINE
 
 
+
+
+
+// not actually all geometry functions, just some numerical methods
+
+#ifndef _INC_GEOMETRY_MISC
+
+#define _INC_GEOMETRY_MISC
+
+
+// numerical integration, T can be scalar/vector/matrix
+template<typename Fun>
+auto NIntegral(Fun f, double a, double b, int n) {
+	n *= 2;
+	double u = (b - a) / n;
+	auto s = f(a)*0.0;
+	for (int i = 1; i < n; i += 2) s += f(a + u * i);
+	s *= 2.0;
+	for (int i = 2; i < n; i += 2) s += f(a + u * i);
+	s = 2.0 * s + f(a) + f(b);
+	return s * (u / 3.0);
+}
+
+
+// solve a linear system (no handling for degenerated case)
+void solveLinear(double* M, double* X, int N) {
+	for (int i = 0; i < N; i++) {
+		double inv_mi = -1.0 / M[i*N + i];
+		for (int j = 0; j < N; j++) if (j != i) {
+			double m = inv_mi * M[j*N + i];
+			for (int k = i; k < N; k++) M[j*N + k] += M[i*N + k] * m;
+			X[j] += X[i] * m;
+		}
+		X[i] *= inv_mi;
+	}
+}
+
+
+// random number
+// override C++ libraries, use it after including C++ libraries to avoid compile error
+unsigned _IDUM = 0;
+#define srand(seed) do{_IDUM=seed;}while(0)
+#define randu (_IDUM=1664525u*_IDUM+1013904223u)  // 32bit unsigned integer
+#define randf (randu*(1./4294967295.))   // uniformly between 0 and 1, inclusive
+
+// inverse error function
+double erfinv(double x) {
+	double n = log(1 - x * x);
+	double t = 0.5 * n + 2 / (PI*0.147);
+	return (x > 0. ? 1. : -1.) * sqrt(-t + sqrt(t*t - n / 0.147));
+}
+// normal-distributed random number
+inline double randnor(double variance, double median = 0.0) {
+	return sqrt(2)*erfinv(2.0 * randf - 1)*variance + median;
+}
+// random unit vector
+inline vec2 randvec2() {
+	double t = 2.*PI*randf;
+	return vec2(cos(t), sin(t));
+}
+
+
+#endif  // _INC_GEOMETRY_MISC
 

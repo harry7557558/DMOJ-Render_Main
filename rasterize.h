@@ -128,9 +128,10 @@ void raster_renderPath(std::vector<spline3> &v, const imageObject &P, COLORREF c
 		// the shape will be modified with transform is set to true
 		outputToScreen(v, P.W, P.H, false);
 	}
+
 	const int dif = 30;
 	for (int d = 0, l = v.size(); d < l; d++) {
-		col = d & 1 ? RED : BLUE;
+		//col = d & 1 ? RED : BLUE;
 		vec2 a = v[d].c0, b;
 		for (int i = 1; i <= dif; i++) {
 			b = v[d].eval(i / double(dif));
@@ -138,6 +139,17 @@ void raster_renderPath(std::vector<spline3> &v, const imageObject &P, COLORREF c
 			a = b;
 		}
 	}
+
+#if 0  // debug
+	{
+		vec2 C = calcLineCOM(v);
+		double t = 1.302284134180384;
+		vec2 d = vec2(sin(t), cos(t));
+		int Count = 0;
+		double r = splineIntersect(v, C, vec2(sin(t), cos(t)), &Count);
+		drawLine(P, C, C + r * d);
+	}
+#endif
 }
 
 // render Fourier series to image
