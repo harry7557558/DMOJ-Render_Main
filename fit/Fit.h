@@ -10,7 +10,7 @@
 
 
 // Fit point set to polynomial, c[k] has degree k
-void fitPolynomial(double *x, double *y, int n, double *c, int N) {
+void fitPolynomial(const double *x, const double *y, int n, double *c, int N) {
 	int L = N + 1;
 
 	// calculate sums and powers
@@ -33,7 +33,7 @@ void fitPolynomial(double *x, double *y, int n, double *c, int N) {
 	}
 	double *X = new double[L];
 	for (int i = 0; i < L; i++) X[i] = sumxny[N - i];
-	delete sumxn, sumxny;
+	delete sumxn; delete sumxny;
 
 	// solve the linear system
 	solveLinear(Mat, X, L);

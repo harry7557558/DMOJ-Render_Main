@@ -1,4 +1,4 @@
-// Fit a path consist of splines into a trigonometric series
+// Fit a path consisting of splines to trigonometric series
 
 #include "Fit.h"
 
@@ -27,14 +27,13 @@ void fitFourierSeries(const std::vector<spline3> &sp, int N, vec2 *A, vec2 *B, b
 	}
 
 	if (print) {
-		// if print_reverse is true, this output will be reflected at y=y0 to fit graphing calculators
+		// if print_reverse is true, this output will be reflected at x-axis to fit graphing calculators
 		double _ = print_reverse ? -1.0 : 1.0;
-
 		printf("(%lf", A[0].x);
 		for (int k = 1; k < N; k++) {
 			printf("%+lf*cos(%d*t)%+lf*sin(%d*t)", A[k].x, k, B[k].x, k);
 		}
-		printf(",%lf", A[0].y);
+		printf(",%lf", _*A[0].y);
 		for (int k = 1; k < N; k++) {
 			double f = k;
 			printf("%+lf*cos(%d*t)%+lf*sin(%d*t)", _*A[k].y, k, _*B[k].y, k);
@@ -75,12 +74,14 @@ void fitFourierSeries_angle(const std::vector<spline3> &sp, vec2 P, int N, vec2 
 
 	if (print) {
 		printf("Time Elapsed: %lfms\n", 1000.*std::chrono::duration<double>(std::chrono::high_resolution_clock::now() - t0).count());
-		printf("r(t)=%lf", C[0].x);
+		printf("r(t)=%.4lg", C[0].x);
 		for (int k = 1; k < N; k++) {
-			printf("%+lf*cos(%d*t)%+lf*sin(%d*t)", C[k].x, k, C[k].y, k);
-			//if (k % 5 == 0) printf("%+lf*cos(%d*t)", C[k].x, k);  // to treat DMOJ logo
+			printf("%+.8lf*cos(%d*t)%+.8lf*sin(%d*t)", C[k].x, k, C[k].y, k);
+			//if (k % 5 == 0) printf("%+.4lg*cos(%d*t)", C[k].x, k);  // to treat DMOJ logo
 		}
 		printf("\n");
 	}
 }
+
+
 

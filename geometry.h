@@ -281,7 +281,8 @@ void solveLinear(double* M, double* X, int N) {
 			for (int k = i; k < N; k++) M[j*N + k] += M[i*N + k] * m;
 			X[j] += X[i] * m;
 		}
-		X[i] *= inv_mi;
+		for (int j = i; j < N; j++) M[i*N + j] *= -inv_mi;
+		X[i] *= -inv_mi;
 	}
 }
 
