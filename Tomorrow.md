@@ -80,9 +80,13 @@ If the instruction count of your code is greater than or equal to 1000, only 3/4
 
 If your program tries to request, it crashes.
 
-Hard-coding using Unicode characters doesn't guarantee to pass.
-
 A fun fact is that if your program outputs `the following file`, the grader's feedback will be `Nice try, print the actual file`.
+
+In calculating marks, code length is counted in bytes. Source encoding may be automatically converted to utf-8. (However, the grader has been updated to detect non-ASCII characters)
+
+**https://dmoj.ca/problem/compress:**
+
+In this problem, a 16-bit Unicode character is counted as one character.
 
 **https://dmoj.ca/problem/osf**
 
