@@ -1,3 +1,5 @@
 # DMOJ-Render_Main
 
-Tomorrow is my alt。
+![](Render_Main/DMOJ%20logo.png)
+
+Whoever sees the history of this repo will be severely cursed. **DO NOT BE CURIOUS.**
