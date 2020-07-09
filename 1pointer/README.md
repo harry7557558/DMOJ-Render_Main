@@ -1,6 +1,6 @@
 $$L_o(\omega_o)=L_e(\omega_o)+\int_\Omega f_r(\omega_i,\omega_o)L_i(\omega_i)\cos(\theta)\,\mathrm{d}\omega_i$$
 
-## Explanations for “meme” problems:
+## Unofficial explanations for DMOJ “meme” problems:
 
 **https://dmoj.ca/problem/helloworldhard:**
 
@@ -17,8 +17,6 @@ There is only one test case, where ~N=1521~. The inputs followed can be in digit
 1-10 in French: `{ "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf", "dix" }`
 
 1-10 in Chinese: `{ "一", "二", "三", "四", "五", "六", "七", "八", "九", "十" }`
-
-An implementation can be found at https://stackoverflow.com/a/59646260.
 
 **https://dmoj.ca/problem/miraclesort:**
 
@@ -84,10 +82,6 @@ A fun fact is that if your program outputs `the following file`, the grader's fe
 
 In calculating marks, code length is counted in bytes. Source encoding may be automatically converted to utf-8. (However, the grader has been updated to detect non-ASCII characters)
 
-**https://dmoj.ca/problem/compress:**
-
-In this problem, a 16-bit Unicode character is counted as one character.
-
 **https://dmoj.ca/problem/osf**
 
 **https://dmoj.ca/problem/osf2**
@@ -99,8 +93,6 @@ In this problem, a 16-bit Unicode character is counted as one character.
 **https://dmoj.ca/problem/cccjqrp4**
 
 **https://dmoj.ca/problem/bf1troll**
-
-**More problems:** Feel free to email your answers to [harry7557558@gmail.com](mailto:harry7557558@gmail.com).
 
 --------
 
@@ -119,8 +111,3 @@ https://dmoj.ca/contest/tle18
 https://dmoj.ca/contest/acc4
 
 https://dmoj.ca/problems/?point_end=1
-
-[![](https://i.stack.imgur.com/Vkq2a.png)](#)
-
-
-[~\color{yellow}{\tiny\text{All meme explanations and spoilers are unofficial.}}~](https://dmoj.ca/problem/hci16moana)
