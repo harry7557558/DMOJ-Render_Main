@@ -40,7 +40,7 @@ There is no input for this problem. It seems like any non-empty output can pass.
 
 **https://dmoj.ca/problem/saoj:**
 
-Input ~N~, output ~\sum\limits_{k=0}^{N} k^6 = \dfrac{1}{42}{N}(N+1)(2N+1)(3N^4+6N^3-3N+1)~, modulo ~1000000000~.
+Input ~N~, output ~\sum\limits_{k=0}^{N} k^6 = \dfrac{1}{42}(6N^7+21N^6+21N^5-7N^3+N)~, modulo ~1000000000~.
 
 **https://dmoj.ca/problem/cccjqrp3:**
 
@@ -58,7 +58,7 @@ One can see from existing comments that these characters are not allowed in code
 
 **https://dmoj.ca/problem/tle18p1:**
 
-This problem asks you to recognize digits from bitmap images. The first line of input contains an integer, ~N~, the number of test images. Followed by ~28N~ lines, each line contains ~28~ real numbers between ~0~ and ~1~, rounded to 5 decimal places, representing ~N~ ~28\times28~ bitmap images, where each image contains a decimal digit. Your program should output ~N~ lines, each line indicates the digit in the image.
+This problem asks you to recognize digits from bitmap images. The first line of input contains an integer, ~N~, the number of test images. Followed by ~28N~ lines, each line contains ~28~ real numbers between ~0~ and ~1~, representing ~N~ ~28\times28~ bitmap images, where each image contains a decimal digit. Your program should output ~N~ lines, each line indicates the digit in the image.
 
 The image represented in the sample input can be found in [this comment](https://dmoj.ca/problem/tle18p1#comment-12374).
 
@@ -68,19 +68,25 @@ The maximum points for this problem is 512. One guesses the points is calculated
 
 **https://dmoj.ca/problem/cccjqrp5:**
 
-The input for this problem is a lowercase English letter. When the input is `a`, your output should be `a`. Otherwise, your output is the answer to the previous letter in the English alphabet plus the input letter plus the answer for the previous letter in the English alphabet.
+The input for this problem is a lowercase English letter. When the input is `a`, the answer is `a`. Otherwise, the answer is the answer to the previous letter of the input letter in the English alphabet plus the input letter plus the answer for the previous letter in the English alphabet.
 
 For example, when the input is `b`, your output should be `a`+`b`+`a`=`aba`. When the input is `c`, your output should be `aba`+`c`+`aba`=`abacaba`.
 
-If the instruction count of your code is greater than or equal to 1000, only 3/4 of points will be granted. The grader may return WA even though the output matches.
+If the instruction count of your code is greater than or equal to 1000, only 3/4 of points will be given. The grader may return WA even though your output matches.
 
 **https://dmoj.ca/problem/csprng:**
 
 If your program tries to request, it crashes.
 
-A fun fact is that if your program outputs `the following file`, the grader's feedback will be `Nice try, print the actual file`.
+If your program outputs `the following file`, the grader's feedback will be `Nice try, print the actual file`.
 
-In calculating marks, code length is counted in bytes. Source encoding may be automatically converted to utf-8. (However, the grader has been updated to detect non-ASCII characters)
+To fail solutions that use data compression, the grader is updated to detect non-ASCII characters.
+
+Notice problem statement:
+
+> a hardware token that he has locally ...... uniformly at random within the range configured
+> Your score will be inversely correlated to the length of your program.
+> To ensure you have the correct output......
 
 **https://dmoj.ca/problem/osf**
 
