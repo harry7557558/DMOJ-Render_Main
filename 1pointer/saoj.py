@@ -1,1 +1,11 @@
-print[n*(n*n*(n*n*(21+21*n+6*n*n)-7)+1)//42%10**9 for n in[input()]][0]
+# Reference solution
+# This problem can be fun for optimization/golfing
+
+N = int(input())
+
+Sum = 0
+for i in range(1,N+1):
+    Sum += i**6
+
+print(Sum % 10**9)
+

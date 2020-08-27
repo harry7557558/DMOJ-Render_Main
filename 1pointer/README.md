@@ -4,13 +4,13 @@ $$L_o(\omega_o)=L_e(\omega_o)+\int_\Omega f_r(\omega_i,\omega_o)L_i(\omega_i)\co
 
 **https://dmoj.ca/problem/helloworldhard:**
 
-The first line is ended with a `\n`, the second line is ended with a `\r`, and the third line is ended with `\r\n`.
+The first line is ended with a `\n`, the second line is ended with a `\r`, and the third line is ended with a `\r\n`.
 
 **https://dmoj.ca/problem/thereturnofaplusb:**
 
-There is only one test case, where ~N=1521~. The inputs followed can be in digits, lowercase English words, lowercase French words, or Simplified Chinese characters.
+There is only one test case, where ~N=1521~. The inputs followed can be decimal digits, lowercase English words, lowercase French words, or Simplified Chinese characters.
 
-1-10 in decimal digits: `{ "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }`
+1-10 in decimal: `{ "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }`
 
 1-10 in English: `{ "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten" }`
 
@@ -32,7 +32,9 @@ The function to implement is to return `true` if ~n~ is happy. The definition of
 
 **https://dmoj.ca/problem/piggy:**
 
-Submitting `Unicode` in Text, `:Xyene` in Text, or `print('Moana')` in Python 3, will likely to make you pass.
+If your submission gets partial AC, the grader's feedback will be `(amaze!!1)`. Submitting it in Text will likely to make you pass.
+
+Other fully AC short Text submissions include `print('Moana')`, `Unicode`, `:Xyene`, `12`, `KFC`, `youtube`, etc.
 
 **https://dmoj.ca/problem/scroll:**
 
@@ -40,11 +42,11 @@ There is no input for this problem. It seems like any non-empty output can pass.
 
 **https://dmoj.ca/problem/saoj:**
 
-Input ~N~, output ~\sum\limits_{k=0}^{N} k^6 = \dfrac{1}{42}(6N^7+21N^6+21N^5-7N^3+N)~, modulo ~1000000000~.
+Input ~N~, output ~\sum\limits_{k=1}^{N} k^6~, modulo ~1000000000~.
 
 **https://dmoj.ca/problem/cccjqrp3:**
 
-All inputs can be fit into a 64-bit unsigned integer. Your task is to output ~A+B+C~, modulo ~42069900169420~.
+All inputs can be fit into 64-bit unsigned integer. Your task is to output ~A+B+C~, modulo ~42069900169420~.
 
 **https://dmoj.ca/problem/bf1easy:**
 
@@ -72,7 +74,15 @@ The input for this problem is a lowercase English letter. When the input is `a`,
 
 For example, when the input is `b`, your output should be `a`+`b`+`a`=`aba`. When the input is `c`, your output should be `aba`+`c`+`aba`=`abacaba`.
 
-If the instruction count of your code is greater than or equal to 1000, only 3/4 of points will be given. The grader may return WA even though your output matches.
+If the instruction count of your code is greater than or equal to 1000, only 3/4 of points will be given. The grader may return WA even though the output matches.
+
+**https://dmoj.ca/problem/tle18p6**
+
+The picture in the problem is in SVG format (where all other problem pictures in that contest is PNG). The SVG contains base64-encoded PNG images stacked up, in which the picture contents include doors, ghost faces, emojis, photos, codes, etc. All `<image>` objects have an `id` attribute. That SVG also contains an empty `<defs>`, a `<metadata>`, and an invisible `<g>`.
+
+There is a base64-encoded image string with a `\n` line break every 76 characters, and all other image use space instead. The content of that picture is an instruction to `Write f:`. Other pictures with code include a screenshot of Sample Input 1 of [this problem](https://dmoj.ca/problem/ccc19s3) and a picture that looks like clipped Brain\*\*\*\* code. The order of the pictures may have some meaning.
+
+As this problem worths 40 points, solving it *may* require some coding skills more than understanding the intention of the problem.
 
 **https://dmoj.ca/problem/csprng:**
 
@@ -84,8 +94,8 @@ To fail solutions that use data compression, the grader is updated to detect non
 
 Notice problem statement:
 
-> a hardware token that he has locally ...... uniformly at random within the range configured
-> Your score will be inversely correlated to the length of your program.
+> a hardware token that he has locally... uniformly at random within the range configured...
+> Your score will be inversely correlated to the length of your program...
 > To ensure you have the correct output......
 
 **https://dmoj.ca/problem/osf**
@@ -98,11 +108,13 @@ Notice problem statement:
 
 **https://dmoj.ca/problem/cccjqrp4**
 
+**https://dmoj.ca/problem/tle18p4**
+
 **https://dmoj.ca/problem/bf1troll**
 
 --------
 
-## Pages that list meme problems:
+## Pages that list esoteric problems:
 
 https://dmoj.ca/contest/cccjqr
 
@@ -117,3 +129,6 @@ https://dmoj.ca/contest/tle18
 https://dmoj.ca/contest/acc4
 
 https://dmoj.ca/problems/?point_end=1
+
+**Additional note:** The DMOJ admins have banned user "[Tomorrow](https://dmoj.ca/user/Tomorrow)" from editing profile and posting comments. This page is currently available for updates.
+
