@@ -24,7 +24,7 @@ const std::string SVG_DEBUG_CASE = "M283.659,80.2481 C295.706,103.634 306.346,14
 
 #include <vector>
 
-// an old code that splits a svg path into cubic arcs
+// an old code that splits an SVG path into cubic arcs
 bool splitPath(std::string S, std::vector<spline3> &V) {
 
 #define isFloat(c) ((c >= '0' && c <= '9') || c == '-' || c == '.')
@@ -130,7 +130,7 @@ bool splitPath(std::string S, std::vector<spline3> &V) {
 #undef readPoint
 }
 
-// an old code that converts a svg shape to a C++ string
+// an old code that converts a list of cubic arcs to an SVG path string
 #include <sstream>
 #include <iomanip>
 std::string toPath(const std::vector<spline3> &v) {
@@ -169,7 +169,7 @@ std::string toPath(const std::vector<spline3> &v) {
 
 
 // copy-pasted from an online integral calculator
-// use Green's formula - note the conditions are important
+// based on divergence theorem - note there are prerequisites for this to work
 
 double calcArea(const std::vector<spline3> &V) {
 	double A = 0.0;
