@@ -46,7 +46,7 @@ Input ~N~, output ~\sum\limits_{k=1}^{N} k^6~, modulo ~1000000000~.
 
 **https://dmoj.ca/problem/cccjqrp3:**
 
-All inputs can fit into 64-bit unsigned integer. Your task is to output ~A+B+C~, modulo ~42069900169420~.
+All inputs can fit into 64-bit unsigned integers. Your task is to output ~A+B+C~, modulo ~42069900169420~.
 
 **https://dmoj.ca/problem/bf1easy:**
 
@@ -60,7 +60,7 @@ One can see from existing comments that these characters are not allowed in code
 
 **https://dmoj.ca/problem/tle18p1:**
 
-This problem asks you to recognize digits from bitmap images. The first line of input contains an integer, ~N~, the number of test cases. Followed by ~28N~ lines, each line contains ~28~ real numbers between ~0~ and ~1~, representing ~N~ ~28\times28~ bitmap images, each image contain a decimal digit. For each test case, output the digit in the image, followed by a line break.
+This problem asks you to recognize digits from bitmap images. The first line of input contains an integer, ~N~, the number of test cases. Followed by ~28N~ lines, each line contains ~28~ real numbers between ~0~ and ~1~, representing ~N~ ~28\times28~ bitmap images, each image contains a decimal digit. For each test case, output the digit in the image, followed by a line break.
 
 The image represented in the sample input can be found in [this comment](https://dmoj.ca/problem/tle18p1#comment-12374).
 
@@ -133,5 +133,5 @@ https://dmoj.ca/problems/?point_end=1
 
 ## Additional note:
 
-The DMOJ admins have banned user "[Tomorrow](https://dmoj.ca/user/Tomorrow)" from editing profile and posting comments. This page is currently available for updates.
+The DMOJ admins have banned the user "[Tomorrow](https://dmoj.ca/user/Tomorrow)" from editing profile and posting comments. This page is currently available for updates.
 

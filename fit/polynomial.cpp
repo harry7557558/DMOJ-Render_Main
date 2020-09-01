@@ -72,7 +72,7 @@ void fitPolynomial_angle(const std::vector<spline3> &sp, vec2 P, int N, double *
 	fitPolynomial(t, r, M, C, N);
 
 	if (print) {
-		// the coefficients can be extremly large or small
+		// the coefficients can be extremely large or small
 		printf("r(t)=%.16lf", C[0]);
 		for (int i = 1; i <= N; i++) {
 			if (abs(log10(abs(C[i]))) > 4) {
