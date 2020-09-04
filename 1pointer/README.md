@@ -130,8 +130,14 @@ https://dmoj.ca/contest/acc4
 
 https://dmoj.ca/problems/?point_end=1
 
+https://dmoj.ca/problems/?category=3&order=user_count
 
-## Additional note:
+
+## Additional notes:
 
 The DMOJ admins have banned the user "[Tomorrow](https://dmoj.ca/user/Tomorrow)" from editing profile and posting comments. This page is currently available for updates.
+
+https://dmoj.ca/contest/halloween14
+
+https://dmoj.ca/contest/stnbd
 
