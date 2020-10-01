@@ -213,7 +213,7 @@ void convexHull(ivec2 *P, int Pn, ivec2 *C, int &Cn) {
 
 }
 
-// useful for maximum area on convex hull
+// useful for finding the maximum area on convex hulls
 template<typename Fun> int binarysearchmaximum(Fun F, int x0, int x1, int &x) {
 	auto f = [&](int x) { return F(x + 1) - F(x); };
 	while (1) {

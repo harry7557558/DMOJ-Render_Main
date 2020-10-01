@@ -116,7 +116,7 @@ int main() {
 	for (int i = 1; i < ints.size(); i++) {
 		double x0 = ints[i - 1], x1 = ints[i];
 		if (x1 - x0 < 1e-6) continue;
-		// determine if the interval's topmost is a segment or a circle
+		// determine if the topmost in the interval is a segment or a circle
 		double xc = 0.5*(x0 + x1);
 		double circMax = 0; int circId = -1;
 		for (int i = 0; i < N; i++) {
@@ -133,7 +133,7 @@ int main() {
 				if (y > segMax) segMax = y, segId = i;
 			}
 		}
-		// if it is a segment, the integral is the area of a trapozoid
+		// if it is a segment, the integral is the area of a trapezoid
 		if (segMax > circMax && segId != -1) {
 			segment s = S[segId];
 			double y0 = s.m*x0 + s.b;
@@ -141,7 +141,7 @@ int main() {
 			double dA = (y0 + y1)*(x1 - x0);
 			Area += dA;
 		}
-		// if it is a circle... geometry and integral should result the same
+		// if it is a circle...
 		else if (circId != -1) {
 			x0 = x0 - H[circId], x1 = x1 - H[circId];
 			double r = R[circId], r2 = r * r;

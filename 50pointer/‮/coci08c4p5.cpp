@@ -69,9 +69,9 @@ int main() {
 	// mid-left/right cols
 	for (int i = 1; i < W2; i++) {
 		int a = i, b = W - i;
-		int s1 = coprimeCount(a, L);  // # can be seem by A
-		int s2 = coprimeCount(b, L);  // # can be seem by B
-		int s0 = coprimeCount(a * b / gcd(a, b), L);  // # can be seem by both
+		int s1 = coprimeCount(a, L);  // # can be seen by A
+		int s2 = coprimeCount(b, L);  // # can be seen by B
+		int s0 = coprimeCount(a * b / gcd(a, b), L);  // # can be seen by both
 		int t2 = s0;
 		int t0 = L - 1 - (s1 + s2 - s0);
 		int t1 = L - 1 - (t0 + t2);

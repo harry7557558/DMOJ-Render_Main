@@ -174,7 +174,7 @@ bool isPossibleIntersecting(const tetrahedron &TH, const triangle3D &T) {
 	vec3 O = T.A, a = T.B - O, b = T.C - O;  // T = O + u a + v b, 0<u,v<1, u+v<1
 	vec3 N = cross(a, b);
 	double d = dot(N, O);
-	// D: "signed distance" to from the vertexes to the plane, non-zero as specified
+	// D: "signed distance" to from the vertices to the plane, non-zero as specified
 	double D[4];
 	for (int i = 0; i < 4; i++) D[i] = dot(TH.P[i], N) - d;
 	if (D[1] * D[0] > 0 && D[2] * D[0] > 0 && D[3] * D[0] > 0) return false;  // on the same side of the plane

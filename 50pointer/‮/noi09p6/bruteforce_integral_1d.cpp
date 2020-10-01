@@ -1,7 +1,7 @@
 // almost a copy of bruteforce_sample_1d.cpp
 // except it uses a proper integral algorithm
 
-// Simpson's method relies on continuous gradient
+// Simpson's method needs continuous derivatives to get expected accuracy
 // may not be good for this situation
 
 #pragma GCC optimize "Ofast"
@@ -36,7 +36,7 @@ struct vec2 {
 typedef pair<vec2, vec2> vec2s;
 
 
-// large data as global variable
+// large data as global variables
 int T, N;
 vec2 P[10000];
 int M;
@@ -84,7 +84,7 @@ int getYs(const capsule &cp, double x, increase* Y) {
 	return cnt;
 }
 
-// calculate the (analytical) integral of area along y-axis using scan-line algorithm
+// calculate the (analytical) integral of the area along the y-axis using the scan-line algorithm
 double calcYInt(double x) {
 	int D = 0;
 	increase *Y = &Ys[0];

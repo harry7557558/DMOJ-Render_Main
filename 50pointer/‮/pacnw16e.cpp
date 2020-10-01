@@ -54,7 +54,7 @@ struct Segment {
 
 // In an intersection test, the ray is considered intersecting the Segment if it hits p exactly, but not q
 
-// shoot a ray toward right
+// shoot a ray toward the right
 bool intSegment(const Segment &s, ivec2 ro) {
 	ivec2 p = s.p, q = s.q;
 	if (p.y < q.y) {
@@ -84,7 +84,7 @@ double intSegmentD(const Segment &s, ivec2 ro) {
 // node of the tree
 // not sure what this tree is called, it is a simplified version of BVH structure used in ray-tracing
 struct Node {
-	lint Min, Max;  // range on y-axis
+	lint Min, Max;  // range on the y-axis
 	Segment s;  // valid if children are nullptr
 	Node *c1 = 0, *c2 = 0;
 } R;
@@ -237,7 +237,7 @@ int main() {
 				// find a point on the added part
 				ivec2 rou = ivec2(ro.x, clamp(ro.y, RMin.y, RMax.y));
 				if (rou.y == C[tId].y) d1 = tId;  // if on top, return topmost point
-				else if (rou.y == C[bId].y) d1 = bId;  // if on buttom, return buttommost point
+				else if (rou.y == C[bId].y) d1 = bId;  // if on bottom, return bottommost point
 				else d1 = getClosestIdY(&R, rou);  // if neither, search tree
 				// if the point is not valid, check adjacent points
 				if ((b1 = det(C[d1] - ro, C[(d1 + 1) % N] - ro) < 0) == b0) d1 = (d1 + Cn - 1) % Cn;

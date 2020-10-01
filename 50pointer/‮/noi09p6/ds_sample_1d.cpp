@@ -36,7 +36,7 @@ struct vec2 {
 typedef pair<vec2, vec2> vec2s;
 
 
-// large data as global variable
+// large data as global variables
 int T, N;
 vec2 P[10000];
 int M;
@@ -153,7 +153,7 @@ int searchTree(node* R, double x, increase* Y) {
 
 
 
-// calculate the (analytical) integral of area along y-axis using scan-line algorithm
+// calculate the (analytical) integral of the area along the y-axis using the scan-line algorithm
 double calcYInt(double x) {
 	int D = 0;
 	increase *Y = &Ys[0];
