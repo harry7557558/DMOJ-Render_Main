@@ -60,6 +60,10 @@ All inputs can fit into 64-bit unsigned integers. Your task is to output ~A+B+C~
 
 Read the problem statement carefully. It tells you to output the integers from ~1~ to ~N~.
 
+**https://dmoj.ca/problem/ludipq**:
+
+There is only one test case. Google "ludipq 123" will give you the sequence is `1,3,3,2,2,1,3,3,3,1,2,3,1,1,1`.
+
 **https://dmoj.ca/problem/toosimple**:
 
 One can see from existing comments that these characters are not allowed in code: `"'1234567890`.
