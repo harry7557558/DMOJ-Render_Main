@@ -1,0 +1,1519 @@
+{
+ "userName": "harry7557558",
+ "date": "2020-03-05T23:53:34.472Z",
+ "numShaders": 38,
+ "shaders": [
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "wljSDt",
+    "date": "1567533000",
+    "viewed": 69,
+    "name": "Burning-Ship ++",
+    "description": "a zoom in to the Burning Ship Fractal",
+    "likes": 3,
+    "published": "Public",
+    "tags": [
+     "fractal",
+     "complex",
+     "iteration"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "/* Also check:\n * Mandelbrot Fractal: https://www.shadertoy.com/view/wl2SWt\n * Burning-Ship Fractal: https://www.shadertoy.com/view/wljSDt\n * Forest Fractal: https://www.shadertoy.com/view/tt2SDt\n * Crown Fractal: https://www.shadertoy.com/view/tl2SDt\n */\n\n#define AA 6\n\nvoid mainImage( out vec4 fragColor, in vec2 fragCoord )\n{\n    vec2 p0 = vec2(-1.932246,6e-6);\n    vec2 p1 = vec2(-0.5,0.55);\n    float m1 = 6.0/length(iResolution), m0 = 1e-5*m1;\n    float t = 1.0-1.0/(exp(3.0-iTime)+1.0);\n    vec2 p = mix(p0,p1,t);\n    float m = mix(m0,m1,t);\n    int MAX_ITER = int(min(floor(0.5/m),2000.0));\n    \n    vec3 col=vec3(0,0,0);\n    for (int u=0;u<AA;u++) {\n      for (int v=0;v<AA;v++){\n        vec2 z = vec2(0,0);\n        vec2 c = (fragCoord+vec2(u,v)/float(AA)-0.5*iResolution.xy)*m+p;\n        for (int i=0;i<MAX_ITER;i++){\n            z=vec2(z.x*z.x-z.y*z.y,-abs(2.0*z.x*z.y))+c;\n            float h = dot(z,z);\n            if (h>1.8447e+19){\n                float n = float(i)-log2(0.5*log2(h))+4.0;\n                float m = exp(-n*n/20000.0);\n                n = mix(4.0*pow((log(n+1.0)+1.0),2.0),n,m);\n              #if 1\n                  m = 5.0*sin(0.1*(n-6.0))+n;\n                  col += vec3(\n                      pow(sin((m-8.0)/20.0),6.0),\n                      pow(sin((m+1.0)/20.0),4.0),\n                      (0.8*pow(sin((m+2.0)/20.0),2.0)+0.2)*(1.0-pow(abs(sin((m-14.0)/20.0)),12.0))\n                  );\n              #else\n                  col += vec3(\n                      pow(sin((n-6.0)/20.0),6.0),\n                      pow(sin((n-2.0)/20.0),4.0),\n                      0.8*pow(sin((n+2.0)/20.0),2.0)+0.2-0.2*pow(abs(sin((n-18.0)/20.0)),6.0)\n                  );\n              #endif\n                break;\n            }\n        }\n      }\n    }\n    col/=float(AA*AA);\n    fragColor=vec4(col,1.0);\n}\n",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "tl2SDt",
+    "date": "1567534664",
+    "viewed": 64,
+    "name": "Crown-Fractal++",
+    "description": "a zoom in to fractal defined by iteration z↦Re(z³)-|Im(z³)|i+c",
+    "likes": 4,
+    "published": "Public",
+    "tags": [
+     "fractal",
+     "complex",
+     "iteration"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "/* Also check:\n * Mandelbrot Fractal: https://www.shadertoy.com/view/wl2SWt\n * Burning-Ship Fractal: https://www.shadertoy.com/view/wljSDt\n * Forest Fractal: https://www.shadertoy.com/view/tt2SDt\n * Crown Fractal: https://www.shadertoy.com/view/tl2SDt\n */\n\n#define AA 4\n\nvoid mainImage( out vec4 fragColor, in vec2 fragCoord )\n{\n    vec2 p0 = vec2(0.0,1.285023);\n    vec2 p1 = vec2(0.0,0.4);\n    float m1 = 6.0/length(iResolution), m0 = 1e-5*m1;\n    float t = 1.0-1.0/(exp(3.0-iTime)+1.0);\n    vec2 p = mix(p0,p1,t);\n    float m = mix(m0,m1,t);\n    int MAX_ITER = int(min(floor(0.5/m),2000.0));\n    \n    vec3 col=vec3(0,0,0);\n    for (int u=0;u<AA;u++) {\n      for (int v=0;v<AA;v++){\n        vec2 z = vec2(0,0);\n        vec2 c = (fragCoord+vec2(u,v)/float(AA)-0.5*iResolution.xy)*m+p;\n        for (int i=0;i<MAX_ITER;i++){\n            z=vec2(z.x*(z.x*z.x-3.0*z.y*z.y),-abs(z.y*(3.0*z.x*z.x-z.y*z.y)))+c;\n            float h = dot(z,z);\n            if (h>2.8243e+11){\n                float n = float(i)-log(0.5*log(h)/log(3.0))/log(3.0)+4.0;\n                float m = exp(-n*n/20000.0);\n                n = mix(4.0*pow((log(n+1.0)+1.0),2.0),n,m);\n              #if 1\n                  m = 5.0*sin(0.1*(n-6.0))+n;\n                  col += vec3(\n                      pow(sin((m-8.0)/20.0),6.0),\n                      pow(sin((m+1.0)/20.0),4.0),\n                      (0.8*pow(sin((m+2.0)/20.0),2.0)+0.2)*(1.0-pow(abs(sin((m-14.0)/20.0)),12.0))\n                  );\n              #else\n                  col += vec3(\n                      pow(sin((n-6.0)/20.0),6.0),\n                      pow(sin((n-2.0)/20.0),4.0),\n                      0.8*pow(sin((n+2.0)/20.0),2.0)+0.2-0.2*pow(abs(sin((n-18.0)/20.0)),6.0)\n                  );\n              #endif\n                break;\n            }\n        }\n      }\n    }\n    col/=float(AA*AA);\n    fragColor=vec4(col,1.0);\n}\n",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "wly3WG",
+    "date": "1579723999",
+    "viewed": 74,
+    "name": "Fitting Arc using Bézier",
+    "description": "Least square fitting an unit arc using cubic bezier curve. \nEllipse fitting can be done by simply applying a linear transform. ",
+    "likes": 9,
+    "published": "Public",
+    "tags": [
+     "bezier",
+     "circle",
+     "approximation",
+     "arc",
+     "fitting",
+     "leastsquare",
+     "2021"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "/*\n\tFitting an unit arc using cubic bezier curve\n\tEllipse fitting can be done by simply applying a linear transform.\n\n\tBasic Idea:\n\n\tLet the start point be A(0,1) and the endpoint be B(cosθ,sinθ), the two other \n\tcontrol points be C(1,x) and D=B+x*(sinθ,-cosθ). Let the equation of the bezier \n\tcurve be P(t)=(1-t)³·A+3t(1-t)²·B+3t²(1-t)·C+t³·D and the error be \n\tE(x)=Integral[(P²-1)²,t,0,1]. This integral is be a quartic polynomial \n\tabout x. Let its derivative equal to zero and solve for x, thus determine \n\tcontrol point B and C.\n\n\tSince the calculation is very machanical and error-prone, I used WolframAlpha \n\tto do expanding, integration and differentiation.\n\n\tAs one can see, when θ<2rad, it's not easy to notice the difference between the \n\tcircle and the fitted curve.\n\n\t2020-03-05:\n\tAdd numerical approximation solutions generated by polynomial regression.\n\t(Simpson's integration in [0,2], 2×100000 samples, Gaussian elimination, double-precision)\n*/\n\n\n#define PI 3.1415926\n#define _13 0.333333333\n#define cbrt(x) ((x)>0.?pow(x,_13):-pow(-(x),_13))\n\n#define Clamp(x) clamp(x,0.,1.)\n\nstruct Bezier3{\n    vec2 A, B, C, D;\n};\n\n\n// ========================= Fitting Code =========================\n\n\nvoid fitArc(float a, out Bezier3 R) {\n    float S = sin(a), C = cos(a), x;\n#if 1\n    // derivative of error: error'=ax³+bx²+cx+d\n\tfloat s2 = S * S, c2 = C * C, sc2 = s2 + c2, sc22 = sc2 * sc2;\n\ta = 1. / (756.*(sc22 + 1.) + 810.*s2 - 1890.*(sc2 + 1.)*C + 2430.*c2);\n\tfloat c = (2520.*sc22 + 2736.*s2 + (-507.*sc2 - 6600.*C + 7215.)*C - 2628.) * a,\n\t\tb = (3996.*(sc2 + 1.) - 6750.*C)*S * a, d = (3439.*sc2 + 4276.*C - 7715.)*S * a;\n    // solve the cubic equation to determine the minima\n\tfloat p = (c - b * b * _13) * _13, q = -0.5 * ((b*b / 13.5 - c * _13) * b + d);\n\ta = q * q + p * p * p;\n\tx = a > 0.0 ? cbrt(q + sqrt(a)) + cbrt(q - sqrt(a)) - b * _13\n\t\t: 2.0 * pow(q*q - a, 0.5*_13) * cos(atan(sqrt(-a), q) * _13) - b * _13;\n    // 450+ time unit\n#else\n    // numerical approximation\n    // 12 time unit, ERR = 2.75e-04, RMSE = 8.02e-05, notable error\n    x = ((0.008561080643*a-0.002518989170)*a+0.334292025655)*a;\n    // 23 time unit, ERR = 2.51e-06, RMSE = 6.29e-07, few error\n    x = ((((0.000223623140*a-0.000237833794)*a+0.007216725971)*a-0.000130686154)*a+0.333353941704)*a;\n    // 28 time unit, ERR = 2.71e-07, RMSE = 6.11e-08, no visible error\n    x = (((((0.000027936409*a+0.000060660755)*a+0.000117720501)*a+0.006861171676)*a+0.000027337977)*a+0.333330238084)*a;\n#endif\n    // apply the solution of the equation to the control points\n    R.A=vec2(1,0), R.B=vec2(1,x), R.C=vec2(C+x*S,S-x*C), R.D=vec2(C,S);\n}\n\nfloat sdBezier3(in Bezier3 R, in vec2 p) {\n\tvec2 A = R.D-R.A+3.*(R.B-R.C), B = 3.*(R.C-2.*R.B+R.A), C = 3.*(R.B-R.A);\n\tvec2 a=vec2(1,0), b, pa=p-a, ba, q;\n\tfloat d = dot(pa,pa);\n\tfor (float dt=.02, t = dt; t < 1.; t += dt) {\n\t\tb = ((A*t + B)*t + C)*t + R.A;\n\t\tpa=p-a, ba=b-a, q=pa-ba*Clamp(dot(pa,ba)/dot(ba,ba));\n\t\td = min(d, dot(q,q));\n\t\ta = b;\n\t}\n\treturn sqrt(d);\n}\n\nvoid mainImage(out vec4 col, in vec2 P) {\n    vec2 res = iResolution.xy;\n    vec2 p = 6.0*(P-.5*res)/length(res);\n    float h = .2*length(res); \t// hardness of anti-aliasing\n\n    float ang = atan(p.y,p.x), a;\n    if (iMouse.z>0.){\n        vec2 d = iMouse.xy-.5*iResolution.xy;\n        a = atan(d.y,d.x);\n    }\n    else a = sin(iTime), a=PI*a*a;\n    if (ang<0.) ang+=2.*PI; if (a<0.) a+=2.*PI;\n\n    // axis\n    vec2 axis = Clamp(h*(abs(p)-.02));\n    vec3 bkg = mix(vec3(0,0,1),vec3(1),min(axis.x,axis.y));\n\n    // circle\n    float circ = Clamp(h*(abs(length(p)-1.)-.02));\n    vec3 c = mix(ang<a?vec3(1,0,0):vec3(.7),bkg,circ);\n\n    // bezier curve\n    Bezier3 R;\n    fitArc(a, R);\n    float d = sdBezier3(R,p);\n    c = mix(vec3(0),c,Clamp(h*(d-.01)));\n\n    // vertexes\n    d = min(length(p-R.B),length(p-R.C))-.04;\n    c = mix(vec3(0),mix(vec3(1),c,Clamp(h*d)),Clamp(h*(abs(d)-.002)));\n    d = min(length(p-R.A),length(p-R.D))-.05;\n    c = mix(vec3(0),mix(vec3(1),c,Clamp(h*d)),Clamp(h*(abs(d)-.005)));\n\n    col = vec4(c,1.0);\n}\n",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "tttSRH",
+    "date": "1580425863",
+    "viewed": 29,
+    "name": "Fitting Arc using Bézier 2",
+    "description": "Cubic version see there: [url]https://www.shadertoy.com/view/wly3WG[/url]\nThese fitting functions are used to convert ellipse arcs in an SVG path into uniform bezier curve, because I don't want to write hundreds of lines of code specifically for ellipses.",
+    "likes": 1,
+    "published": "Public",
+    "tags": [
+     "bezier",
+     "circle",
+     "arc",
+     "fitting",
+     "leastsquare"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "/*\n\tFitting an unit arc using a quadratic bezier curve\n\tCubic version: https://www.shadertoy.com/view/wly3WG\n\n\tAs one can see, cubic fitting is much better than quadratic fitting.\n\n    Since rendering quadratic is much faster than cubic, fitting the arc/ellipse\n    using multiple quadratic bezier curves is still better. It's not easy to notice \n    the C0 continuety.\n\n*/\n\n#define PI 3.1415926\n#define _13 0.333333333\n#define cbrt(x) ((x)>0.?pow(x,_13):-pow(-(x),_13))\n\nstruct Bezier2{\n    vec2 A, B, C;\n};\n\n\n// ========================= Fitting Code =========================\n\n\n#if 0\n\n// along the tangent\nvoid fitArc(in float theta, out Bezier2 R) {\n    float c = cos(theta), s = sin(theta);\n    float k = theta==0.0 ? 0.0 : (1.0 - c) / s;\n    R.A = vec2(1.0, 0.0), R.B = vec2(1.0, k), R.C = vec2(c, s);\n}\n\n#else\n\n// least square, let the control point be k*(cos(θ/2),sin(θ/2))\nvoid fitArc(in float theta, out Bezier2 R) {\n    // derivative of error: error'=ax³+bx²+cx+d\n    // thanks https://www.integral-calculator.com/ for helping me integrate that disgusting function!\n    float alpha = 0.5 * theta;\n\tfloat s1 = sin(alpha), s2 = s1 * s1, s4 = s2 * s2, s6 = s4 * s2,\n\t\tc1 = cos(alpha), c2 = c1 * c1, c3 = c2 * c1, c4 = c3 * c1, c5 = c4 * c1, c6 = c4 * c2, c7 = c5 * c2;\n    float a = 32.*s4+64.*c2*s2+32.*c4,\n        b = (60.*c1*s4+(120.*c3+60.*c1)*s2+60.*c5+60.*c3) / a,\n        c = (20.*s6+(100.*c2-16.)*s4+(140.*c4+32.*c2-148.)*s2+60.*c6+48.*c4-108.*c2) / a,\n        d = (35.*c1*s6+(105.*c3-5.*c1)*s4+(105.*c5+10.*c3-131.*c1)*s2+35.*c7+15.*c5-111.*c3-91.*c1) / a;\n    // calculate the minima (zero derivative), solve a the cubic function\n\tfloat p = (c - b * b * _13) * _13, q = -0.5 * ((b*b / 13.5 - c * _13) * b + d);\n\ta = q * q + p * p * p;\n\tfloat k = a > 0.0 ? cbrt(q + sqrt(a)) + cbrt(q - sqrt(a)) - b * _13\n\t\t: 2.0 * pow(q*q - a, 0.5 * _13) * cos(atan(sqrt(-a), q) * _13) - b * _13;\n    // apply the solution of the equation to the control points\n    R.A = vec2(1.0, 0.0), R.B = k * vec2(c1, s1), R.C = vec2(c1*c1-s1*s1, 2.0*c1*s1);\n}\n\n#endif\n\n\n\n// ========================= Rendering Code =========================\n\n\n// quadratic bezier distance approximation by tayholliday: https://www.shadertoy.com/view/XsX3zf\nfloat det(vec2 a, vec2 b) { return a.x*b.y-b.x*a.y; }\nvec2 get_distance_vector(vec2 b0, vec2 b1, vec2 b2) {\n  float a=det(b0,b2), b=2.0*det(b1,b0), d=2.0*det(b2,b1);\n  float f=b*d-a*a;\n  vec2 d21=b2-b1, d10=b1-b0, d20=b2-b0;\n  vec2 gf=2.0*(b*d21+d*d10+a*d20);\n  gf=vec2(gf.y,-gf.x);\n  vec2 pp=-f*gf/dot(gf,gf);\n  vec2 d0p=b0-pp;\n  float ap=det(d0p,d20), bp=2.0*det(d10,d0p);\n  float t=clamp((ap+bp)/(2.0*a+b+d), 0.0 ,1.0);\n  return mix(mix(b0,b1,t),mix(b1,b2,t),t);\n}\nfloat sdBezier2(in Bezier2 R, in vec2 p) {\n  return length(get_distance_vector(R.A-p, R.B-p, R.C-p));\n}\n\nvoid mainImage(out vec4 col, in vec2 P) {\n    vec2 res = iResolution.xy;\n    vec2 p = 6.0*(P-0.5*res)/length(res);\n    float h = 0.2*length(res); \t// hardness of anti-aliasing\n\n    float ang = atan(p.y,p.x);\n    if (ang<0.0) ang += 2.0*PI;\n    float a = sin(0.6*iTime); a=1.8*PI*a*a;\n    int n = int(abs(a)/1.5) + 1;\n    float da = a / float(n);\n    if (iMouse.z>0.0){\n        vec2 d = iMouse.xy-0.5*iResolution.xy;\n        a = atan(d.y,d.x);\n    \tif (a<0.0) a += 2.0*PI;\n        n=1, da=a;\n    }\n\n    // axis\n    vec2 axis = clamp(h*(abs(p)-0.02),0.0,1.0);\n    float bk = min(axis.x,axis.y);\n    vec3 bkg = mix(vec3(0,0,1),vec3(1),bk);\n\n    // circle\n    float circ = clamp(h*(abs(length(p)-1.0)-0.02),0.0,1.0);\n    vec3 c = (ang<a)?vec3(1,0,0):vec3(0.7);\n    c = mix(c,bkg,circ);\n\n    // bezier curve\n    Bezier2 R;\n    fitArc(da, R);\n    if (ang<a){\n        float t = mod(ang,da);\n        vec2 q = length(p)*vec2(cos(t),sin(t));\n    \tfloat d = sdBezier2(R,q);\n    \tc = mix(vec3(0),c,clamp(h*(d-0.01),0.0,1.0));\n    }\n\n    // control points\n    float d = length(p-R.B)-0.04;\n    c = mix(vec3(1),c,clamp(h*d,0.0,1.0));\n    c = mix(vec3(0),c,clamp(h*(abs(d)-0.002),0.0,1.0));\n    d = min(length(p-R.A),length(p-R.C))-0.05;\n    c = mix(vec3(1),c,clamp(h*d,0.0,1.0));\n    c = mix(vec3(0),c,clamp(h*(abs(d)-0.005),0.0,1.0));\n\n    col = vec4(c, 1.0);\n}\n",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "WsySWt",
+    "date": "1575254924",
+    "viewed": 75,
+    "name": "Float Limit Exceed",
+    "description": "sawtooth effect produced by exceeding of float point accuracy limit",
+    "likes": 3,
+    "published": "Public",
+    "tags": [
+     "graph",
+     "function"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "float f(in float x){\n    return 0.25*(pow(exp(x)+exp(-x),2.0)-pow(exp(x)-exp(-x),2.0)); \t// always equal to 1\n}\n\nfloat grad(in float x){\n    const float eps = 1e-2;\n    float a = (f(x+eps)-f(x-eps))/(2.0*eps);\n    return sqrt(a*a+1.0);\n}\n\nvoid mainImage( out vec4 fragColor, in vec2 fragCoord )\n{\n    float s = 0.05*(sin(iTime)+2.0)*length(iResolution.xy);\n    vec2 p = (fragCoord-0.5*iResolution.xy)/s+vec2(10.0*sin(0.2*iTime),1.0);\n    float sd = 1.0-min(0.2*s*(abs(p.x)-0.008),1.0);\n    vec3 col = vec3(0,0,sd);\n    sd = min(s*(abs(p.y)-0.03),1.0);\n    col = mix(vec3(1,0,0),col,sd);\n\tsd = (f(p.x)-p.y)/grad(p.x);\n    sd = clamp(0.0,1.0,s*(abs(sd)-0.03));\n    col = mix(vec3(0,1,0),col,sd);\n    fragColor = vec4(col,1.0);\n}\n",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "ttKGRt",
+    "date": "1579642972",
+    "viewed": 2,
+    "name": "Float Limit Exceed 91 chars",
+    "description": "A copy of [url]https://www.shadertoy.com/view/3lKGRt[/url] by [url=https://www.shadertoy.com/user/FabriceNeyret2]FabriceNeyret2[/url]",
+    "likes": 0,
+    "published": "Unlisted",
+    "tags": [
+     "short"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "#define mainImage(c,p) \\\n    c.xy=p+1e-5*iTime; \\\n    c.xy/=c.xy+min(0.,iTime); \\\n    c.xy=vec2(c.x!=1.,c.y!=1.)",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "3tK3z3",
+    "date": "1579497743",
+    "viewed": 87,
+    "name": "Float Limit Exceed 95 chars",
+    "description": "mirroring an oblique ellipse x² + y² - |x|·y = r²\nresult may be different on different hardware",
+    "likes": 1,
+    "published": "Public",
+    "tags": [
+     "heart",
+     "pink",
+     "short",
+     "cyan"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "#define mainImage(c,p) \\\n\tc.xy = 4.*p-iResolution.xy; \\\n\tc = sin(dot(c,c)-abs(c.x)*c.y+iTime+vec4(3,2,0,0))",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "tt2SDt",
+    "date": "1567533859",
+    "viewed": 61,
+    "name": "Forest-Fractal++",
+    "description": "a zoom in to fractal defined by iteration z↦|Re(z²)|-|Im(z²)|i+c",
+    "likes": 2,
+    "published": "Public",
+    "tags": [
+     "fractal",
+     "complex",
+     "iteration"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "/* Also check:\n * Mandelbrot Fractal: https://www.shadertoy.com/view/wl2SWt\n * Burning-Ship Fractal: https://www.shadertoy.com/view/wljSDt\n * Forest Fractal: https://www.shadertoy.com/view/tt2SDt\n * Crown Fractal: https://www.shadertoy.com/view/tl2SDt\n */\n\n#define AA 5\n\nvoid mainImage( out vec4 fragColor, in vec2 fragCoord )\n{\n    //vec2 p0 = vec2(-1.9989191770689436,0.000002058504218357831); // I made a deep zoom in to this position with double-precision float and it looks very nice\n    vec2 p0 = vec2(-1.6837324337509336,1e-5);\n    vec2 p1 = vec2(-0.65,0.55);\n    float m1 = 6.0/length(iResolution), m0 = 1e-5*m1;\n    float t = 1.0-1.0/(exp(3.0-0.5*iTime)+1.0);\n    vec2 p = mix(p0,p1,t);\n    float m = mix(m0,m1,t);\n    int MAX_ITER = int(min(floor(0.5/m),2000.0));\n    \n    vec3 col=vec3(0,0,0);\n    for (int u=0;u<AA;u++) {\n      for (int v=0;v<AA;v++){\n        vec2 z = vec2(0,0);\n        vec2 c = (fragCoord+vec2(u,v)/float(AA)-0.5*iResolution.xy)*m+p;\n        for (int i=0;i<MAX_ITER;i++){\n            z=vec2(abs(z.x*z.x-z.y*z.y),-abs(2.0*z.x*z.y))+c;\n            float h = dot(z,z);\n            if (h>1.8447e+19){\n                float n = float(i)-log2(0.5*log2(h))+4.0;\n                float m = exp(-n*n/20000.0);\n                n = mix(4.0*pow((log(n+1.0)+1.0),2.0),n,m);\n              #if 1\n                  m = 5.0*sin(0.1*(n-6.0))+n;\n                  col += vec3(\n                      pow(sin((m-8.0)/20.0),6.0),\n                      pow(sin((m+1.0)/20.0),4.0),\n                      (0.8*pow(sin((m+2.0)/20.0),2.0)+0.2)*(1.0-pow(abs(sin((m-14.0)/20.0)),12.0))\n                  );\n              #else\n                  col += vec3(\n                      pow(sin((n-6.0)/20.0),6.0),\n                      pow(sin((n-2.0)/20.0),4.0),\n                      0.8*pow(sin((n+2.0)/20.0),2.0)+0.2-0.2*pow(abs(sin((n-18.0)/20.0)),6.0)\n                  );\n              #endif\n                break;\n            }\n        }\n      }\n    }\n    col/=float(AA*AA);\n    fragColor=vec4(col,1.0);\n}\n",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "WdKXDt",
+    "date": "1575344149",
+    "viewed": 92,
+    "name": "Frozen Fractals",
+    "description": "And one thought crystallizes like an icy blast...\n\nFake snowflakes generated by mirroring complex fractals. \n",
+    "likes": 4,
+    "published": "Public",
+    "tags": [
+     "fractal",
+     "iteration",
+     "snowflake"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "#define PI 3.14159265358979\n#define AA 3\n\nint sn; \t// index of snowflake\n\nvec3 fractal(vec2 p){\n    p.x=-p.x-(cos(iTime)+5.0)/3.0;\n    vec3 col=vec3(0.0);\n    vec2 z = vec2(0.0);\n    int i;\n    for (i=0;i<64;i++){\n\n        // different iteration functions generate different snowflakes\n        if (sn==0) z=vec2(z.x*z.x-z.y*z.y,2.0*z.x*z.y)+p;\n        else if (sn==3) z=vec2(z.x*z.x-z.y*z.y,-2.0*z.x*z.y)+p;\n        else if (sn==1) z=vec2(abs(z.x*z.x-z.y*z.y),2.0*z.x*z.y)+p;\n        else if (sn==4) z=vec2(abs(z.x*z.x-z.y*z.y),-2.0*z.x*z.y)+p;\n        else if (sn==2) z=vec2(z.x*z.x-z.y*z.y,-abs(2.0*z.x*z.y))+p;\n\n        // color function for Mandelbrot (https://www.shadertoy.com/view/wl2SWt)\n        float h = dot(z,z);\n        if (h>1.8447e+19){\n            float n = float(i)-log2(.5*log2(h))+4.;\n            float m = exp(-n*n/20000.);\n            n = mix(4.*pow((log(n+1.)+1.),2.),n,m);\n            m = 5.*sin(.1*(n-6.))+n;\n            col += vec3(\n                pow(sin((m-8.)/20.),6.),\n                pow(sin((m+1.)/20.),4.),\n                (.8*pow(sin((m+2.)/20.),2.)+.2)*(1.-pow(abs(sin((m-14.)/20.)),12.))\n            );\n            break;\n        }\n    }\n    if (i==64) col=vec3(1.0);\n    return col;\n}\n\nvoid mainImage( out vec4 fragColor, in vec2 fragCoord )\n{\n    float s = 0.3*length(iResolution.xy);\n    vec3 col=vec3(0.0);\n    sn = int(iTime/(2.*PI))%5;\n    for (int u=0;u<AA;u++){\n        for (int v=0;v<AA;v++){\n    \t\tvec2 p = (fragCoord+vec2(u,v)/float(AA)-0.5*iResolution.xy)/s;\n            // rotation and mirroring\n    \t\tfloat m = length(p);\n    \t\tfloat a = abs(mod(atan(p.y,p.x)+iTime,PI/3.0)-PI/6.0);\n    \t\tcol += fractal(vec2(m*cos(a),m*sin(a)));\n        }\n    }\n    fragColor = vec4(col/float(AA*AA),1.0);\n}\n",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "tlc3Dj",
+    "date": "1577581479",
+    "viewed": 60,
+    "name": "Heat Conduction",
+    "description": "Solving heat equation numerically",
+    "likes": 2,
+    "published": "Public",
+    "tags": [
+     "heatequation"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [
+      {
+       "id": "4dXGR8",
+       "filepath": "/media/previz/buffer00.png",
+       "type": "buffer",
+       "channel": 0,
+       "sampler": {
+        "filter": "linear",
+        "wrap": "clamp",
+        "vflip": "true",
+        "srgb": "false",
+        "internal": "byte"
+       },
+       "published": 1
+      }
+     ],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "void mainImage( out vec4 col, in vec2 p ){\n    float t=clamp(0.5*texelFetch(iChannel0,ivec2(p),0).w,0.,1.);\n    float r=(((-11.7227*t+18.8479)*t-7.26786)*t+0.710379)*t+0.174578;\n    float g=(-3.11386*t+3.09609)*t+0.184932;\n    float b=(((-11.9359*t+28.3134)*t-21.022)*t+4.06718)*t+0.753008;\n    col = vec4(r,g,b,1.0);\n}\n",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    },
+    {
+     "inputs": [
+      {
+       "id": "4dXGR8",
+       "filepath": "/media/previz/buffer00.png",
+       "type": "buffer",
+       "channel": 0,
+       "sampler": {
+        "filter": "linear",
+        "wrap": "clamp",
+        "vflip": "true",
+        "srgb": "false",
+        "internal": "byte"
+       },
+       "published": 1
+      }
+     ],
+     "outputs": [
+      {
+       "id": "4dXGR8",
+       "channel": 0
+      }
+     ],
+     "code": "#define bf iChannel0\n\nfloat D(ivec2 p){\n    float c=texelFetch(bf,p,0).w;\n    float l=texelFetch(bf,p-ivec2(1,0),0).w;\n    float r=texelFetch(bf,p+ivec2(1,0),0).w;\n    float u=texelFetch(bf,p+ivec2(0,1),0).w;\n    float d=texelFetch(bf,p-ivec2(0,1),0).w;\n    return 0.2*(l+r+u+d-4.0*c);\n}\n\nvoid mainImage( out vec4 col, in vec2 p ){\n    float k;\n    if (iFrame==0){\n    \tvec2 q=10.*(p-0.5*iResolution.xy)/length(iResolution.xy);\n        float x=q.x+0.5,y=q.y+0.7;\n        k = x*x*x*(x-2.)+y*y*y*(y-2.)+x<0.?2.:0.;\n    }\n    else{\n        k=texelFetch(bf,ivec2(p),0).w;\n    \tif (length(p-iMouse.xy)<10.) k+=0.01;\n    \tk+=D(ivec2(p));\n    }\n    col = vec4(vec3(0.0),k);\n}",
+     "name": "Buffer A",
+     "description": "",
+     "type": "buffer"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "tltSWr",
+    "date": "1580886017",
+    "viewed": 118,
+    "name": "I heart Fourier",
+    "description": "As a beginner to Fourier series, inspired by a picture on my religion teacher's slide. ",
+    "likes": 27,
+    "published": "Public",
+    "tags": [
+     "heart",
+     "fourier",
+     "love"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "vec2 path[18];\nvec2 a[10], b[10];  // 10 = int(18 / 2) + 1\nvoid init() {\n\t// manual point set\n\tpath[0] = vec2(1.0137, 0.3967);\n\tpath[1] = vec2(0.5626, 0.5417);\n\tpath[2] = vec2(0.3414, -0.0639);\n\tpath[3] = vec2(0.1158, 0.6121);\n\tpath[4] = vec2(-0.7459, 0.7070);\n\tpath[5] = vec2(-0.8443, 0.1465);\n\tpath[6] = vec2(-0.3618, 0.1444);\n\tpath[7] = vec2(-0.1585, 0.4285);\n\tpath[8] = vec2(-0.3173, 0.3743);\n\tpath[9] = vec2(-0.4706, -0.2456);\n\tpath[10] = vec2(-0.7936, -0.3968);\n\tpath[11] = vec2(-0.5655, -0.1589);\n\tpath[12] = vec2(0.2119, -0.6991);\n\tpath[13] = vec2(0.2968, -0.9548);\n\tpath[14] = vec2(0.3969, -0.4136);\n\tpath[15] = vec2(0.7119, 0.0779);\n\tpath[16] = vec2(0.6283, 0.2814);\n\tpath[17] = vec2(0.7057, -0.0209);\n\n\t// calculate Fourier coefficients, b[0] is always zero\n\tfloat t, dt;\n\tfor (int k = 0; k < 10; k++) {\n\t\ta[k] = vec2(0.), b[k] = vec2(0.);\n\t\tt = 0.0, dt = 6.283185 * float(k) / 18.;\n\t\tfor (int i = 0; i < 18; i++, t += dt)\n\t\t\ta[k] += path[i] * cos(t), b[k] += path[i] * sin(t);\n\t\ta[k] = a[k] * (2.0 / 18.), b[k] = b[k] * (2.0 / 18.);\n\t}\n\ta[0] = a[0] * 0.5;\n}\n\nvec2 eval(float t) {\n\tvec2 r = a[0];\n    float c0 = cos(t), s0 = sin(t), c = c0, s = s0, c1;\n    for (int k = 1; k < 10; k++) {\n        r += a[k] * c + b[k] * s;\n        c1 = c, c = c * c0 - s * s0, s = c1 * s0 + s * c0;\n    }\n\treturn r;\n}\n\n\n// an improvement of iq's https://www.shadertoy.com/view/Xlf3zl\nfloat sdSqSegment(in vec2 p, in vec2 a, in vec2 b) {\n\tvec2 pa = p - a, ba = b - a;\n\tvec2 q = pa - ba * clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);\n\treturn dot(q, q);\n}\nfloat sd(vec2 p) {\n\tfloat o = sin(0.5*iTime); o = .04 + .005*o*o;  // path offset\n\tfloat o2 = (o + .02)*(o + .02);\n\tfloat t_max = 6.3*min(1.5*fract(0.15*iTime), 1.0);\n\tvec2 a = eval(0.0), b, c;\n\tfloat dt = 0.05, t = dt;\n\tfloat d = 1e8, dd;\n\twhile (t < t_max) {\n\t\tb = eval(t);\n\t\tdd = sdSqSegment(p, a, b);\n\t\tif (dd < o2) {  // more accurate and doesn't reduce much speed\n\t\t\tc = eval(t - 0.5*dt);\n\t\t\tdd = min(sdSqSegment(p, a, c), sdSqSegment(p, c, b));\n\t\t}\n\t\td = min(d, dd);\n\t\tdt = clamp(0.026*length(a - p) / length(a - b), 0.02, 0.1);\n\t\tt += dt;\n\t\ta = b;\n\t}\n\td = min(d, sdSqSegment(p, a, eval(t_max))); \t// add this line to eliminate gaps\n\td = min(sqrt(d), abs(length(p) - 0.15));\n\treturn d - o;\n}\n\nvoid mainImage(out vec4 fragColor, in vec2 fragCoord) {\n\tinit();\n\tvec2 p = 5.0 * (fragCoord - 0.5*iResolution.xy) / length(iResolution.xy);\n\tfloat d = sd(p - vec2(-.1, .08));\n\n    // modified from iq's sdf visualizing function\n\tvec3 col = d > 0. ? vec3(1.0, 0.3, 0.5) : vec3(0.3, 1.5, 2.7);\n\tcol *= 1.0 - 0.9*exp(-6.*abs(d));\n\tcol *= 0.8 + 0.2*cos(120.*d - 3.0*iTime);\n\tcol = mix(col, vec3(1.0), 1.0 - smoothstep(0.0, 0.02, abs(d)));\n\tfragColor = vec4(col, 1.0);\n}\n",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "WtjSD3",
+    "date": "1567308037",
+    "viewed": 78,
+    "name": "Implicit Heart",
+    "description": "defined by implicit equation (x² + 9/4 y² + z²)³ - x² z³ - 9/80 y² z³ = 0",
+    "likes": 3,
+    "published": "Public",
+    "tags": [
+     "heart",
+     "implicit",
+     "love"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "#define PI 3.14159265358979\n#define AA 2\n\n#define EPSILON 1e-5\n\n#define MAX_STEP 1024\n#define MAX_DIST 20.0\n\nvec3 light = normalize(vec3(-0.3, 0.1, 1));\n\n// put any implicit equations you want to visualize there \\\n     (you may need to reduce the step length)\nfloat func(in vec3 p) {\n    float e = p.x*p.x + 2.25*p.y*p.y + p.z*p.z - 1.0;\n\treturn e*e*e - (p.x*p.x + 0.1125*p.y*p.y)*p.z*p.z*p.z;\n}\n\nvec3 calcGrad(vec3 p) {\n\tfloat k_111 = func(vec3(p.x + EPSILON, p.y + EPSILON, p.z + EPSILON));\n\tfloat k_100 = func(vec3(p.x + EPSILON, p.y - EPSILON, p.z - EPSILON));\n\tfloat k_010 = func(vec3(p.x - EPSILON, p.y + EPSILON, p.z - EPSILON));\n\tfloat k_001 = func(vec3(p.x - EPSILON, p.y - EPSILON, p.z + EPSILON));\n\tvec3 n = vec3(k_111 + k_100 - k_010 - k_001, k_111 - k_100 + k_010 - k_001, k_111 - k_100 - k_010 + k_001);\n\treturn n / (4.0 * EPSILON);\n}\n\nvec3 castRay(vec3 p, vec3 d) {\n\tfloat t = 100.0 * EPSILON, dt;\n\tvec3 P = p + t * d;\n\tif (func(p) < 0.0) return vec3(0.0, 0.0, 0.0);\n\tfor (int i = 0; i < MAX_STEP; i++) {\n\t\tdt = func(p + t * d);\n        dt /= length(calcGrad(p + t * d));\n\t\tt += 0.5*dt;\n\t\tif (dt < EPSILON) break;\n\t\tif (dt > MAX_DIST) {\n            P = normalize(p + t * d);\n            vec3 col = sin(30.0*P.x)+sin(30.0*P.y)+sin(30.0*P.z)>0.0 ?\n                vec3(0.2,0.6,1.0) : vec3(0.6,0.4,1.0);\n\t\t\tt = max(dot(d, light), 0.0);\n\t\t\treturn (0.3+0.7*t)*col;\n\t\t}\n\t}\n\tP = p + t * d;\n    vec3 n = normalize(calcGrad(P));\n    if (dot(n, d) > 0.0) n = -n;\n    \n    float dif = clamp(dot(n, light), 0.0, 1.0);\n    return (0.7*dif + 0.2*pow(max(dot(d, light), 0.0), 4.0) + 0.3)*vec3(1.0, 0.1, 0.6);\n}\n\n\nvoid mainImage( out vec4 fragColor, in vec2 fragCoord )\n{\n    float h = 2.0*cos(0.4*iTime)+1.0;\n    float r = sqrt(20.0-h*h)+0.2*(cos(iTime)+1.0);\n    vec3 pos = vec3(r*cos(iTime), r*sin(iTime), h);\n    float Unit = 0.6*length(iResolution);\n    \n    float rz=atan(-pos.x,pos.y), rx=atan(length(pos.xy),-pos.z);\n    mat3 M=mat3(cos(rz),sin(rz),0,-sin(rz),cos(rz),0,0,0,1)*mat3(1,0,0,0,cos(rx),sin(rx),0,-sin(rx),cos(rx));\n    \n    vec3 col = vec3(0.0,0.0,0.0);\n    for (int i=0;i<AA;i++) for (int j=0;j<AA;j++) {\n        vec3 d = M*vec3(0.5*iResolution.x-(fragCoord.x+float(i)/float(AA)),-0.5*iResolution.y+(fragCoord.y+float(j)/float(AA)),Unit);\n        col += castRay(pos,normalize(d));\n    }\n    col/=float(AA*AA);\n    \n    col.x=pow(col.x,0.75),col.y=pow(col.y,0.75),col.z=pow(col.z,0.75);\n\n    fragColor = vec4(col,1.0);\n}",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "wttGzM",
+    "date": "0",
+    "viewed": 0,
+    "name": "Implicit SDF",
+    "description": "temp",
+    "likes": 0,
+    "published": "Private",
+    "tags": [
+     "temp"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "#define Scale 0.1\n\nconst vec2 r=vec2(1.618,1.0);\n\nfloat imp(float x, float y){\n    vec2 p=vec2(x,y)/r; return dot(p,p)-1.0;\n    //return sqrt(x*x+y*y)-1.0;\n    //return 0.35*x*x+y*y-1.0;\n    //return x*x*x*x+y*y*y*y-1.0;\n}\n\nfloat sd_grad(vec2 p){\n    // divide by numerical gradient\n    {\n    \tfloat eps=0.001;\n    \tfloat dx = imp(p.x+eps,p.y)-imp(p.x-eps,p.y);\n    \tfloat dy = imp(p.x,p.y+eps)-imp(p.x,p.y-eps);\n    \tfloat g = length(vec2(dx,dy)/(2.0*eps));\n    \t//return imp(p.x,p.y)/g;\n    }\n    \n    // divide by analytical gradient\n    {\n        float k1=length(p/r), k2=length(p/(r*r));\n    \t//return (k1*k1-1.0)/(2.*k2);\n    }\n    \n    // divide by analytical second gradient\n    {\n    \tvec2 p1=p/r, p2=p1/r, p3=p2/r;\n        float A=dot(p1,p1)-1.0, B=2.0*length(p2);\n        vec2 a=2.0*p2, b=p3/length(p2);\n        vec2 grad=(a*B-A*b)/(B*B);\n        return A/length(a)/length(grad);\n    }\n    \n    // iq's approximation\n    {\n    \tfloat k1=length(p/r), k2=length(p/(r*r));\n    \treturn k1*(k1-1.0)/k2;\n    }\n    \n}\n\n/*float sd_grad2(vec2 p){\n    float eps=0.01;\n    float dx = sd_grad(vec2(p.x+eps,p.y))-sd_grad(vec2(p.x-eps,p.y));\n    float dy = sd_grad(vec2(p.x,p.y+eps))-sd_grad(vec2(p.x,p.y-eps));\n    float g = length(vec2(dx,dy)/(2.0*eps));\n    return sd_grad(vec2(p.x,p.y))/g;\n}*/\n\n//#define sd(p) imp((p).x,(p).y)\n#define sd(p) sd_grad(p)\n\nvoid mainImage( out vec4 fragColor, in vec2 fragCoord )\n{\n    vec2 p = (fragCoord-0.5*iResolution.xy)/(length(iResolution.xy)*Scale);\n\tfloat d = 5.0*sd(p)*Scale;\n    if (d!=d){\n\t\tfragColor = vec4(0.0,0.25,0.0,1.0);\n        return;\n    }\n    vec3 col = vec3(1.0) - sign(d)*vec3(0.1,0.4,0.7);\n\tcol *= 1.0 - exp(-2.0*abs(d));\n\tcol *= 0.8 + 0.2*cos(140.0*d);\n\tcol = mix(col, vec3(1.0), 1.0-smoothstep(0.0,0.02,abs(d)));\n\tfragColor = vec4(col,1.0);\n}",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "wl2SWt",
+    "date": "1567531823",
+    "viewed": 55,
+    "name": "Mandelbrot++",
+    "description": "zoom in to the Mandelbrot Set",
+    "likes": 0,
+    "published": "Public",
+    "tags": [
+     "mandelbrot",
+     "complex",
+     "iteration"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "/* Also check:\n * Mandelbrot Fractal: https://www.shadertoy.com/view/wl2SWt\n * Burning-Ship Fractal: https://www.shadertoy.com/view/wljSDt\n * Forest Fractal: https://www.shadertoy.com/view/tt2SDt\n * Crown Fractal: https://www.shadertoy.com/view/tl2SDt\n */\n\n#define AA 2\n\nvoid mainImage( out vec4 fragColor, in vec2 fragCoord )\n{\n    vec2 p0 = vec2(-0.743643904987575,0.1318259145542959);\n    //vec2 p0 = vec2(0.3385847939577921,0.5733237332425829);\n    vec2 p1 = vec2(-0.65,0);\n    float m1 = 6.0/length(iResolution), m0 = 1e-5*m1;\n    float t = 1.0-1.0/(exp(3.0-iTime)+1.0);\n    vec2 p = mix(p0,p1,t);\n    float m = mix(m0,m1,t);\n    int MAX_ITER = int(min(floor(0.5/m),2000.0));\n    \n    vec3 col=vec3(0,0,0);\n    for (int u=0;u<AA;u++) {\n      for (int v=0;v<AA;v++){\n        vec2 z = vec2(0,0);\n        vec2 c = (fragCoord+vec2(u,v)/float(AA)-0.5*iResolution.xy)*m+p;\n        if (length(c-vec2(-1,0))>0.25 && length(c-vec2(-0.25,0))>0.5)\n        for (int i=0;i<MAX_ITER;i++){\n            z=vec2(z.x*z.x-z.y*z.y,2.0*z.x*z.y)+c;\n            float h = dot(z,z);\n            if (h>1.8447e+19){\n                float n = float(i)-log2(0.5*log2(h))+4.0;\n                float m = exp(-n*n/20000.0);\n                n = mix(4.0*pow((log(n+1.0)+1.0),2.0),n,m);\n              #if 1\n                  m = 5.0*sin(0.1*(n-6.0))+n;\n                  col += vec3(\n                      pow(sin((m-8.0)/20.0),6.0),\n                      pow(sin((m+1.0)/20.0),4.0),\n                      (0.8*pow(sin((m+2.0)/20.0),2.0)+0.2)*(1.0-pow(abs(sin((m-14.0)/20.0)),12.0))\n                  );\n              #else\n                  col += vec3(\n                      pow(sin((n-6.0)/20.0),6.0),\n                      pow(sin((n-2.0)/20.0),4.0),\n                      0.8*pow(sin((n+2.0)/20.0),2.0)+0.2-0.2*pow(abs(sin((n-18.0)/20.0)),6.0)\n                  );\n              #endif\n                break;\n            }\n        }\n      }\n    }\n    col/=float(AA*AA);\n    fragColor=vec4(col,1.0);\n}\n",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "wscGz8",
+    "date": "1567813560",
+    "viewed": 46,
+    "name": "Mandelbrot−Julia Relationship",
+    "description": "Relationship between Mandelbrot and Julia set: the red dot in the Mandelbrot set represents c, where Julia set is defined by z↦z²+c. ",
+    "likes": 1,
+    "published": "Public",
+    "tags": [
+     "fractal",
+     "complex",
+     "iteration"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "#define AA 2\n#define MAX_ITER 1024\n\nvec3 colorf(float n) {\n    float m = 5.0*sin(0.1*(n-6.0))+n;\n    return vec3(\n        pow(sin(0.05*(m-8.0)),6.0),\n        pow(sin(0.05*(m+1.0)),4.0),\n        (0.8*pow(sin(0.05*(m+2.0)),2.0)+0.2)*(1.0-pow(abs(sin(0.05*(m-14.0))),12.0))\n    );\n}\n\nvec3 Iter(vec2 z, vec2 c)\n{\n    for (int i=0;i<MAX_ITER;i++){\n        z = vec2(z.x*z.x-z.y*z.y, 2.0*z.x*z.y)+c;\n        float h = dot(z,z);\n        if (h>1.8447e+19){\n            float n = float(i)-log2(0.5*log2(h))+4.0;\n            return colorf(n);\n        }\n    }\n    return vec3(0.0);\n}\n\nvoid mainImage( out vec4 fragColor, in vec2 fragCoord )\n{\n    float d = length(iResolution);\n    float m = 7.0/d, s = 0.06*d;\n    vec2 b = iResolution.xy-sqrt(iResolution.xy*vec2(s));\n    \n    vec2 c = abs(asin(sin(0.017*iTime)))*vec2(cos(iTime)-0.4,0.8*sin(iTime));\n    \n    vec3 col=vec3(0,0,0);\n    for (int u=0;u<AA;u++){\n        for (int v=0;v<AA;v++){\n            vec2 p = fragCoord+vec2(u,v)/float(AA);\n            float sd = max(b.x-p.x,b.y-p.y);\n            if (abs(sd)<0.04*s)  // red border\n                col+=vec3(1.0,0.0,0.0);\n            else if (sd<0.0){  // Mandelbrot\n                p = 2.75*(p-b);\n                vec2 z = (p-0.5*iResolution.xy)*m;\n                if (length(z-c)<0.06) col+=vec3(1.0,0.0,0.0);  // red dot\n                else col += Iter(vec2(0.0),z);\n            }\n            else{  // Julia\n                vec2 z = (p-0.5*iResolution.xy)*m;\n                col += Iter(z, c);\n            }\n        }\n    }\n    col/=float(AA*AA);\n    fragColor=vec4(col,1.0);\n}\n",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "ttSSDc",
+    "date": "1580178987",
+    "viewed": 18,
+    "name": "Self-Adaptive Super Sampling",
+    "description": "Much faster than brute force super sampling. \nNote that the sawteeth at the side of the cup are not recognized. \nI think this can be improved by using a depth buffer. ",
+    "likes": 0,
+    "published": "Unlisted",
+    "tags": [
+     "raymarching",
+     "supersampling",
+     "cup"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [
+      {
+       "id": "XsfGRn",
+       "filepath": "/media/a/1f7dca9c22f324751f2a5a59c9b181dfe3b5564a04b724c657732d0bf09c99db.jpg",
+       "type": "texture",
+       "channel": 1,
+       "sampler": {
+        "filter": "mipmap",
+        "wrap": "repeat",
+        "vflip": "true",
+        "srgb": "false",
+        "internal": "byte"
+       },
+       "published": 1
+      },
+      {
+       "id": "4dXGR8",
+       "filepath": "/media/previz/buffer00.png",
+       "type": "buffer",
+       "channel": 0,
+       "sampler": {
+        "filter": "linear",
+        "wrap": "clamp",
+        "vflip": "true",
+        "srgb": "false",
+        "internal": "byte"
+       },
+       "published": 1
+      }
+     ],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "#if 0\nvoid mainImage(out vec4 fragColor, in vec2 fragCoord) {\n    vec3 c0 = texelFetch(iChannel0,ivec2(fragCoord),0).xyz;\n    float d = 0.0;\n    for (int i=-1;i<=1;i++) {\n        for (int j=-1;j<=1;j++) {\n            if (i!=0&&j!=0) {\n        \t\tvec3 c = texelFetch(iChannel0,ivec2(fragCoord)+ivec2(i,j),0).xyz;\n                c -= c0;\n                d = max(d,length(c));\n            }\n        }\n    }\n    float dif = d;\n    \n    int AA = 1; float a;\n    //fragColor = vec4(dif,dif,dif,0.); return;\n    if (dif<0.2){\n        fragColor=vec4(c0,1.0);\n        return;\n    }\n    else if (dif<0.8) AA=2, a=0.3;\n    else AA=3, a=0.8;\n    \n    vec3 col;\n    for (int i=0;i<AA;i++) for (int j=0;j<AA;j++)\n    \tcol += calcCol(fragCoord+(vec2(i,j)+vec2(0.5))/float(AA),\n                       iResolution.xy, iMouse, iTime, iChannel1);\n    col/=float(AA*AA);\n    if (fract(iTime)>0.5) col=mix(col,vec3(1,0,0),a);\n    fragColor = vec4(col,1.0);\n}\n\n#else\nvoid mainImage(out vec4 fragColor, in vec2 fragCoord) {\n#define C(i,j) cols[3*(i)+(j)]\n    vec3 cols[9];\n    for (int i=-1;i<=1;i++) for (int j=-1;j<=1;j++){\n        C(i+1,j+1) = texelFetch(iChannel0,ivec2(fragCoord)+ivec2(i,j),0).xyz;\n    }\n    vec3 dx,dy;\n    for (int i=0;i<3;i++){\n        float m=i==1?2.0:1.0;\n        dx+=m*max(abs(C(2,i)-C(1,i)),abs(C(1,i)-C(0,i)));\n        dy+=m*max(abs(C(i,2)-C(i,1)),abs(C(i,1)-C(i,0)));\n    }\n    vec3 g = sqrt(dx*dx+dy*dy);\n    float dif = dot(g,vec3(0.3,0.59,0.11));\n    \n    int AA = 1; float a;\n    if (dif<0.5){\n        fragColor=vec4(C(1,1),1.0);\n        return;\n    }\n    else if (dif<2.0) AA=2, a=0.3;\n    else AA=3, a=0.8;\n    \n    vec3 col;\n    for (int i=0;i<AA;i++) for (int j=0;j<AA;j++)\n    \tcol += calcCol(fragCoord+(vec2(i,j)+vec2(0.5))/float(AA),\n                       iResolution.xy, iMouse, iTime, iChannel1);\n    col/=float(AA*AA);\n    if (fract(iTime)>0.5) col=mix(col,vec3(1,0,0),a);\n    fragColor = vec4(col,1.0);\n}\n#endif",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    },
+    {
+     "inputs": [],
+     "outputs": [],
+     "code": "#define PI 3.14159265358979\n\nfloat opExtrusion(float sd, float h, vec3 P) {\n    if (P.z >= 0. && P.z <= h) return sd > 0. ? sd : max(sd, max(-P.z, P.z - h));\n\tif (P.z > h) return sd > 0. ? sqrt(sd*sd + (P.z - h)*(P.z - h)) : P.z - h;\n\tif (P.z < 0.) return sd > 0. ? sqrt(sd*sd + P.z*P.z) : -P.z;\n}\n\nfloat sdCylinder(float r, float min_z, float max_z, vec3 p) {\n    p.z-=min_z, max_z-=min_z, min_z=0.0;\n    float d=length(p.xy)-r;\n    if (p.z>0.0 && p.z<max_z) return max(d, max(-p.z, p.z-max_z));\n    if (p.z>max_z) p.z-=max_z;\n    else p.z=-p.z;\n    return d<0.0?p.z:sqrt(d*d+p.z*p.z);\n}\n\nfloat sdPolygon(vec2 v[4], vec2 p) {\n\tfloat sd = dot(p - v[0], p - v[0]);\n\tfloat sgn = 1.0;\n\tvec2 e, w, b; float c;\n\tfor (int i = 0; i < 4; i++) {\n\t\te = v[(i+1)%4] - v[i];\n\t\tw = p - v[i];\n\t\tb = w - e*clamp( dot(w,e)/dot(e,e), 0.0, 1.0 );\n\t\tsd = min(sd, dot(b,b));\n\t\tif (e.y < 0.0) e.y = -e.y, w.y = -w.y;\n\t\tif (w.y > 0.0 && w.y < e.y && (w.y*e.x / e.y > w.x)) sgn =-sgn;\n\t}\n\treturn sgn*sqrt(sd);\n}\n\nfloat s_sub(float a, float b, float k) {\n\tfloat h = 0.5 - 0.5*(b + a) / k;\n\tif (h < 0.0) return a; if (h > 1.0) return -b;\n\treturn mix(a,-b,h) + k*h*(1.0 - h);\n}\n\nfloat s_min(float a, float b, float k) {\n\tfloat h = 0.5 + 0.5*(b - a) / k;\n\tif (h < 0.0) return b; if (h > 1.0) return a;\n\treturn mix(b,a,h) - k*h*(1.0 - h);\n}\n\nfloat sdCup(vec3 p) {\n    p.z-=0.23;\n    float cyl = sdCylinder(0.75, 0.0, 2.0, p);\n    float sd = abs(cyl - 0.15) - 0.08;\n    sd = s_sub(sd, 1.8 - p.z, 0.08);\n    vec3 q=p.xzy-vec3(1.03,0.38,-0.15);\n    float handle = sdPolygon(vec2[4](vec2(0,0.9),vec2(0.4,0.9),vec2(0.3,0.35),vec2(0,0.1)),q.xy);\n    handle=opExtrusion(abs(handle-0.2)-0.05, 0.3, q)-0.1;\n    handle=max(handle,0.12-cyl);\n    sd = s_min(sd, handle, 0.05);\n    return sd;\n}\n\nfloat map(vec3 p) {\n    p.z+=1.0;\n    return min(p.z, sdCup(p));\n}\n\n#define ZERO min(int(time),0)\n#define eps 1e-3\n#define MAX_STEP 256\n#define MAX_DIST 20.0\n\n\nvec3 light = normalize(vec3(-0.3, 0.1, 1));\n\nvec3 calcCol(in vec2 coord, in vec2 res, in vec4 iMouse, in float time, sampler2D g) {\n    vec3 Pos;\n    if (iMouse.z>0.){\n        float u = 2.0*PI*iMouse.x/res.x;\n        float v = 0.5*PI*iMouse.y/res.y;\n        Pos = 5.0*vec3(sin(u)*cos(v),cos(u)*cos(v),sin(v));\n    }\n    else{\n    \tfloat H = cos(0.4*time); H=3.5*H*H+0.5;\n    \tfloat R = sqrt(20.0-H*H)+0.2*(cos(time)+1.0);\n    \tPos=vec3(R*cos(time), R*sin(time), H);\n    }\n    \n    float rz=atan(-Pos.x,Pos.y), rx=atan(length(Pos.xy),-Pos.z);\n    mat3 M=mat3(cos(rz),sin(rz),0,-sin(rz),cos(rz),0,0,0,1)*mat3(1,0,0,0,cos(rx),sin(rx),0,-sin(rx),cos(rx));\n    \n    vec3 d = M*normalize(vec3(0.5*res.x-coord.x,-0.5*res.y+coord.y,0.7*length(res)));\n    \n    \n\t// cast ray\n\tfloat t = 100.0 * eps, dt;\n\tvec3 p = Pos + t * d;\n\tif (map(p) < 0.0) return vec3(0.0, 0.0, 0.0);\n\tfor (int i = ZERO; i < MAX_STEP; i++) {\n\t\tdt = map(Pos + t * d);\n\t\tt += dt;\n\t\tif (dt < -eps) return vec3(1.0, 0.0, 0.0);\n\t\tif (dt < eps) break;\n\t\tif (dt > MAX_DIST || i+1 == MAX_STEP) {\n            return vec3(0.0);\n\t\t\t//t = max(dot(d, light), 0.0);\n\t\t\t//return vec3(t, t, t);\n\t\t}\n\t}\n\tp = Pos + t * d;\n    vec3 col = vec3(0.87,0.8,0.7);\n    if (p.z+1.0<eps) col = texture(g,0.1*p.xy).rgb;\n    col *= exp(-0.01*dot(p.xy,p.xy));\n\n\t// calculate normal\n\tfloat k_111 = map(vec3(p.x + eps, p.y + eps, p.z + eps));\n\tfloat k_100 = map(vec3(p.x + eps, p.y - eps, p.z - eps));\n\tfloat k_010 = map(vec3(p.x - eps, p.y + eps, p.z - eps));\n\tfloat k_001 = map(vec3(p.x - eps, p.y - eps, p.z + eps));\n\tvec3 n = normalize(vec3(k_111 + k_100 - k_010 - k_001, k_111 - k_100 + k_010 - k_001, k_111 - k_100 - k_010 + k_001));\n\tif (dot(n, d) > 0.0) n = -n;\n\n\t// calculate shadow\n\td -= 2.0 * dot(d, n)*n;\n\tfloat r = 1.0;\n\tt = 0.01;\n\tfor (int i = ZERO; i < MAX_STEP; i++) {\n\t\tdt = map(p + t * light);\n\t\tr = min(r, 15.0 * dt / t);\n\t\tif (r < 0.01 || t > 2.0) break;\n\t\tt += 0.1*clamp(dt, 0.5, 2.0);\n\t}\n\tr = clamp(r, 0.0, 1.0);\n\n\t// final result\n\tfloat dif = clamp(dot(n, light), 0.0, 1.0);\n\treturn (dif*r + 0.2*pow(max(dot(d, light), 0.0), 4.0))*col + (0.5 - 0.5*dif)*vec3(0.1, 0.15, 0.25);\n    \n}\n",
+     "name": "Common",
+     "description": "",
+     "type": "common"
+    },
+    {
+     "inputs": [
+      {
+       "id": "XsfGRn",
+       "filepath": "/media/a/1f7dca9c22f324751f2a5a59c9b181dfe3b5564a04b724c657732d0bf09c99db.jpg",
+       "type": "texture",
+       "channel": 0,
+       "sampler": {
+        "filter": "mipmap",
+        "wrap": "repeat",
+        "vflip": "true",
+        "srgb": "false",
+        "internal": "byte"
+       },
+       "published": 1
+      }
+     ],
+     "outputs": [
+      {
+       "id": "4dXGR8",
+       "channel": 0
+      }
+     ],
+     "code": "void mainImage(out vec4 fragColor, in vec2 fragCoord) {\n    vec3 col=calcCol(fragCoord+vec2(0.5),iResolution.xy,iMouse,iTime,iChannel0);\n    fragColor = vec4(clamp(col,0.0,1.0),1.0);\n}\n",
+     "name": "Buffer A",
+     "description": "",
+     "type": "buffer"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "wttGDB",
+    "date": "1577836293",
+    "viewed": 14,
+    "name": "Sound Test 0x00000001",
+    "description": "temp",
+    "likes": 0,
+    "published": "Unlisted",
+    "tags": [
+     "temp"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "void mainImage( out vec4 fragColor, in vec2 fragCoord )\n{\n    vec2 uv = fragCoord/iResolution.xy;\n    vec2 a = calcSound(0.01*uv.x+iTime);\n    float w = a.x+a.y;\n    float c = 20.0*abs(w-uv.y+0.5);\n    vec3 col = vec3(smoothstep(0.5,0.0,c));\n    fragColor = vec4(col, 1.0);\n}",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    },
+    {
+     "inputs": [],
+     "outputs": [],
+     "code": "\nvec2 mainSound(float time){\n    return calcSound(time);\n}\n",
+     "name": "Sound",
+     "description": "",
+     "type": "sound"
+    },
+    {
+     "inputs": [],
+     "outputs": [],
+     "code": "//https://i.stack.imgur.com/1NN4r.png\n\n#if 0\n\nconst int NS = 128;\nconst float dirS = 12.0;\nconst float vS = 240.0/60.0;\nconst int S[NS] = int[NS](\n    42,51,49,47,42,00,00,42,\n    42,51,49,47,44,00,00,00,\n    44,52,51,49,46,00,00,00,\n    54,54,52,49,51,00,00,00,\n    42,51,49,47,42,00,00,00,\n    42,51,49,47,44,00,00,44,\n    44,52,51,49,54,54,54,54,\n    56,54,52,49,47,00,00,00,\n    51,51,51,00,51,51,51,00,\n    51,54,47,49,51,00,00,00,\n    52,52,52,52,52,51,51,51,\n    51,49,49,51,49,00,54,00,\n    51,51,51,00,51,51,51,00,\n    51,54,47,49,51,00,00,00,\n    52,52,52,52,52,51,51,51,\n    54,54,52,49,47,00,00,00\n);\n\n#define BASS\nconst int NE = 128;\nconst float dirE = 12.0;\nconst float vE = 240.0/60.0;\nconst int E[NE] = int[NE](\n    35,00,42,00,35,00,42,00,\n    35,00,42,00,28,00,35,00,\n    28,00,35,00,30,00,37,00,\n    30,00,42,00,35,00,42,00,\n    35,00,42,00,35,00,42,00,\n    35,00,42,00,28,00,35,00,\n    28,00,35,00,30,00,37,00,\n    34,00,42,00,35,00,42,00,\n    35,47,42,47,35,47,42,47,\n    35,47,42,49,35,47,42,47,\n    40,52,47,52,35,47,42,47,\n    37,49,44,49,42,40,39,37,\n    35,47,42,47,35,47,42,47,\n    35,47,42,49,35,47,42,47,\n    40,52,47,52,35,47,42,47,\n    37,49,44,49,42,40,39,37\n);\n\n#else\n\nconst int NS = 128;\nconst float dirS = 14.0;\nconst float vS = 284.0/60.0;\nconst int S[NS] = int[NS](\n    47,48,40,47,00,48,00,00,\n    47,48,40,48,00,47,00,38,\n    45,47,38,45,00,47,00,38,\n    43,00,00,00,41,00,00,00,\n    47,48,40,47,00,48,00,00,\n    48,47,40,48,00,47,00,38,\n    45,47,38,45,00,47,00,38,\n    43,00,00,00,42,00,00,38,\n    40,00,40,00,40,00,40,40,\n    40,38,36,36,00,00,36,36,\n    38,38,00,00,00,36,35,33,\n    00,00,00,00,00,00,00,33,\n    40,40,40,40,00,00,43,43,\n    40,00,00,00,00,00,36,36,\n    38,40,00,00,00,38,36,38,\n    00,00,00,00,00,00,00,00\n);\n\n#define BASS\nconst int NE = 16;\nconst float dirE = 2.0;\nconst float vE = 35.5/60.0;\nconst int E[NE] = int[NE](\n    45,41,43,38,45,41,43,38,\n    40,36,38,38,40,36,38,38\n);\n\n#endif\n\n\n\n\n//=====================================================================\n\n\n\n#define freq(n) 440.0*exp2(((n)-49.0)/12.0)\n\n#define sinWave(f,t) sin(6.283185307*(f)*(t))\n#define triWave(f,t) (2.0*abs(2.0*fract(f*t-0.25)-1.0)-1.0)\n#define sqrWave(f,t) (fract((f)*(t))>0.5?-0.5:0.5)\n#define sthWave(f,t) (2.0*fract((f)*(t)-0.5)-1.0)\n#define wave(f,t) sinWave(f,t)\n\nfloat calcS(float t){\n    t*=vS;\n    int n = S[int(t)%NS];\n    if (n==0) return 0.0;\n    t=fract(t);\n    float m = t<0.9?1.0:mix(1.0,0.0,10.0*(t-0.9));\n    float f = freq(float(n)+dirS);\n    return m*wave(f,t/vS);\n}\n\n#ifdef BASS\nfloat calcE(float t){\n    t*=vE;\n    int n = E[int(t)%NE];\n    if (n==0) return 0.0;\n    t=fract(t);\n    float m = t<0.9?1.0:mix(1.0,0.0,10.0*(t-0.9));\n    float f = freq(float(n)+dirE);\n    return m*wave(f,t/vE);\n}\n#endif\n\n\n\nfloat beep(float t){\n    // pretty obivious in the image but sounds really horrible\n    return mod(t,2.0)<1.0?0.0:0.005*tan(2764.6*t);\n}\n\nvec2 calcSound(float time){\n    float a = calcS(time);\n#ifdef BASS\n    float b = calcE(time);\n#else\n    float b = a;\n#endif\n    //return 0.1*vec2(a,b)+beep(time);\n    return 0.1*vec2(a,b);\n}\n\n\n",
+     "name": "Common",
+     "description": "",
+     "type": "common"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "wtGGz1",
+    "date": "0",
+    "viewed": 0,
+    "name": "Sound Test 0x00000002",
+    "description": "copied from https://www.shadertoy.com/view/wlyGRz",
+    "likes": 0,
+    "published": "Private",
+    "tags": [
+     "temp"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "void mainImage( out vec4 fragColor, in vec2 fragCoord )\n{\n    vec2 uv = fragCoord/iResolution.xy;\n    vec2 a = calcSound(0.01*uv.x+iTime);\n    float w = a.x+a.y;\n    float c = 20.0*abs(w-uv.y+0.5);\n    vec3 col = vec3(smoothstep(0.5,0.0,c));\n    fragColor = vec4(col, 1.0);\n}",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    },
+    {
+     "inputs": [],
+     "outputs": [],
+     "code": "// Procedural Music Sequencer\n// by Hazel Quantock 2020\n// This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License. https://creativecommons.org/licenses/by-sa/4.0/\n\n// random hash from here: https://www.shadertoy.com/view/4dVBzz\n#define M1 1597334677U     //1719413*929\n#define M2 3812015801U     //140473*2467*11\n#define M3 3299493293U     //467549*7057\n\n#define F0 (1.0/float(0xffffffffU))\n\n#define hash(n) n*(n^(n>>15))\n\n#define coord1(p) ((p)*M1)\n#define coord2(p) ((p).x*M1^(p).y*M2)\n#define coord3(p) ((p).x*M1^(p).y*M2^(p).z*M3)\n\nfloat hash1(uint n){return float(hash(n))*F0;}\nvec2 hash2(uint n){return vec2(hash(n)*uvec2(0x1U,0x3fffU))*F0;}\nvec3 hash3(uint n){return vec3(hash(n)*uvec3(0x1U,0x1ffU,0x3ffffU))*F0;}\nvec4 hash4(uint n){return vec4(hash(n)*uvec4(0x1U,0x7fU,0x3fffU,0x1fffffU))*F0;}\n\n\n\nint baseNote;\nfloat bps;\n\nint majorScale( int index )\n{\n    return (index*12)/7; //0,2,4,6,7,9,11,12,14,16,18,19,...\n}\n\nint pentatonicScale( int index )\n{\n    return (index*12)/5; //0,2,4,7,9,12,14,16,19,...\n}\n\nfloat frequency( int note )\n{\n    return 440. * exp2( float(note + baseNote) / 12. );\n}\n\nfloat triangleWave( int note, float time )\n{\n    return fract(frequency(note)*time)*2.-1.;\n}\n\nfloat squareWave( int note, float time )\n{\n    return step(.5,fract(frequency(note)*time))*2.-1.;\n}\n\nfloat sineWave( int note, float time )\n{\n    return sin(6.283185*frequency(note)*time);\n}\n\nvoid beat( out int i, out float f, float beatLength, float time )\n{\n    f = time*bps/beatLength;\n    i = int(floor( f ));\n    f -= float(i);\n}\n\nvec2 calcSound( float time )\n{\n    // YES!! iDate.w changes every time and sound is regenerated on rewind!\n    uint seed = coord1(uint(iDate.w));//uvec3(iDate));\n    vec4 rand = hash4(seed);\n    seed = coord1(seed);\n    \n    // todo: vary these on initialisation\n    baseNote = int(rand.x*12.999)-15;//-9; // relative to middle A\n    int inversion = int(rand.y*12.999)-5;\n    bps = 140./60.;\n    ivec4 triads = ivec4(hash4(seed)*6.999);\n    seed = coord1(seed);\n    \n    int beatsPerBar = 4*int(exp2(floor(rand.y*2.999)));\n    int barsPerPhrase = 4; // this currently has to match the number of triads\n    \n    // timings\n// this would be neater with a function taking number of beats returning int and float\n// which would also work for arp\n    int beat = int(floor(time*bps));\n    float beatf = time*bps-float(beat);\n    int bar = beat/beatsPerBar;\n    float barf = (float(beat-bar*beatsPerBar)+beatf)/float(beatsPerBar);\n    int phrase = bar/barsPerPhrase;\n    float phrasef = (float(bar-phrase*barsPerPhrase)+barf)/float(barsPerPhrase);\n// todo: have verse phrase, chorus phrase alternate a few times, then bridge phrase and final chorus phrase\n// only difference between phrases should be random seed\n\n    int barInPhrase = bar%barsPerPhrase;\n    int beatInBar = beat%beatsPerBar;\n\n    // note frequencies are: exp2(i/12.+octave)*baseFreq\n    \n    // 6 triads = alternate notes in the scale, starting on the first 6 notes\n    \n    // pick a triad for the bar\n    int triadBaseNote = triads[barInPhrase];\n    \n    // invert the triads into the same range\n    ivec3 triad =\n        ivec3(\n        \t((majorScale(triadBaseNote)-inversion)%12)+inversion,\n    \t\t((majorScale(triadBaseNote+2)-inversion)%12)+inversion,\n    \t\t((majorScale(triadBaseNote+4)-inversion)%12)+inversion\n        );\n    \n    // sort these notes! this is important for arp and bass\n    if ( triad.x < triad.y )\n    {\n        if ( triad.y < triad.z ) triad.xyz = triad.xyz;\n        else if ( triad.x < triad.z ) triad.xyz = triad.xzy;\n            else triad.xyz = triad.zxy;\n    }\n    else\n    {\n        if ( triad.x < triad.z ) triad.xyz = triad.yxz;\n        else if ( triad.y < triad.z ) triad.xyz = triad.yzx;\n            else triad.xyz = triad.zyx;\n    }\n\n    float f = 0.;\n    \n    // play the chord as pads\n    float padAmp = .1*smoothstep(0.,.1,barf)*smoothstep(1.,.5,barf);\n    f += (triangleWave(triad[0],time) + triangleWave(triad[1],time) + triangleWave(triad[2],time))*padAmp;\n    \n    // arpeggiator\n    int arpPerBeat = int(floor(pow(rand.w,2.)*4.999))+2; // I thought 5 would sound bad but it's ok actually\n    float arpf = time*bps * float(arpPerBeat);\n    int arpb = int(floor(arpf));\n    arpf -= float(arpb);\n    \n    // run through the notes of the triad\n    vec4 randArp = hash4(seed);\n    seed = coord1(seed);\n    int range = int(randArp.y*5.999+3.);\n    int arpNote =\n        randArp.z > .5 ?\n        abs(((arpb+int(randArp.x*100.999))%(range*2))-(range-1)) // yoyo\n    \t: arpb%range; // ascending\n    arpNote += int(randArp.w*5.999)-2;\n    float arpAmp = .1*step(arpf,.5);//smoothstep(0.,.001,arpf)*smoothstep(.5,.499,arpf);//pow(1.-arpf,2.);\n    \n    int octFudge = 2; // mods go wrong on -ves\n    arpNote += octFudge*3;\n    f += squareWave(triad[arpNote%3] + 12*(arpNote/3 - octFudge),time)*arpAmp;\n    \n    \n    // bass line - play the bottom note of the chord in a random rhythm\n\t// it's ok but the randomness is a bit too random\n    if ( hash1(coord2(uvec2(seed,barInPhrase)))*.9+.1 > hash1(coord2(uvec2(beatInBar,seed)))*2.*float(beatInBar)/float(beatsPerBar) )    {\n        float bassAmp = .4*smoothstep(.0,.001,beatf)*pow(1.-beatf,1.);\n        f += mix(\n            \tsineWave(triad[0]-12,time)*3.,\n            \ttriangleWave(triad[0]-24,time),\n            //mix(0.,.5,pow(1.-beatf,2.))) // quite a nice pluck effect\n            mix(0.,.3+.4*hash1(coord1(uint(beat))),pow(1.-beatf,2.))) // add a little randomness to the \"harshness\" of the pluck\n            * bassAmp;\n    }\n    \n    \n    // todo: Melody\n    // more complicated rhyhm than bass\n    // pick notes randomly from the pentatonic scale for the melody\n    // but start and end each phrase with a note from the triad\n    \n    \n    return vec2(f)*.3;\n}\n",
+     "name": "Common",
+     "description": "",
+     "type": "common"
+    },
+    {
+     "inputs": [],
+     "outputs": [],
+     "code": "\nvec2 mainSound(float time){\n    return calcSound(time);\n}\n",
+     "name": "Sound",
+     "description": "",
+     "type": "sound"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "ttcSRN",
+    "date": "0",
+    "viewed": 0,
+    "name": "Sound Test 0x00000003",
+    "description": "temp",
+    "likes": 0,
+    "published": "Private",
+    "tags": [
+     "temp"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "void mainImage(out vec4 fragColor, in vec2 fragCoord) {\n    vec2 uv = fragCoord/iResolution.xy;\n    vec2 a = 0.1*calcSound(0.01*uv.x+iTime);\n    float w = a.x+a.y;\n    float c = 20.0*abs(w-uv.y+0.5);\n    vec3 col = vec3(smoothstep(0.5,0.0,c));\n    fragColor = vec4(col, 1.0);\n}",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    },
+    {
+     "inputs": [],
+     "outputs": [],
+     "code": "float hash(float x){\n    return fract(sin(12.9898*x+12.87)*43758.5453)*2.0-1.0;\n}\n\nfloat noise(float x){\n    //return sin(x);\n    //return fract(x);\n    //return fract(x)<0.5?1.0:0.0;\n    //return tan(x);\n    return mix(hash(floor(x)),hash(ceil(x)),fract(x));\n}\n\nfloat fbm(float x){\n    float res = 0.0;\n    float a = 1.0;\n    float e = 1.0;\n    for (int k=0; k<10; k++){\n        res += a * noise(e*(x+hash(float(k))));\n        a *= 0.5, e *= 2.0;\n    }\n    return res;\n}\n\n\n#define freq(n) 440.0*exp2(((n)-49.0)/12.0)\n\n#define sinWave(f,t) sin(6.283185307*(f)*(t))\n#define triWave(f,t) (2.0*abs(2.0*fract(f*t-0.25)-1.0)-1.0)\n#define sqrWave(f,t) (fract((f)*(t))>0.5?-0.5:0.5)\n#define sthWave(f,t) (2.0*fract((f)*(t)-0.5)-1.0)\n\nvec2 calcSound(float time){\n    float k = fbm(100.0*time);\n    //if (fract(time)<0.5) k=0.0;\n    //k = sinWave(freq(mod(floor(10.0*time),72.0)+28.),fract(time));\n    return vec2(k);\n}\n",
+     "name": "Common",
+     "description": "",
+     "type": "common"
+    },
+    {
+     "inputs": [],
+     "outputs": [],
+     "code": "vec2 mainSound(float time) {\n    return calcSound(time);\n}\n",
+     "name": "Sound",
+     "description": "",
+     "type": "sound"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "tlcXDM",
+    "date": "1581053690",
+    "viewed": 36,
+    "name": "Unnecessary Calculation",
+    "description": "A new discovery made after a curious attempt - every time we calculate the distance to a quadratic bezier curve by solving a cubic equation, we made an unnecessary calculation.",
+    "likes": 0,
+    "published": "Unlisted",
+    "tags": [
+     "sdf",
+     "bezier",
+     "root"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "/*\n\tA new discovery made after a curious attempt - every time we \n\tcalculate the distance to a quadratic bezier curve by \n\tsolving a cubic equation, we made an unnecessary calculation.\n\n\tThe usual way to solve cubic equation has 4 cases. Each case \n\tis represented in a different color - orange, purple, blue, \n\tand green. But in this demo, no matter how you choose three \n\tcontrol points, the green won't appear.\n\n\tI get this based on my observation without mathematical prove. \n\tIf you see green appear, please let me know.\n\n*/\n\nvec3 col;  // color as global variable\n\n#define PI 3.14159265\n#define _13 0.33333333\n#define PI_3 1.04719755\nfloat SDBezier2(vec2 A, vec2 B, vec2 C, in vec2 P) {\n\tvec2 C2 = A-2.0*B+C, C1 = 2.0*(B-A), C0 = A-P, E;\n\tfloat t = 0.5/dot(C2,C2),\n\t\ta = dot(C2,C1)*t, b = (2.0*dot(C2,C0)+dot(C1,C1))*t, c = dot(C1,C0)*t;\n\tfloat a2 = 9.0*a*a, p = (-a2*_13+b)*_13, q = 0.11111111*a*a2+0.5*(c-a*b),\n\t\tp3 = p*p*p, delta = q*q+p3;\n\tfloat sd, E2;\n\tif (delta>0.0) {  // one real root, show in orange\n\t\tdelta = sqrt(delta);\n\t\tt = (delta>q?pow(delta-q,_13):-pow(q-delta,_13))\n            -(delta+q>0.0?pow(delta+q,_13):-pow(-delta-q,_13));\n\t\tt = clamp(t-a,0.,1.);\n\t\tE = (C2*t+C1)*t+C0, sd = dot(E,E);\n\t\tcol = vec3(.9,.6,.2);\n\t}\n\telse {  // three real roots\n        t = sqrt(-p), q = _13*acos(q/(p*t)), p = 2.0*t;\n\t\t// the ever-existing real root, show in purple\n\t\tt = clamp(p*cos(q)-a,0.,1.);\n\t\tE = (C2*t+C1)*t+C0, sd = dot(E,E);\n\t\tcol = vec3(.8,.4,.6);\n\t\t// show in blue\n\t\tt = clamp(-p*cos(q-PI_3)-a,0.,1.);\n\t\tE = (C2*t+C1)*t+C0, E2 = dot(E,E);\n\t\tif (E2<sd) sd = E2, col = vec3(.3,.6,.9);\n\t\t// show in green, this color doesn't show up\n        // which means the following lines are unnecessary\n\t\tt = clamp(-p*cos(q+PI_3)-a,0.,1.);\n\t\tE = (C2*t+C1)*t+C0, E2 = dot(E,E);\n\t\tif (E2<sd) sd = E2, col = vec3(.4,.7,.6);\n\t}\n\treturn sqrt(sd);\n}\n\n\nfloat hash(float x){  // [-1,1)\n    return fract(sin(12.9898*x+12.87)*43758.5453)*2.0-1.0;\n}\nfloat noise(float x, float d){\n    return mix(hash(floor(x)+d),hash(ceil(x)+d),fract(x));\n}\nvoid mainImage(out vec4 Col, in vec2 Pos) {\n    float a = noise(iTime,0.5);\n    vec2 A = vec2(sin(a),cos(a))*noise(iTime,0.0);\n    a = noise(iTime,1.5);\n    vec2 B = vec2(sin(a),cos(a))*noise(iTime,1.0);\n    a = noise(iTime,2.5);\n    vec2 C = vec2(sin(a),cos(a))*noise(iTime,2.0);\n\n    vec2 p = 4.0*(Pos-0.5*iResolution.xy)/length(iResolution.xy);\n    float d = SDBezier2(A,B,C,p);\n\tcol *= 1.0-exp(-3.0*abs(d));\n\tcol *= 0.8+0.2*cos(150.0*d);\n\tcol = mix(col,vec3(1.0),1.0-smoothstep(0.0,0.02,abs(1.2*d)));\n    Col = vec4(col,1.0);\n}\n\n",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "3l2XWc",
+    "date": "1570296570",
+    "viewed": 6,
+    "name": "Untitled 0x00000001",
+    "description": "temp",
+    "likes": 0,
+    "published": "Unlisted",
+    "tags": [
+     "temp"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "#define AA 3\n\n#define EPSILON 1e-3\n\n#define MAX_STEP 1024\n#define MAX_DIST 200.0\n\n#define Unit 2000.0\n\n\nfloat map(vec3 p) {\n    float sd=sd_regularstar(1.618,1.0,5,p.xy);\n    sd = opExtrusion(sd,2.0,p+vec3(0,0,0));\n    return max(abs(abs(sd) - 0.3) - 0.1, p.z - 0.5);\n}\n\nvec3 calcGrad(vec3 p) {\n\tfloat k_111 = map(vec3(p.x + EPSILON, p.y + EPSILON, p.z + EPSILON));\n\tfloat k_100 = map(vec3(p.x + EPSILON, p.y - EPSILON, p.z - EPSILON));\n\tfloat k_010 = map(vec3(p.x - EPSILON, p.y + EPSILON, p.z - EPSILON));\n\tfloat k_001 = map(vec3(p.x - EPSILON, p.y - EPSILON, p.z + EPSILON));\n\tvec3 n = vec3(k_111 + k_100 - k_010 - k_001, k_111 - k_100 + k_010 - k_001, k_111 - k_100 - k_010 + k_001);\n\treturn n / (4.0 * EPSILON);\n}\n\nvec3 castRay(vec3 p, vec3 d, vec3 light) {\n    // cast ray\n    float t = 100.0 * EPSILON, dt;\n\tvec3 P = p + t * d;\n\tif (map(p) < 0.0) return vec3(0.0, 0.0, 0.0);\n\tfor (int i = 0; i < MAX_STEP; i++) {\n\t\tdt = map(p + t * d);\n\t\tt += dt;\n        if (dt < -EPSILON) return vec3(1.0,0.0,0.0);\n\t\tif (dt < EPSILON) break;\n\t\tif (dt > MAX_DIST) {\n            vec3 col = vec3(1.0,1.0,1.0);\n\t\t\tt = max(dot(d, light), 0.0);\n\t\t\treturn t*t*col;\n\t\t}\n\t}\n\tP = p + t * d;\n    vec3 n = normalize(calcGrad(P));\n    if (dot(n, d) > 0.0) n = -n;\n    \n    // shadow\n    d -= 2.0 * dot(d, n)*n;\n\tfloat r = 1.0;\n\tt = 0.01;\n\tfor (int i = 0; i < MAX_STEP; i++) {\n\t\tdt = map(P + t * light);\n\t\tr = min(r, 15.0 * dt / t);\n\t\tif (r < 0.001 || t > 2.0) break;\n\t\tt += clamp(dt, 1.0, 2.0)*clamp(length(p) / Unit, 0.002, 0.2);\n\t}\n\tr = clamp(r,0.0,1.0);\n    \n    // final result\n    float dif = clamp(dot(n, light), 0.0, 1.0);\n    return (0.9*dif*r + 0.2*pow(max(dot(d,light),0.0),4.0) + 0.1)*vec3(0.9,0.8,0.8);\n}\n\nvoid mainImage( out vec4 fragColor, in vec2 fragCoord )\n{\n    float h = 4.0*(cos(0.4*iTime)+1.0)+3.0;\n    float r = sqrt(150.0-h*h) + 1.0*(cos(iTime)+1.0) + 8.0;\n    vec3 pos = vec3(r*cos(iTime), r*sin(iTime), h);\n    vec3 ctr = vec3(0.0,0.0,0.0);\n    vec3 dir = ctr-pos;\n    \n    float rz=atan(dir.x,-dir.y), rx=atan(length(dir.xy),dir.z);\n    mat3 M=mat3(cos(rz),sin(rz),0,-sin(rz),cos(rz),0,0,0,1)*mat3(1,0,0,0,cos(rx),sin(rx),0,-sin(rx),cos(rx));\n    \n    vec3 light = normalize(vec3(-0.3, 0.1, 1));\n    \n    vec3 col = vec3(0.0,0.0,0.0);\n    for (int i=0;i<AA;i++) for (int j=0;j<AA;j++) {\n        vec3 d = M*vec3(0.5*iResolution.x-(fragCoord.x+float(i)/float(AA)),-0.5*iResolution.y+(fragCoord.y+float(j)/float(AA)),Unit);\n        col += castRay(pos,normalize(d),light);\n    }\n    col/=float(AA*AA);\n    \n    col.x=pow(col.x,0.75),col.y=pow(col.y,0.75),col.z=pow(col.z,0.75);\n\n    fragColor = vec4(col,1.0);\n}\n\n",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    },
+    {
+     "inputs": [],
+     "outputs": [],
+     "code": "#define PI 3.14159265358979\n\nfloat det(vec2 a, vec2 b){\n    return a.x*b.y-b.x*a.y;\n}\n\nfloat sd_circle(float r, in vec2 p) {\n\treturn length(p) - r;\n}\n\nfloat sd_segment(vec2 v1, vec2 v2, in vec2 p) {\n\tfloat t = dot(v2 - v1, p - v1);\n\tif (t < 0.0) return length(p - v1);\n\tif (t > dot(v2-v1, v2-v1)) return length(p - v2);\n\treturn abs(det(normalize(v2 - v1), p - v1));\n}\n\nfloat sd_box(vec2 Min, vec2 Max, in vec2 p) {\t// order doesn't matter\n\tif (p.x > Min.x == p.x < Max.x) {\n\t\tif (p.y > Min.y == p.y < Max.y) {\n\t\t\treturn -min(min(abs(p.x - Min.x), abs(p.x - Max.x)), min(abs(p.y - Min.y), abs(p.y - Max.y)));\n\t\t}\n\t\treturn min(abs(p.y - Min.y), abs(p.y - Max.y));\n\t}\n\telse if (p.y > Min.y == p.y < Max.y) return min(abs(p.x - Min.x), abs(p.x - Max.x));\n\treturn min(min(length(p - Min), length(p - Max)), min(length(p - vec2(Min.x, Max.y)), length(p - vec2(Max.x, Min.y))));\n}\n\nfloat sd_triangle(vec2 a, vec2 b, vec2 c, in vec2 p) {\n\ta -= p, b -= p, c -= p;\n\tif ((int(det(a, b) > 0.0) + int(det(b, c) > 0.0) + int(det(c, a) > 0.0)) % 3 != 0) {\t\t// outside\n\t\tfloat t, m, d = 1e+30, td;\n\t\tt = dot(a - b, a), m = dot(b-a,b-a); if (t > 0.0 && t < m) d = abs(det(a, b - a)) / sqrt(m);\n\t\tt = dot(b - c, b), m = dot(c-b,c-b); if (t > 0.0 && t < m) { td = abs(det(b, c - b)) / sqrt(m); if (td < d) d = td; }\n\t\tt = dot(c - a, c), m = dot(a-c,a-c); if (t > 0.0 && t < m) { td = abs(det(c, c - a)) / sqrt(m); if (td < d) d = td; }\n\t\ttd = length(a); if (td < d) d = td;\n\t\ttd = length(b); if (td < d) d = td;\n\t\ttd = length(c); if (td < d) d = td;\n\t\treturn d;\n\t}\n\telse {\t// inside\n\t\tfloat d = abs(det(a, normalize(b - a)));\n\t\tfloat td = abs(det(b, normalize(c - b))); if (td < d) d = td;\n\t\ttd = abs(det(c, normalize(a - c))); if (td < d) d = td;\n\t\treturn -d;\n\t}\n}\n\nfloat sd_regularpolygon(float r, int n, in vec2 P) {\t// first vertex at (0,r)\n\tfloat ang = 2.0 * PI / float(n);\n\tfloat rang = atan(P.x,P.y);\n\tfloat a = rang - ang * float(int(rang / ang)); if (a < 0.0) a += ang;\n\tvec2 p = length(P) * vec2(cos(a), sin(a)) - vec2(r, 0.0), e = r * vec2(cos(ang) - 1.0, sin(ang));\n\ta = dot(p, e);\n\tif (a < 0.0) return length(p); if (a > dot(e,e)) return length(p - e);\n\treturn det(p, normalize(e));\n}\n\nfloat sd_regularstar(float R, float r, int N, in vec2 P) {\t// 0<r<R, first vertex at (0,R)\n\tfloat ang = 2.0 * PI / float(N);\n\tfloat rang = atan(P.x,P.y);\n\tfloat a = rang - ang * float(int(rang / ang)); if (a < 0.0) a += ang;\n\tif (a > 0.5*ang) a = ang - a; ang /= 2.0;\n\tvec2 p = length(P) * vec2(cos(a), sin(a)) - vec2(R, 0), e = r * vec2(cos(ang), sin(ang)) - vec2(R, 0.0);\n\ta = dot(p, e);\n\tif (a < 0.0) return length(p);\n\tif (a > dot(e,e)) return length(P) < r ? -length(p - e) : length(p - e);\n\treturn det(p, normalize(e));\n}\n\nfloat sd_sector(float r, float ang, in vec2 p) {\t// centered at origin, range [-ang, ang], 0<ang<π\n\tfloat a = atan(p.y / p.x); if (p.x < 0.0) a += p.y > 0.0 ? PI : -PI; a = abs(a) - ang;\n\tfloat sd = length(p);\n\tif (a < 0.0) {\n\t\tif (sd > r) return sd - r;\n\t\tif (a > -PI / 2.0) sd = max(sd - r, sd*sin(a));\n\t\telse sd = max(sd - r, -sd);\n\t\treturn sd;\n\t}\n\tif (a > PI / 2.0) return sd;\n\tif (sd*cos(a) < r) return sd * sin(a);\n\treturn sqrt(sd*sd + r * r - 2.0 * r*sd*cos(a));\n}\n\nfloat sd_arc(float r, float ang, in vec2 p) {\t// centered at origin, range [-ang, ang], 0<ang<π\n\tfloat a = atan(p.y / p.x); if (p.x < 0.0) a += p.y > 0.0 ? PI : -PI; a = abs(a) - ang;\n\tfloat sd = length(p); if (a < 0.0) return abs(sd - r);\n\treturn length(vec2(p.x - r * cos(ang), abs(p.y) - r * sin(ang)));\n}\n\nfloat sd_ellipse(float a, float b, in vec2 P) {\t// a,b > 0\n\tvec2 p = abs(P);\n    if (p.x > p.y) { p = p.yx; float c=a; a=b, b=c; }\n\tfloat l = b * b - a * a;\n\tfloat m = a * p.x / l, m2 = m * m;\n\tfloat n = b * p.y / l, n2 = n * n;\n\tfloat c = (m2 + n2 - 1.0) / 3.0, c3 = c * c * c;\n\tfloat q = c3 + m2 * n2*2.0;\n\tfloat d = c3 + m2 * n2;\n\tfloat g = m + m * n2;\n\tfloat co;\n\tif (d < 0.0) {\n\t\tfloat p = acos(q / c3) / 3.0;\n\t\tfloat s = cos(p);\n\t\tfloat t = sin(p)*sqrt(3.0);\n\t\tfloat rx = sqrt(-c * (s + t + 2.0) + m2);\n\t\tfloat ry = sqrt(-c * (s - t + 2.0) + m2);\n\t\tco = (ry + (l > 0.0 ? rx : -rx) + abs(g) / (rx*ry) - m) / 2.0;\n\t}\n\telse {\n\t\tfloat h = 2.0*m*n*sqrt(d);\n\t\tfloat s = q + h > 0.0 ? pow(q + h, 1.0 / 3.0) : -pow(-q - h, 1.0 / 3.0);\n\t\tfloat u = q > h ? pow(q - h, 1.0 / 3.0) : -pow(h - q, 1.0 / 3.0);\n\t\tfloat rx = -s - u - c * 4.0 + 2.0*m2;\n\t\tfloat ry = (s - u)*sqrt(3.0);\n\t\tfloat rm = sqrt(rx*rx + ry * ry);\n\t\tfloat p = ry / sqrt(rm - rx);\n\t\tco = (p + 2.0*g / rm - m) / 2.0;\n\t}\n\tvec2 closestPoint = vec2(a*co, b*sqrt(1.0 - co * co));\n\tfloat sd = length(closestPoint - p);\n\tif (p.y > closestPoint.y) return sd;\n\treturn -sd;\n}\nfloat sd_ellipse_fast(float a, float b, in vec2 p) {\n\tfloat k0 = length(vec2(p.x / a, p.y / b));\n\tfloat k1 = length(vec2(p.x / (a*a), p.y / (b*b)));\n\treturn k0 * (k0 - 1.0) / k1;\n}\n\n\n\n\n\nfloat SD_sphere(float r, in vec3 p) {\n\treturn length(p) - r;\n}\n\nfloat SD_segment(vec3 v1, vec3 v2, in vec3 p) {\n\tfloat t = dot(v2-v1, p-v1);\n\tif (t < 0.0) return length(p - v1);\n\tif (t > dot(v2-v1, v2-v1)) return length(p-v2);\n\treturn length(cross(normalize(v2-v1), p-v1));\n}\n\nfloat SD_box(vec3 b, in vec3 p) {\n\tvec3 d = vec3(abs(p.x), abs(p.y), abs(p.z)) - b;\n\treturn length(max(d,0.0)) + min(max(d.x, max(d.y, d.z)), 0.0);\n}\n\nfloat SD_torus(float R, float r, in vec3 p) {\t\t// xoy\n\tfloat d = length(p.xy) - R;\n\treturn sqrt(d * d + p.z * p.z) - r;\n}\n\nfloat SD_cylinder_z(float r, float min_z, float max_z, in vec3 p) {\t// perpendicular to xoy, min_z<max_z\n\tfloat d = length(p.xy) - r;\n\tif (p.z < max_z && p.z > min_z) return max(d, max(min_z - p.z, p.z - max_z));\n\tif (d < 0.0) return p.z > max_z ? p.z - max_z : min_z - p.z;\n\treturn p.z > max_z ? sqrt(d*d + (p.z - max_z)*(p.z - max_z)) : sqrt(d*d + (p.z - min_z)*(p.z - min_z));\n}\nfloat SD_cylinder(vec3 v1, vec3 v2, float r, in vec3 p) {\n\tvec3 dr = v2 - v1; float h = length(dr); dr /= h;\n\tfloat t = dot(dr, p - v1), d = length(cross(p - v1, dr)) - r;\n\tif (t < 0.0) {\n\t\tif (d > 0.0) return sqrt(d * d + t * t);\n\t\treturn -t;\n\t}\n\tif (t > h) {\n\t\tt -= h;\n\t\tif (d > 0.0) return sqrt(d * d + t * t);\n\t\treturn t;\n\t}\n\tif (d > 0.0) return d;\n\treturn max(max(-t, t - h), d);\n}\nfloat SD_cylinder(vec3 c, vec3 dir, float r, float h, in vec3 p) {\t// dir unit vectors\n\tc -= p;\n\tfloat t = -dot(dir, c);\n\tfloat d = length(cross(c, dir)) - r;\n\tif (t < 0.0) {\n\t\tif (d > 0.0) return sqrt(d * d + t * t);\n\t\treturn -t;\n\t}\n\tif (t > h) {\n\t\tt -= h;\n\t\tif (d > 0.0) return sqrt(d * d + t * t);\n\t\treturn t;\n\t}\n\tif (d > 0.0) return d;\n\treturn max(max(-t, t - h), d);\n}\n\nfloat SD_cone(vec3 c, vec3 dir, float r, float h, in vec3 p) {\t// dir unit vector,  h,r > 0.0\n\tc -= p;\n\tfloat t = -dot(dir, c);\n\tfloat d = length(cross(c, dir));\n\tif (t > h) {\n\t\tif (d < r) return t - h;\n\t\td -= r, t -= h; return sqrt(d * d + t * t);\n\t}\n\tif (t < 0.0) {\n\t\tif (r * d + h * t < 0.0) return sqrt(d * d + t * t);\n\t\treturn (h * d - r * t) / sqrt(h * h + r * r);\n\t}\n\tif (r * (d - r) + h * (t - h) > 0.0) {\n\t\td -= r, t -= h; return sqrt(d * d + t * t);\n\t}\n\td = (h * d - r * t) / sqrt(h * h + r * r);\n\tif (d > 0.0) return d;\n\treturn max(d, t - h);\n}\n\nfloat SD_ellipsoid(float xy, float z, in vec3 p) {\t// exact, rotating ellipse\n\treturn sd_ellipse(xy, z, vec2(length(p.xy), p.z));\n}\nfloat SD_ellipsoid(float a, float b, float c, in vec3 p) {\t// not exact, problem occurs inside and far outside\n\tfloat k0 = length(vec3(p.x / a, p.y / b, p.z / c));\n\tfloat k1 = length(vec3(p.x / (a*a), p.y / (b*b), p.z / (c*c)));\n\treturn k0 * (k0 - 1.0) / k1;\n}\n\nfloat SD_Bezier2(vec3 A, vec3 B, vec3 C, in vec3 P) {\n\tvec3 C2 = A - 2.0 * B + C, C1 = 2.0 * (B - A), C0 = A - P;\n\tfloat t = 2.0 * dot(C2, C2)\n\t\t, a = 3.0 * dot(C2, C1) / t, b = (2.0 * dot(C2, C0) + dot(C1, C1)) / t, c = dot(C1, C0) / t;\n\tfloat a2 = a * a, p = (-a2 / 3.0 + b) / 3.0, q = (a*a2 / 13.5 - a * b / 3.0 + c) / 2.0;\n\tfloat p3 = p * p*p, delta = q * q + p3;\n#define E (C2*t + C1)*t + C0\n\tif (delta > 0.0) {\n\t\tdelta = sqrt(delta);\n\t\tt = (delta > q ? pow(delta - q, 1.0/3.0) : -pow(q - delta, 1.0/3.0)) - (delta + q > 0.0 ? pow(delta + q, 1.0/3.0) : -pow(-delta - q, 1.0/3.0)) - a / 3.0;\n\t\treturn t > 1.0 ? length(P - C) : t < 0.0 ? length(C0) : length(E);\n\t}\n\telse {\n\t\tq = acos(-q / sqrt(-p3)) / 3.0, p = 2.0 * sqrt(-p), a /= 3.0;\n\t\tt = p * cos(q) - a;\n\t\tfloat sd = t > 1.0 ? dot(P-C,P-C) : t < 0.0 ? dot(C0,C0) : dot(E,E);\n\t\tt = -p * cos(q + PI / 3.0) - a;\n\t\tsd = min(sd, t > 1.0 ? dot(P-C,P-C) : t < 0.0 ? dot(C0,C0) : dot(E,E));\n\t\tt = -p * cos(q - PI / 3.0) - a;\n\t\tsd = min(sd, t > 1.0 ? dot(P-C,P-C) : t < 0.0 ? dot(C0,C0) : dot(E,E));\n\t\treturn sqrt(sd);\n\t}\n#undef E\n}\n\n\nfloat s_union(in float a, in float b, in float k) {\n\tfloat h = 0.5 + 0.5*(b - a) / k;\n\tif (h < 0.0) return b; if (h > 1.0) return a;\n\treturn (1.0 - h)*b + h * a - k * h * (1.0 - h);\n}\nfloat s_int(in float a, in float b, in float k) {\n\tfloat h = 0.5 - 0.5*(b - a) / k;\n\tif (h < 0.0) return b; if (h > 1.0) return a;\n\treturn (1.0 - h)*b + h * a + k * h * (1.0 - h);\n}\nfloat s_sub(in float a, in float b, in float k) {\n\tfloat h = 0.5 - 0.5*(b + a) / k;\n\tif (h < 0.0) return a; if (h > 1.0) return -b;\n\treturn (1.0 - h)*a - h * b + k * h * (1.0 - h);\n}\nfloat opExtrusion(float sd2, float h, in vec3 P) {\t// exact, extrude toward z-axis\n\tif (P.z >= 0.0 && P.z <= h) return sd2 > 0.0 ? sd2 : max(sd2, max(-P.z, P.z - h));\n\tif (P.z > h) return sd2 > 0.0 ? sqrt(sd2*sd2 + (P.z - h)*(P.z - h)) : P.z - h;\n\tif (P.z < 0.0) return sd2 > 0.0 ? sqrt(sd2*sd2 + P.z*P.z) : -P.z;\n}\n\n\n\n",
+     "name": "Common",
+     "description": "",
+     "type": "common"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "Wl2SWd",
+    "date": "0",
+    "viewed": 0,
+    "name": "Untitled 0x00000003",
+    "description": "temp",
+    "likes": 0,
+    "published": "Private",
+    "tags": [
+     "temp"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "#define PI 3.14159265358979\n\n#define AA 3\n\n#define EPSILON 1e-4\n\n#define MAX_STEP 128\n#define MAX_DIST 10.0\n\nfloat Unit = 500.0;\n\n\nfloat mapCube(vec3 p) {\n    float sd = max(max(abs(p.x),abs(p.y)),abs(p.z))-1.0;\n    float N=1.0;\n    for (int i=0;i<3;i++){\n        vec3 q = abs((mod(p-N,2.0*N))-N);\n        N*=1.0/3.0;\n        q/=N;\n        float xy = max(abs(q.x),abs(q.y))-1.0;\n        float yz = max(abs(q.y),abs(q.z))-1.0;\n        float xz = max(abs(q.x),abs(q.z))-1.0;\n        sd=max(sd,-N*min(min(xy,yz),xz));\n    }\n    return sd;\n}\n\nfloat mapSphere(vec3 p) {\n    float sd = length(p)-1.0;\n    float N=1.0;\n    for (int i=0;i<4;i++){\n        vec3 q = abs((mod(p-N,2.0*N))-N);\n        N*=1.0/3.0;\n        q/=N;\n        float xy = length(q.xy)-1.0;\n        float yz = length(q.yz)-1.0;\n        float xz = length(q.xz)-1.0;\n        sd=max(sd,-N*min(min(xy,yz),xz));\n    }\n    return sd;\n}\n\n#define map mapSphere\n\nvec3 calcGrad(vec3 p) {\n\tfloat k_111 = map(vec3(p.x + EPSILON, p.y + EPSILON, p.z + EPSILON));\n\tfloat k_100 = map(vec3(p.x + EPSILON, p.y - EPSILON, p.z - EPSILON));\n\tfloat k_010 = map(vec3(p.x - EPSILON, p.y + EPSILON, p.z - EPSILON));\n\tfloat k_001 = map(vec3(p.x - EPSILON, p.y - EPSILON, p.z + EPSILON));\n\tvec3 n = vec3(k_111 + k_100 - k_010 - k_001, k_111 - k_100 + k_010 - k_001, k_111 - k_100 - k_010 + k_001);\n\treturn n / (4.0 * EPSILON);\n}\n\nvec3 castRay(vec3 p, vec3 d, vec3 light) {\n    // cast ray\n    float t = 100.0 * EPSILON, dt;\n\tvec3 P = p + t * d;\n\tif (map(p) < 0.0) return vec3(0.0, 0.0, 0.0);\n\tfor (int i = 0; i < MAX_STEP; i++) {\n\t\tdt = map(p + t * d);\n\t\tt += dt;\n        if (dt < -EPSILON) return vec3(1.0,0.0,0.0);\n\t\tif (dt < EPSILON) break;\n\t\tif (dt > MAX_DIST) {\n            vec3 col = vec3(1.0,1.0,1.0);\n\t\t\tt = max(dot(d, light), 0.0);\n\t\t\treturn t*t*col;\n\t\t}\n\t}\n\tP = p + t * d;\n    vec3 n = normalize(calcGrad(P));\n    if (dot(n, d) > 0.0) n = -n;\n    \n    // shadow\n    d -= 2.0 * dot(d, n)*n;\n\tfloat r = 1.0;\n\tt = 0.01;\n\tfor (int i = 0; i < MAX_STEP; i++) {\n\t\tdt = map(P + t * light);\n\t\tr = min(r, 15.0 * dt / t);\n\t\tif (r < 0.01 || t > 1.0) break;\n\t\tt += 0.02*clamp(dt, 1.0, 2.0);\n\t}\n\tr = clamp(r,0.0,1.0);\n    \n    // final result\n    float dif = clamp(dot(n, light), 0.0, 1.0);\n    return (0.9*dif*r + 0.2*pow(max(dot(d,light),0.0),4.0) + 0.1)*vec3(0.9,0.8,0.8);\n}\n\nvoid mainImage( out vec4 fragColor, in vec2 fragCoord )\n{\n    Unit = 0.75*length(iResolution);\n    float h = cos(0.4*iTime)+2.0;\n    float r = sqrt(10.0-h*h) + 0.2*cos(iTime) + 2.5;\n    vec3 pos = vec3(r*cos(iTime), r*sin(iTime), h);\n    //pos=vec3(-4,3,2);\n    \n    float rz=atan(-pos.x,pos.y), rx=atan(length(pos.xy),-pos.z);\n    mat3 M=mat3(cos(rz),sin(rz),0,-sin(rz),cos(rz),0,0,0,1)*mat3(1,0,0,0,cos(rx),sin(rx),0,-sin(rx),cos(rx));\n    \n    vec3 light = normalize(vec3(-0.2, 0.4, 0.8));\n    \n    vec3 col = vec3(0.0,0.0,0.0);\n    for (int i=0;i<AA;i++) for (int j=0;j<AA;j++) {\n        vec3 d = M*vec3(0.5*iResolution.x-(fragCoord.x+float(i)/float(AA)),-0.5*iResolution.y+(fragCoord.y+float(j)/float(AA)),Unit);\n        col += castRay(pos,normalize(d),light);\n    }\n    col/=float(AA*AA);\n    \n    col.x=pow(col.x,0.75),col.y=pow(col.y,0.75),col.z=pow(col.z,0.75);\n\n    fragColor = vec4(col,1.0);\n}\n\n",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "wstGRH",
+    "date": "1569197670",
+    "viewed": 2,
+    "name": "Untitled 0x00000004",
+    "description": "Sketchbook No.1",
+    "likes": 0,
+    "published": "Unlisted",
+    "tags": [
+     "temp"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "#define AA 2\n#define omega 1.0\n\n#define MAX_STEP 1024\n#define MAX_DIST 200.0\n#define EPSILON 1e-4\n\n#define PI 3.14159265358979\n\nfloat sdCylinder(vec3 p, float th, float r){\n    p.z=abs(p.z)-th;\n    float d = length(p.xy)-r;\n\tif (p.z<0.0) return d>0.0?d:max(d,max(-th-p.z,p.z));\n\treturn d<0.0?p.z:sqrt(d*d+p.z*p.z);\n}\n\nfloat sdCube(vec3 p, float r){\n    p=abs(p)-r;\n    return length(max(p,0.0)) + min(max(p.x,max(p.y,p.z)),0.0);\n}\n\nfloat sdDisk(vec3 p){\n    return sdCylinder(p,0.06,1.2);\n}\n\nfloat sdAxis(vec3 p){\n    return sdCylinder(p+vec3(0.0,0.0,0.2),1.3,0.07);\n}\n\nfloat sdDice(vec3 p){\n    return sdCube(p-vec3(0.9,0.0,0.2),0.1);\n}\n\nfloat map(vec3 p){\n    float sd=min(sdDisk(p),sdAxis(p));\n    sd=min(sd,sdDice(p));\n    return sd-0.02;\n}\n\nvec3 calcGrad(vec3 p){\n\tfloat k_111 = map(vec3(p.x + EPSILON, p.y + EPSILON, p.z + EPSILON));\n\tfloat k_100 = map(vec3(p.x + EPSILON, p.y - EPSILON, p.z - EPSILON));\n\tfloat k_010 = map(vec3(p.x - EPSILON, p.y + EPSILON, p.z - EPSILON));\n\tfloat k_001 = map(vec3(p.x - EPSILON, p.y - EPSILON, p.z + EPSILON));\n\tvec3 n = vec3(k_111 + k_100 - k_010 - k_001, k_111 - k_100 + k_010 - k_001, k_111 - k_100 - k_010 + k_001);\n\treturn n / (4.0 * EPSILON);\n}\n\nfloat calcShadow(vec3 p, vec3 light){\n    float t=0.01, dt;\n    for (int i=0;i<64;i++){\n        dt=map(p+t*light);\n        if (dt>MAX_DIST) break;\n        if (dt<EPSILON) return 0.5;\n        t+=dt;\n    }\n    return 1.0;\n}\n\nvec3 castRay(vec3 p, vec3 d, vec3 light){\n    float t=100.0*EPSILON, dt;\n    for (int i=0;i<MAX_STEP;i++){\n        dt = map(p+t*d);\n        t+=dt;\n        if (dt<EPSILON){\n            p=p+t*d;\n            vec3 n=calcGrad(p);\n            float k=0.3+0.7*max(dot(n,light),0.0);\n            k*=calcShadow(p,light);\n            vec3 col;\n            if (sdDice(p)-0.02<EPSILON) col=k*vec3(0.7,0.8,0.9);\n            else if (sdAxis(p)-0.02<EPSILON) col=k*vec3(0.9,0.8,0.7);\n            else if ((t=atan(p.y,p.x))>PI/3.0) col=k*vec3(0.8,1.0,1.0);\n            else if (t<-PI/3.0) col=k*vec3(1.0,0.8,1.0);\n            else col=k*vec3(1.0,1.0,0.8);\n            return col;\n        }\n        if (t>MAX_DIST) return vec3(0);\n        if (t<-EPSILON) return vec3(1,0,0);\n    }\n    return vec3(0);\n}\n\nvoid mainImage( out vec4 fragColor, in vec2 fragCoord )\n{\n    float Unit = 0.75*length(iResolution);\n    float h = 2.0;\n    float r = 5.0;\n    float t = -omega*iTime;\n    vec3 pos = vec3(r*cos(t), r*sin(t), h);\n    vec3 dir = vec3(0.0,0.0,-0.1)-pos;\n    \n    float rz=atan(dir.x,-dir.y), rx=atan(length(dir.xy),dir.z);\n    mat3 M=mat3(cos(rz),sin(rz),0,-sin(rz),cos(rz),0,0,0,1)*mat3(1,0,0,0,cos(rx),sin(rx),0,-sin(rx),cos(rx));\n    \n    vec3 l = normalize(vec3(0.4, 0.3, 0.7));\n    l = vec3(l.x*cos(t)-l.y*sin(t),l.x*sin(t)+l.y*cos(t),l.z);\n    \n    vec3 col = vec3(0.0,0.0,0.0);\n    for (int i=0;i<AA;i++) for (int j=0;j<AA;j++) {\n        vec3 d = M*vec3(0.5*iResolution.x-(fragCoord.x+float(i)/float(AA)),-0.5*iResolution.y+(fragCoord.y+float(j)/float(AA)),Unit);\n        col += castRay(pos,normalize(d),l);\n    }\n    col/=float(AA*AA);\n    \n    fragColor = vec4(col,1.0);\n}\n\n",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "wddGRH",
+    "date": "0",
+    "viewed": 0,
+    "name": "Untitled 0x00000005",
+    "description": "Sketchbook No.7",
+    "likes": 0,
+    "published": "Private",
+    "tags": [
+     "temp"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "#define AA 2\n\nfloat smin( float d1, float d2, float k ) {\n    float h = clamp( 0.5 + 0.5*(d2-d1)/k, 0.0, 1.0 );\n    return mix( d2, d1, h ) - k*h*(1.0-h);\n}\nfloat ssub( float d1, float d2, float k ) {\n    float h = clamp( 0.5 - 0.5*(d2+d1)/k, 0.0, 1.0 );\n    return mix( d2, -d1, h ) + k*h*(1.0-h);\n}\nfloat smax( float d1, float d2, float k ) {\n    float h = clamp( 0.5 - 0.5*(d2-d1)/k, 0.0, 1.0 );\n    return mix( d2, d1, h ) + k*h*(1.0-h);\n}\nvec2 hash2(vec2 p){\n\treturn fract(sin(vec2(dot(p,vec2(127.1,311.7)),dot(p,vec2(269.5,183.3))))*43758.5453);\n}\n\n// value and analytical gradient\nvec3 GenL(vec2 p){\n    //float st=sin(4833.87), ct=cos(4833.87), t=0.2*4833.87;\n    float st=sin(iTime), ct=cos(iTime), t=0.2*iTime;\n    float d = 1.5*(0.1*(p.x-p.y)*(p.x-p.y)-p.x-p.y+1.0);\n    float s = 1.0;\n    vec2 grad = 1.5*vec2(0.2*(p.x-p.y)-1.0,0.2*(p.y-p.x)-1.0);\n    for (int i=0;i<4;i++){\n        d += (sin(s*p.x-st)+cos(s*p.y+ct)\n           +3.0*sin(s*p.x+t)*cos(s*p.y-t))/s;\n        grad += vec2(cos(s*p.x-st)+3.0*cos(s*p.x+t)*cos(s*p.y-t),\n                     -sin(s*p.y+ct)-3.0*sin(s*p.x+t)*sin(s*p.y-t));\n        s*=2.0;\n    }\n    return vec3(d,grad);\n}\n\nfloat GenL1(vec2 p){\n    float d=1e+10;\n    for (int i=-8;i<8;i++){\n        for (int j=-8;j<8;j++){\n            vec2 rand=8.0*(hash2(vec2(i,j))-vec2(0.3));\n            rand-=p+vec2(sin(0.1*iTime+float(i)),cos(0.1*iTime+float(j)));\n            float sd=length(rand)-0.05;\n            if (d>0.0||sd>0.0) d=smin(d,sd,0.02);\n        }\n    }\n    return d+0.01*sin(20.0*p.x)*sin(20.0*p.y);\n}\n\n#define func(p) (GenL(p).x/length(GenL(p).yz))\n#define EPSILON 1e-3\nvec2 calcGrad(vec2 p){\n    float x = func(p+vec2(EPSILON,0.0))-func(p-vec2(EPSILON,0.0));\n    float y = func(p+vec2(0.0,EPSILON))-func(p-vec2(0.0,EPSILON));\n    return vec2(x,y)/(2.0*EPSILON);\n}\n\nvec3 colorf(float d){\n    vec3 col = vec3(1.0) - sign(d)*vec3(0.1,0.4,0.7);\n\tcol *= 1.0 - exp(-2.0*abs(d));\n\tcol *= 0.8 + 0.2*cos(60.0*d);\n\treturn mix( col, vec3(1.0), 1.0-smoothstep(0.0,0.04,abs(d)) );\n}\n\nvoid mainImage( out vec4 fragColor, in vec2 fragCoord )\n{\n    vec3 totcol = vec3(0.0);\n    for (int u=0;u<AA;u++) {\n        for (int v=0;v<AA;v++) {\n            vec2 p = 10.0*(fragCoord+vec2(u,v)/float(AA)-0.5*iResolution.xy)/length(iResolution.xy);\n            \n            vec3 G = GenL(p);\n            float g = G.x, mg = length(G.yz);\n            \n            vec3 col=vec3(1.0);\n            if (abs(g/mg)<0.03) col=vec3(0.2);\n            //else if (abs(g/mg+0.2)<0.02) col=vec3(0.5); \t// thickness not constant, need second derivative to correct\n            else if (abs((g+0.8)/mg)<0.02) col=vec3(0.5);\n            else if (g/mg>0.0){  // outside\n                col=vec3(0.1,0.4,0.7);\n            }\n            else if ((g+0.8)/mg<-0.02){  // inside\n                col=vec3(0.8,0.8,0.7);\n                float d=smax(GenL1(p),(g+1.2)/mg,0.2);\n                if (d<0.0) col=mix(vec3(0.1,0.5,0.3),vec3(0.2,0.7,1.0),clamp(-20.0*d,0.0,1.0));\n            }\n            else{  // border\n                col=vec3(0.7,0.5,0.3);\n            }\n            \n                //if (GenL1(p)<0.0) col=vec3(1,0,0);\n            //col=colorf(GenL1(p));\n            \n            totcol+=col;\n        }\n    }\n    totcol/=float(AA*AA);\n    fragColor = vec4(totcol,1.0);\n}\n\n\n\n\n\n\n",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "Wd3GzN",
+    "date": "0",
+    "viewed": 0,
+    "name": "Untitled 0x00000006",
+    "description": "Sketchbook No.30",
+    "likes": 0,
+    "published": "Private",
+    "tags": [
+     "temp"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [
+      {
+       "id": "4dXGR8",
+       "filepath": "/media/previz/buffer00.png",
+       "type": "buffer",
+       "channel": 0,
+       "sampler": {
+        "filter": "linear",
+        "wrap": "clamp",
+        "vflip": "true",
+        "srgb": "false",
+        "internal": "byte"
+       },
+       "published": 1
+      }
+     ],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "#if AAS\n\nvoid mainImage(out vec4 fragColor, in vec2 fragCoord) {\n    //fragColor=texelFetch(iChannel0,ivec2(fragCoord),0); return;\n#define C(i,j) cols[3*(i)+(j)]\n    vec3 cols[9];\n    for (int i=-1;i<=1;i++) for (int j=-1;j<=1;j++){\n        C(i+1,j+1) = texelFetch(iChannel0,ivec2(fragCoord)+ivec2(i,j),0).xyz;\n    }\n    vec3 dx,dy;\n    for (int i=0;i<3;i++){\n        float m=i==1?2.0:1.0;\n        dx+=m*max(abs(C(2,i)-C(1,i)),abs(C(1,i)-C(0,i)));\n        dy+=m*max(abs(C(i,2)-C(i,1)),abs(C(i,1)-C(i,0)));\n    }\n    vec3 g = sqrt(dx*dx+dy*dy);\n    if (dot(g,vec3(0.3,0.59,0.11))<0.8){\n        fragColor=vec4(C(1,1),1.0);\n        return;\n    }\n    //fragColor=vec4(1,0,0,0);return;\n    vec3 col;\n    for (int i=0;i<AA;i++) for (int j=0;j<AA;j++)\n    \tcol += calcCol(fragCoord+(vec2(i,j)+vec2(0.5))/float(AA), iResolution.xy, iTime);\n    col/=float(AA*AA);\n    fragColor = vec4(col,1.0);\n}\n\n#else\n\nvoid mainImage(out vec4 fragColor, in vec2 fragCoord) {\n    vec3 col = texelFetch(iChannel0,ivec2(fragCoord),0).xyz;\n    fragColor = vec4(col,1.0);\n}\n\n#endif",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    },
+    {
+     "inputs": [],
+     "outputs": [],
+     "code": "#define AAS 1\n#define AA 3\n\n#define MAX_STEP 1024\n#define MAX_D 200.0\n#define MIN_D 0.01\n\nconst vec3 light = normalize(vec3(-0.3, 0.1, 1));\n\nfloat sdSphere(vec3 c, float r, in vec3 p){\n    return length(p-c)-r;\n}\nfloat sdBox(in vec3 b, in vec3 p) {\n\tvec3 d = abs(p) - b;\n\treturn length(max(d,0.0)) + min(max(d.x, max(d.y, d.z)), 0.0);\n}\nfloat sdBox(in vec3 Min, in vec3 Max, in vec3 p){\n    return sdBox(0.5*(Max-Min),p-0.5*(Max+Min));\n}\n\nfloat map(in vec3 p, in float t) {\n    float base=sdBox(vec3(-1000.0,-1000.0,-10.0),vec3(0.0,0.0,2.5),p);  // base\n    float d=base;\n    base=sdBox(vec3(-5.0,-6.0,-10.0),vec3(1.0,-2.5,10.0),p);  // notch\n    d=max(d,-base);\n    base=sdBox(vec3(-1000.0,-1000.0,-10.0),vec3(-9.0,-5.5,3.5),p); \t// stage\n    d=min(d,base);\n    base=sdBox(vec3(-25.0,-30.0,-10.0),vec3(-20.0,-18.0,6.0),p);  // building\n    d=min(d,base);\n    base=sdBox(vec3(-26.0,-28.0,-10.0),vec3(-25.0,-27.0,7.0),p);  // chimney\n    d=min(d,base);\n    base=sdBox(vec3(-4.2,2.0,-10.0),vec3(-1.5,3.5,2.8),p);  // platform L\n    d=min(d,base);\n    base=sdBox(vec3(-8.0,5.2,-10.0),vec3(-1.2,6.2,2.0),p);  // platform R\n    d=min(d,base);\n    base=sdBox(vec3(-3.4,3.5,1.4),vec3(-2.2,5.2,2.0),p);  // bridge\n    d=min(d,base);\n    base=sdBox(vec3(4.0,2.0,-10.0),vec3(10.0,4.0,3.5),p);  // platform F\n    d=min(d,base);\n    base=sdSphere(vec3(5.0,3.0,4.0),0.5,p);  // ball\n    d=min(d,base);\n    d=min(d,0.1*sin(5.0*p.x+t)*sin(5.0*p.y-t)+p.z);  // wave\n    return d;\n    return 0.8*d;\n}\n\nvec3 calcGrad(in vec3 p, in float t) {\n    const float e=1e-3;\n\tfloat k_111 = map(vec3(p.x+e, p.y+e, p.z+e),t);\n\tfloat k_100 = map(vec3(p.x+e, p.y-e, p.z-e),t);\n\tfloat k_010 = map(vec3(p.x-e, p.y+e, p.z-e),t);\n\tfloat k_001 = map(vec3(p.x-e, p.y-e, p.z+e),t);\n\tvec3 n = vec3(k_111+k_100-k_010-k_001, k_111-k_100+k_010-k_001, k_111-k_100-k_010+k_001);\n\treturn n / (4.0 * e);\n}\n\nvec3 castRay(in vec3 p, in vec3 d, in float time) {\n    float t = MIN_D, dt;\n\tvec3 P = p + t * d;\n\tfor (int i = 0; i < MAX_STEP; i++) {\n\t\tdt = map(p+t*d, time);\n\t\tt += dt;\n        if (dt < -MIN_D) return vec3(1,0,0);\n        if (dt < MIN_D) {\n\t\t\tP = p + t * d;\n    \t\tvec3 n = normalize(calcGrad(P, time));\n    \t\tfloat dif = clamp(dot(n, light), 0.0, 1.0);\n    \t\treturn (0.9*dif + 0.2*pow(max(dot(d,light),0.0),4.0) + 0.1)*vec3(0.9,0.8,0.8);\n        }\n\t\tif (dt > MAX_D) break;\n\t}\n    return vec3(max(dot(d,light),0.0));\n}\n\n\nvec3 calcCol(in vec2 coord, in vec2 res, in float time) {\n    vec3 pos = vec3(12.0+cos(0.3*time),16.0+sin(0.4*time),8.0+sin(0.5*time));\n    vec3 ctr = vec3(-5.0,-5.0,2.5)+vec3(cos(0.5*time));\n    vec3 dir = ctr-pos;\n\n    float rz=atan(dir.x,-dir.y), rx=atan(length(dir.xy),dir.z);\n    mat3 M=mat3(cos(rz),sin(rz),0,-sin(rz),cos(rz),0,0,0,1)*mat3(1,0,0,0,cos(rx),sin(rx),0,-sin(rx),cos(rx));\n\n\n    vec3 d = M*vec3(0.5*res.x-coord.x,-0.5*res.y+coord.y,0.8*length(res));\n    vec3 col = castRay(pos,normalize(d), time);\n\n    col.x=pow(col.x,0.75),col.y=pow(col.y,0.75),col.z=pow(col.z,0.75);\n\n    return col;\n}\n\n",
+     "name": "Common",
+     "description": "",
+     "type": "common"
+    },
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dXGR8",
+       "channel": 0
+      }
+     ],
+     "code": "#if AAS\n\nvoid mainImage(out vec4 fragColor, in vec2 fragCoord) {\n    vec3 col=calcCol(fragCoord+vec2(0.5),iResolution.xy,iTime);\n    fragColor = vec4(clamp(col,0.0,1.0),1.0);\n}\n\n#else\n\nvoid mainImage(out vec4 fragColor, in vec2 fragCoord) {\n    vec3 col;\n    for (int i=0;i<AA;i++) for (int j=0;j<AA;j++)\n    \tcol += calcCol(fragCoord+(vec2(i,j)+vec2(0.5))/float(AA), iResolution.xy, iTime);\n    col/=float(AA*AA);\n    fragColor = vec4(col,1.0);\n}\n\n#endif",
+     "name": "Buf A",
+     "description": "",
+     "type": "buffer"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "wdc3RB",
+    "date": "1569197432",
+    "viewed": 82,
+    "name": "Untitled 0x00000007",
+    "description": "simple test of non-recursive ray tracing",
+    "likes": 5,
+    "published": "Public",
+    "tags": [
+     "raytracing"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "#define AA 2\n#define Unit 0.5*length(iResolution.xy)\n\n#define EPSILON 1e-5\n\nstruct Sphere{\n    vec3 O;\n    float r;\n};\nbool sphInt(in Sphere S, in vec3 P, in vec3 d, out float t, out vec3 n) {\t// doesn't work when inside\n\tvec3 p = P - S.O; if (dot(p, d) >= 0.0) return false;\n\tvec3 k = cross(p, d); float rd2 = dot(k,k); if (rd2 >= S.r*S.r) return false;\n\tt = sqrt(dot(p,p) - rd2) - sqrt(S.r*S.r - rd2); if (t < EPSILON) return false;\n\tn = (p + t * d) / S.r; return true;\n}\nconst Sphere sph1 = Sphere(vec3(-2.0,-2.0,1.0),1.0);\nconst Sphere sph2 = Sphere(vec3(3.0,-2.0,1.3),1.3);\nconst Sphere sph3 = Sphere(vec3(1.0,3.0,1.8),1.8);\nconst Sphere sph4 = Sphere(vec3(1.0,1.0,0.4),0.4);\n\n\nvec3 traceRay(vec3 p, vec3 d, vec3 light){\n    vec3 col=vec3(1.0), ecol;\n    for (int i=0;i<64;i++){\n    \tfloat t, mt=1e+12; vec3 n, mn; bool r=false;\n    \tt=-p.z/d.z;\n        if (t>EPSILON){\n            mt=t, mn=vec3(0.0,0.0,1.0), r=true;\n            vec3 q=p+t*d;\n            ecol = ((int(floor(q.x))&1)==(int(floor(q.y))&1)) ? vec3(135,206,250)/256.0 : vec3(148,166,188)/256.0;\n        }\n    \tif (sphInt(sph1,p,d,t,n) && t<mt) r=true, mt=t, mn=n, ecol=vec3(221,160,221)/256.0;\n    \tif (sphInt(sph2,p,d,t,n) && t<mt) r=true, mt=t, mn=n, ecol=vec3(173,216,230)/256.0;\n    \tif (sphInt(sph3,p,d,t,n) && t<mt) r=true, mt=t, mn=n, ecol=vec3(255,182,193)/256.0;\n    \tif (sphInt(sph4,p,d,t,n) && t<mt) r=true, mt=t, mn=n, ecol=vec3(244,164,96)/256.0;\n        if (r) {\n            p+=mt*d;\n            d-=2.0*dot(mn,d)*mn;\n            col*=ecol;\n        }\n        else {\n            col *= vec3(max(dot(d,light),0.0));\n            break;\n        }\n    }\n    return col;\n}\n\n\nvoid mainImage( out vec4 fragColor, in vec2 fragCoord )\n{\n    float h = 2.0*(cos(0.4*iTime)+2.0);\n    float r = sqrt(40.0-h*h) + 0.5*(cos(iTime)+1.0) + 3.0;\n    vec3 pos = 2.0*vec3(r*cos(iTime), r*sin(iTime), h);\n    vec3 dir = vec3(0.0,0.0,1.0)-pos;\n    \n    float rz=atan(dir.x,-dir.y), rx=atan(length(dir.xy),dir.z);\n    mat3 M=mat3(cos(rz),sin(rz),0,-sin(rz),cos(rz),0,0,0,1)*mat3(1,0,0,0,cos(rx),sin(rx),0,-sin(rx),cos(rx));\n    \n    vec3 light = normalize(vec3(0.0,0.0,1.0));\n    \n    vec3 col = vec3(0.0,0.0,0.0);\n    for (int i=0;i<AA;i++) for (int j=0;j<AA;j++) {\n        vec3 d = M*vec3(0.5*iResolution.x-(fragCoord.x+float(i)/float(AA)),-0.5*iResolution.y+(fragCoord.y+float(j)/float(AA)),Unit);\n        col += traceRay(pos,normalize(d),light);\n    }\n    col/=float(AA*AA);\n\n    fragColor = vec4(col,1.0);\n}\n",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "3dcGRf",
+    "date": "1578366574",
+    "viewed": 75,
+    "name": "Untitled 0x00000008",
+    "description": "test 100% reflective surface",
+    "likes": 5,
+    "published": "Public",
+    "tags": [
+     "temp"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "#define AA 2\n#define Unit 0.5*length(iResolution.xy)\n\n\n// Modeling\n\n#define MIN_D 1e-2\n#define MAX_D 1e+3\n#define RTMinD 1e-2\n#define RTMaxD 1e+12\n\nconst float h=0.5, h1=0.51, w=1.618, s=10.0, wp=1.0;\nconst vec2 r = vec2(s,s*w);\n\nfloat surf(vec3 p, out vec3 grad) {\n    float m=length(p.xy), n=m-iTime;\n    float r=h*sin(n);\n    m=h*cos(n)/m;\n    grad.x=p.x*m;\n    grad.y=p.y*m;\n    grad.z=1.0;\n    //return (p.z+r)/sqrt(dot(grad,grad)+1.0);\n    return 0.9*(p.z+r)/length(grad);\n}\nbool surfint(vec3 p, vec3 d, out float t, out vec3 n){\n    if (d.z>0.0 && p.z>h1) return false;\n    float sd;\n    t=10.0*MIN_D;\n    if (d.z<0.0&&p.z>h1) t=-(p.z-1.0)/d.z;\n    for (int i=0;i<100;i++){\n        sd=surf(p+t*d,n);\n        if (sd<-MIN_D) return false;\n        t+=sd;\n        if (t>MAX_D) return false;\n        if (t<MIN_D) break;\n    }\n    return true;\n}\n\nbool sphint(vec3 p, vec3 d, out float t, out vec3 n){\n    p.z-=h1+1.0;\n    if (dot(p, d) >= 0.0) return false;\n\tvec3 k = cross(p, d); float rd2 = dot(k,k); if (rd2 >= 1.0) return false;\n\tt = sqrt(dot(p,p) - rd2) - sqrt(1.0 - rd2); if (t < RTMinD) return false;\n\tn = p + t * d; return true;\n}\n\n// a debugging function, it looks nice so I decide to keep it\n// example image at iTime=1.90 see https://i.imgur.com/flZjpMR.png\n/*bool trackint(vec3 p, vec3 d, out float t, out vec3 n){\n    const float s=3.0;\n    float t1 = d.x+d.y/w, t2 = p.x+p.y/w, delta=4.0*s;\n    float a=2.*t1*t1, b=2.*t1*t2-delta*d.z, c=t2*t2+delta*(h1-p.z);\n    delta=sqrt(b*b-2.*a*c); if (delta<0.) return false;\n    delta=sqrt(delta)/a; b=-b/a;\n    t1=b+delta,t2=b-delta;\n    if (t1<RTMinD) t1=RTMaxD; if (t2<RTMinD) t2=RTMaxD;\n    t=min(t1,t2); if (t>=RTMaxD) return false;\n    vec3 q=p+t*d;\n    t1=0.5/s*(q.x+q.y/w), n=vec3(t1,t1/w,-1.);\n    t1=length(n.xy/vec2(1.,w)), t2=length(n.xy/vec2(1./w*w));\n  \tdelta=t1*(t1-1.0)/t2/length(n.xy);\n    if (abs(delta)>0.1) return false;\n    n=normalize(n);\n    return true;\n}*/\nbool trackint(vec3 p, vec3 d, out float t, out vec3 n){\n    float t1 = d.x+d.y/w, t2 = p.x+p.y/w, delta=4.0*s;\n    float a=t1*t1, b=2.*t1*t2-delta*d.z, c=t2*t2+delta*(h1-p.z);\n    delta=b*b-4.*a*c; if (delta<0.) return false;\n    a*=2.0,delta=sqrt(delta)/a; b=-b/a;\n    t1=b+delta,t2=b-delta;\n    vec3 q;\n#define Test(t0) q=p+t0*d; \\\n  a=0.5/s*(q.x+q.y/w), n=vec3(a,a/w,-1.); \\\n  b=length(q.xy/r), c=length(q.xy/(r*r)), a=b*(b-1.0)/c*length(n); \\\n  if (abs(a)<wp) t=t0;\n    t=RTMaxD;\n    if (t1>RTMinD) {Test(t1)}\n    if (t2>RTMinD&&t2<t) {Test(t2)}\n    if (t==RTMaxD) return false;\n    q=p+t*d;\n    a=0.5/s*(q.x+q.y/w), n=normalize(vec3(a,a/w,-1.));\n    return true;\n}\n\n\n// Rendering\n\n#define sunpos normalize(vec3(1.0,-1.0,0.5))\n#define fogcol vec3(1.0,0.7,0.4)\n#define skycol vec3(0.6,0.8,1.0)\n#define suncol vec3(0.9,0.8,0.5)\n#define fogD 0.008\n\nvec3 skycolor(vec3 d){\n    vec3 col;\n    float sky=(0.2-0.8)*max(d.z,0.0)+0.8;\n    col=sky*skycol;\n    float horizon=pow(1.0-d.z*d.z,100.0);\n    col=mix(col,vec3(1.0),horizon);\n    float sun=max(dot(d,sunpos),0.0);\n    col+=pow(sun,150.0)*suncol;\n    return col;\n}\nfloat fog(vec3 d){\n    if (d.z<=0.0) return 1.0;\n    return pow(1.0-d.z*d.z,200.0);\n}\n\nvec3 calcCol(vec3 p, vec3 d){\n    float a=0.0;\n    for (int i=0;i<16;i++){\n    \tfloat t=0.0, mt=MAX_D; vec3 n, mn; bool r=false;\n        if (sphint(p,d,t,n)) r=true, mn=n, mt=t; \t// vec3(135,250,206)/256.0;\n        if (trackint(p,d,t,n) && t<mt) r=true, mn=n, mt=t; \t// vec3(250,206,135)/256.0\n        if (surfint(p,d,t,n) && t<mt) mt=t, mn=normalize(n), r=true; \t// vec3(135,206,250)/256.0\n        if (r) {\n            p+=mt*d;\n            d-=2.0*dot(mn,d)*mn;\n        \ta+=mt;\n        }\n        else { // calculate sky color as final output\n            a=exp(-fogD*a);\n            vec3 sky=skycolor(d);\n            sky=mix(sky,fogcol,fog(d));\n            return mix(fogcol,sky,a);\n        }\n    }\n    return fogcol;\n}\n\n\nvoid mainImage( out vec4 fragColor, in vec2 fragCoord )\n{\n    float h = cos(0.4*iTime)+2.0;\n    float r = 0.5*(cos(iTime)+1.0) + 10.0;\n    vec3 pos = 5.0*cos(0.5*iTime)*vec3(r*cos(iTime), r*sin(iTime), h);\n    vec3 dir = vec3(0.0,0.0,1.0+h1)-pos;\n\n    float rz=atan(dir.x,-dir.y), rx=atan(length(dir.xy),dir.z);\n    mat3 M=mat3(cos(rz),sin(rz),0,-sin(rz),cos(rz),0,0,0,1)*mat3(1,0,0,0,cos(rx),sin(rx),0,-sin(rx),cos(rx));\n\n    vec3 col = vec3(0.0,0.0,0.0), ecol;\n    for (int i=0;i<AA;i++) for (int j=0;j<AA;j++) {\n        vec3 d = M*vec3(0.5*iResolution.x-(fragCoord.x+float(i)/float(AA)),-0.5*iResolution.y+(fragCoord.y+float(j)/float(AA)),Unit);\n        ecol = calcCol(pos,normalize(d));\n    \tif (dot(ecol,vec3(0.3,0.59,0.11))<0.1) ecol=fogcol;\n        col+=ecol;\n    }\n\n    fragColor = vec4(col/float(AA*AA),1.0);\n}\n",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "Wsc3D2",
+    "date": "0",
+    "viewed": 0,
+    "name": "Untitled 0x00000009",
+    "description": "temp",
+    "likes": 0,
+    "published": "Private",
+    "tags": [
+     "temp"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "float hash(float a){\n    return fract(sin(12.9898*a+12.87)*43758.5453);\n}\nfloat hash2(vec2 p){\n\treturn fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);\n}\nfloat hash3(vec3 p){\n    //return 0.5*(hash2(p.xz)+hash2(p.yz));\n    //p = p.zyx;\n\treturn fract(sin(dot(p,vec3(12.9898,78.233,144.7272)))*43758.5453);\n}\n\nvoid mainImage( out vec4 fcol, in vec2 coord ) {\n    //coord = vec2(sin(coord.x),sin(coord.y));\n    fcol = vec4(hash3(vec3(coord,fract(iTime))),\n                hash3(vec3(coord,fract(iTime+0.3))),\n                hash3(vec3(coord,fract(iTime+0.5))),\n               hash(iTime));\n}\n",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "ttGGzR",
+    "date": "0",
+    "viewed": 0,
+    "name": "Untitled 0x0000000A",
+    "description": "Copy of iq's Elevated",
+    "likes": 0,
+    "published": "Private",
+    "tags": [
+     "temp"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "float hash(vec2 p){\n    return fract(23892.58*sin(dot(p,vec2(28.28,73.70))));\n}\n\n// value noise, and its analytical derivatives\nvec3 noised( in vec2 x )\n{\n    vec2 f = fract(x);\n    vec2 u = f*f*(3.0-2.0*f);\n    vec2 p = floor(x);\n\tfloat a = hash((p+vec2(0.5,0.5))/256.0);\n\tfloat b = hash((p+vec2(1.5,0.5))/256.0);\n\tfloat c = hash((p+vec2(0.5,1.5))/256.0);\n\tfloat d = hash((p+vec2(1.5,1.5))/256.0);\n\treturn vec3(a+(b-a)*u.x+(c-a)*u.y+(a-b-c+d)*u.x*u.y,\n\t\t\t\t6.0*f*(1.0-f)*(vec2(b-a,c-a)+(a-b-c+d)*u.yx));\n}\n\nfloat terrain( in vec2 x, int N )\n{\n\tvec2  p = x*0.003;\n    float a = 0.0;\n    float b = 1.0;\n\tvec2  d = vec2(0.0);\n    for( int i=0; i<15; i++ )\n    {\n        vec3 n = noised(p);\n        /*d=n.yz;\n        a+=b*n.x/(1.0+dot(d,d));\n\t\tb *= 0.5;\n        p*=2.0;*/\n        d += n.yz;\n        a += b*n.x/(1.0+dot(d,d));\n\t\tb *= 0.5;\n        p = mat2(0.8,-0.6,0.6,0.8)*p*2.0;\n    }\n\n\treturn 120.0*a;\n}\n\n\nvec4 render( in vec3 ro, in vec3 rd )\n{\n    float tmin = 1.0;\n    float tmax = 5000.0;\n    float t = tmin;\n\tfor( int i=0; i<300; i++ ) {\n        vec3 pos = ro + t*rd;\n\t\tfloat h = pos.y - terrain( pos.xz, 9 );\n\t\tif( abs(h)<(0.002*t) || t>tmax ) break;\n\t\tt += 0.4*h;\n\t}\n    \n    if( t>tmax) return vec4(0.0);\n    \n\tvec3 pos = ro + t*rd;\n    vec2 eps = vec2( 0.002*t, 0.0 );\n    vec3 nor = normalize( vec3( terrain(pos.xz-eps.xy, 15) - terrain(pos.xz+eps.xy, 15),\n                            2.0*eps.x,\n                            terrain(pos.xz-eps.yx, 15) - terrain(pos.xz+eps.yx, 15) ) );\n    return vec4(vec3(mix(0.2,1.0,nor.z)),t);\n}\n\n\nvec3 camPath( float time )\n{\n\treturn 1100.0*vec3( cos(0.0+0.23*time), 0.0, cos(1.5+0.21*time) );\n}\n\nmat3 setCamera(in vec3 d, in float r)\n{\n\tvec3 cp = vec3(sin(r), cos(r), 0.0);\n\tvec3 cu = normalize( cross(d,cp) );\n\tvec3 cv = normalize( cross(cu,d) );\n    return mat3( cu, cv, d );\n}\n\nvoid moveCamera( float time, out vec3 oRo, out vec3 oTa, out float oCr, out float oFl )\n{\n\tvec3 ro = camPath( time );\n\tvec3 ta = camPath( time + 3.0 );\n\tro.y = terrain( ro.xz, 3) + 20.0;\n\tta.y = ro.y - 20.0;\n\tfloat cr = 0.2*cos(0.1*time);\n    oRo = ro;\n    oTa = ta;\n    oCr = cr;\n    oFl = 3.0;\n}\n\nvoid mainImage( out vec4 fragColor, in vec2 fragCoord )\n{\n    float time = iTime*0.1 - 0.1 + 0.3 + 4.0*iMouse.x/iResolution.x;\n\n    // camera position\n    vec3 ro, ta; float cr, fl;\n    moveCamera( time, ro, ta, cr, fl );\n\n    // camera2world transform    \n    mat3 cam = setCamera(normalize(ta-ro), cr );\n    //cam = setCamera(vec3(-1),0.0);\n\n    // pixel\n    vec2 p = (-iResolution.xy + 2.0*fragCoord)/iResolution.y;\n\n    float t = 5000.0;\n    vec3 tot = vec3(0.0);\n    vec2 s = p;\n\n\t// camera ray    \n\tvec3 rd = cam * normalize(vec3(s,fl));\n\n\tvec4 res = render( ro, rd );\n\tt = min( t, res.w );\n\t\n\ttot += res.xyz;\n\n    fragColor = vec4( tot, -1.0 );\n}",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "Wl33RX",
+    "date": "0",
+    "viewed": 0,
+    "name": "Untitled 0x0000000C",
+    "description": "temp",
+    "likes": 0,
+    "published": "Private",
+    "tags": [
+     "temp"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [
+      {
+       "id": "4dXGR8",
+       "filepath": "/media/previz/buffer00.png",
+       "type": "buffer",
+       "channel": 0,
+       "sampler": {
+        "filter": "linear",
+        "wrap": "clamp",
+        "vflip": "true",
+        "srgb": "false",
+        "internal": "byte"
+       },
+       "published": 1
+      }
+     ],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "\nvoid mainImage( out vec4 fragColor, in vec2 fragCoord )\n{\n    vec3 col=texture(iChannel0,fragCoord/iResolution.xy).rgb/float(iFrame+1);\n    col=texture(iChannel0,fragCoord/iResolution.xy).rgb;\n    fragColor = vec4(col,1.0);\n}",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    },
+    {
+     "inputs": [
+      {
+       "id": "4dXGR8",
+       "filepath": "/media/previz/buffer00.png",
+       "type": "buffer",
+       "channel": 0,
+       "sampler": {
+        "filter": "linear",
+        "wrap": "clamp",
+        "vflip": "true",
+        "srgb": "false",
+        "internal": "byte"
+       },
+       "published": 1
+      }
+     ],
+     "outputs": [
+      {
+       "id": "4dXGR8",
+       "channel": 0
+      }
+     ],
+     "code": "float obj(vec3 p){\n    const float o=3.0;\n    p.x=mod(p.x,2.0*o)-o;\n    p.y=mod(p.y,2.0*o)-o;\n    p.z-=1.0;\n    return length(p)-1.0;\n}\n\nfloat map(vec3 p){\n    float d= obj(p);\n    //return d;\n    return p.z<d?p.z:d;\n}\n\nvec3 grad(vec3 p){\n    const float e=1e-3;\n\tfloat k_111 = map(vec3(p.x + e, p.y + e, p.z + e));\n\tfloat k_100 = map(vec3(p.x + e, p.y - e, p.z - e));\n\tfloat k_010 = map(vec3(p.x - e, p.y + e, p.z - e));\n\tfloat k_001 = map(vec3(p.x - e, p.y - e, p.z + e));\n\tvec3 n = vec3(k_111 + k_100 - k_010 - k_001, k_111 - k_100 + k_010 - k_001, k_111 - k_100 - k_010 + k_001);\n\treturn n / (4.0 * e);\n}\n\nvec3 trace(vec3 p, vec3 d){\n    vec3 col=vec3(1.0), ecol;\n    for (int n=0;n<64;n++){\n        bool r=false;\n    \tfloat t=1e-2, dt;\n    \tvec3 q=p+t*d;\n    \tfor (int i=0;i<4096;i++){\n    \t    dt=map(q);\n    \t    t+=dt;\n    \t    q+=dt*d;\n            if (dt<1e-4) {\n                r=true;\n                if (q.z<1e-4) ecol=(((int(floor(q.x))&1)==(int(floor(q.y))&1))?vec3(135,206,250):vec3(148,166,188))/256.0;\n                else ecol=vec3(0.9,0.9,0.95);\n                break;\n            }\n    \t    if (t>1000.0) break;\n    \t}\n        if (r) {\n            p=q;\n            vec3 n=grad(p);\n            d-=2.0*dot(n,d)*n;\n            col*=ecol;\n        }\n        else {\n    \t    float k=clamp(d.z,0.0,1.0);\n            col *= k;\n            break;\n        }\n    }\n    return col;\n}\n\nvoid mainImage(out vec4 Col, in vec2 coord){\n    vec3 pos=vec3(0.0,10.0*iTime+2.0,1.0);\n    vec3 dir=vec3(0,1,0);\n    float rz=atan(dir.x,-dir.y), rx=atan(length(dir.xy),dir.z);\n    mat3 M=mat3(cos(rz),sin(rz),0,-sin(rz),cos(rz),0,0,0,1)*mat3(1,0,0,0,cos(rx),sin(rx),0,-sin(rx),cos(rx));\n    float u=0.0,v=0.0;\n    vec3 d = M*vec3(0.5*iResolution.x-(coord.x+u),-0.5*iResolution.y+(coord.y+v),0.5*length(iResolution.xy));\n    vec3 col = trace(pos,normalize(d));\n    Col=vec4(col+texture(iChannel0,coord/iResolution.xy).rgb,1.0);\n    Col=vec4(col,1.0);\n}\n",
+     "name": "Buffer A",
+     "description": "",
+     "type": "buffer"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "WtK3Ry",
+    "date": "1579568369",
+    "viewed": 118,
+    "name": "Untitled 0x0000000D",
+    "description": "basically a copy of my c++ code [url]https://github.com/Harry7557558/Graphics/blob/light2d/light2d%20(no%20recursion).cpp[/url] (not gl)",
+    "likes": 6,
+    "published": "Public",
+    "tags": [
+     "light2d"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [
+      {
+       "id": "4dXGR8",
+       "filepath": "/media/previz/buffer00.png",
+       "type": "buffer",
+       "channel": 0,
+       "sampler": {
+        "filter": "linear",
+        "wrap": "clamp",
+        "vflip": "true",
+        "srgb": "false",
+        "internal": "byte"
+       },
+       "published": 1
+      }
+     ],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "void mainImage(out vec4 c, in vec2 p) {\n\tc = texelFetch(iChannel0, ivec2(p), 0);\n    c /= float(iFrame+1);\n}\n",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    },
+    {
+     "inputs": [
+      {
+       "id": "4dXGR8",
+       "filepath": "/media/previz/buffer00.png",
+       "type": "buffer",
+       "channel": 0,
+       "sampler": {
+        "filter": "linear",
+        "wrap": "clamp",
+        "vflip": "true",
+        "srgb": "false",
+        "internal": "byte"
+       },
+       "published": 1
+      }
+     ],
+     "outputs": [
+      {
+       "id": "4dXGR8",
+       "channel": 0
+      }
+     ],
+     "code": "#define PI 3.14159265358979\n\n// set SAMPLE to a smaller value if you have a slow machine\n#define SAMPLE 64\n#define EPSILON 1e-4\n#define MAX_STEP 64\n#define MAX_DIST 10.0\n#define MAX_RECU 50\n\nvec2 CENTER = vec2(0.0, 0.0);\nfloat SCALE = 100.0;\nfloat BULB = 2.0;\nfloat INDEX = 1.5;\n\n\nfloat hash(vec2 x){\n    return fract(sin(dot(x,vec2(12.9898,78.233)))*43758.5453);\n}\n\nvec2 Refract(vec2 I, vec2 N, float n1, float n2, out float R) {\n\tfloat eta = n1 / n2;\n\tfloat ci = -dot(N, I);\n\tif (ci < 0.) ci = -ci, N = -N;\n\tfloat ct = sqrt(1.0 - eta * eta * (1.0 - ci * ci));\n\tvec2 r = I * eta + N * (eta * ci - ct);\n\tfloat Rs = (n1 * ci - n2 * ct) / (n1 * ci + n2 * ct);\n\tfloat Rp = (n1 * ct - n2 * ci) / (n1 * ct + n2 * ci);\n\tR = 0.5 * (Rs * Rs + Rp * Rp);\n\treturn r;\n}\n\n\nfloat sdBulb(vec2 p) {\n\t//return length(p - vec2(3.0)) - 1.0;\n\t//return length(vec2(abs(p.x) - 3.0, abs(p.y) - 3.0)) - 0.5;\n\treturn length(vec2(p.x, p.y - 3.0)) - 1.0;\n}\n\nfloat sdObj(vec2 p) {\n\t//return length(p)-1.0;\t// circle\n\t//return (abs(p.x)>0.8?length(vec2(abs(p.x)-0.8,p.y)):abs(p.y))-0.8;\t// capsule\n\t//return max(abs(p.x) - 1.2, abs(p.y) - 0.75);\t// rectangle\n\t//return max(length(vec2(p.x,p.y-0.4))-1.0,p.y-0.5);\t// semi-circle\n\t//float k=length(vec2(0.618*p.x,p.y)); return k<1.0?k-1.0:k*(k-1.0)/length(vec2(0.382*p.x,p.y));\t// ellipse (approximation)\n\treturn min(max(abs(p.x),abs(p.y)-1.2), max(abs(p.x)-0.7,abs(p.y-0.5)))-0.2;\t// cross\n\t//p=abs(p); return min((p.y>1.0?length(p-vec2(0.65,1.0)):abs(p.x-0.65))-0.2, max(p.x-0.65,p.y)-0.2);\t// letter H\n}\n\nvec2 gradient(vec2 p) {\n\tfloat k = 0.001;\n\tfloat u = sdObj(vec2(p.x + k, p.y)) - sdObj(vec2(p.x - k, p.y));\n\tfloat v = sdObj(vec2(p.x, p.y + k)) - sdObj(vec2(p.x, p.y - k));\n\treturn vec2(u, v) * (0.5 / k);\n}\n\nfloat traceRay(vec2 p, vec2 d) {\n\tint N = 0;\n\twhile (N++ < MAX_RECU) {\n\t\tfloat t = 10.0*EPSILON, dt, sdb, sdo, ot, it, R;\n\t\tvec2 q, n, r;\n\t\tint i; for (i = 0; i < MAX_STEP; i++) {\n\t\t\tq = p + d * t;\n\t\t\tsdb = sdBulb(q);\n\t\t\tif (sdb <= EPSILON) return BULB;\n\t\t\tsdo = sdObj(q);\n\t\t\tdt = sdb > sdo ? sdo : sdb;\n\t\t\tif (abs(dt) <= EPSILON) {\n\t\t\t\tn = normalize(gradient(q)), r;\n\t\t\t\tif (dt >= 0.0) r = Refract(d, n, 1.0, INDEX, R);\n\t\t\t\telse r = Refract(d, n, INDEX, 1.0, R);\n\t\t\t\tif (0.0*R != 0.0) R = 1.0;\n\t\t\t\tbreak;\n\t\t\t}\n\t\t\tt += abs(dt);\n\t\t\tif (t > MAX_DIST) return 0.0;\n\t\t}\n\t\tif (i == MAX_STEP) return 0.0;\n\n\t\tt = hash(q + d * R + iTime);\n\t\tif (t < R) p = q, d = reflect(d, n);\n\t\telse p = q, d = r;\n\t}\n\treturn 0.0;\n}\n\nfloat Sample(vec2 p) {\n\tfloat c = 0.0;\n\tfloat s = 1.0 / SCALE, h = -0.5 / SCALE;\n\tfor (int i = 0; i < SAMPLE + min(iFrame, 0); i++) {\n\t\tfloat a = 2.0 * PI * (float(i) + hash(p + vec2(i) + iTime)) / float(SAMPLE);\n\t\tvec2 d = vec2(cos(a), sin(a));\n\t\tc += traceRay(p + vec2(hash(p + iTime - float(i))) * s, d);\n\t}\n\treturn c / float(SAMPLE);\n}\n\nvoid mainImage( out vec4 col, in vec2 coord ) {\n\tSCALE = 0.2*sqrt(iResolution.x*iResolution.y);\n\tvec2 p = (coord - iResolution.xy * 0.5) * (1.0 / SCALE) + CENTER * 0.5;\n\tfloat c = Sample(p);\n\tcol = vec4(vec3(c), 1.0);\n    col += texelFetch(iChannel0, ivec2(coord), 0);\n}\n",
+     "name": "Buffer A",
+     "description": "",
+     "type": "buffer"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "3tVGWG",
+    "date": "0",
+    "viewed": 0,
+    "name": "Untitled 0x0000000E",
+    "description": "old religion assignment",
+    "likes": 0,
+    "published": "Private",
+    "tags": [
+     "temp"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "#define PI 3.14159265358979\n#define AA 2\n\nconst vec3 atmo_col=vec3(0.0,0.7,1.3);\n\nvec3 sun = normalize(vec3(-1.0,-0.1,1.0));\n\nfloat star(vec3 d){\n    return pow(abs(noise3(600.0*d).x)+0.35,10.0);\n}\n\nvec3 earthcol(vec3 p){\n    float u=atan(p.x,p.z)/(2.*PI), v=0.5*(p.y+1.0);  // uniform distributed between 0 and 1\n    float k=cloud(20.0*vec2(u,v),iTime);\n    vec3 cloud=mix(vec3(1.0),vec3(0.5),k);\n    float l=max(dot(p,sun)+0.25,0.1);\n    return l*cloud;\n}\n\nvec3 calccol(vec3 p, vec3 d) {\n    float t=0.0, dt;\n    int i;\n\tvec3 k = cross(p,d); float rd2 = dot(k,k);\n    if (rd2 < 1.0) {  // earth\n        float t = sqrt(dot(p,p) - rd2) - sqrt(1.0 - rd2);\n    \tp+=t*d;\n    \tfloat atmo=max(0.2/abs(dot(p,d))-0.3,0.0);\n    \tfloat l=max(dot(p,sun)+0.25,0.0);\n    \treturn 0.5*earthcol(p)+atmo*l*atmo_col;\n    }\n    vec3 str = vec3(star(d));\n    float light=pow(max(dot(d,sun),0.0),300.0);\n    p-=dot(p,d)*d;\n    float rd=length(p);\n    float atmo=max(0.3/(sqrt(1.0-(2.0-rd)*(2.0-rd)))-0.3,0.0);\n    vec3 atm=atmo*max(dot(normalize(p),sun)+0.2,0.0)*atmo_col;\n    return str+light*vec3(1.0)+clamp(atm,0.0,1.0);\n}\n\n\n\n\n\n\nmat3 setcamera(vec3 d, vec3 n){\n    d=normalize(d),n=normalize(n);\n    vec3 k=-d,j=normalize(n-dot(d,n)*d), i=cross(j,k);\n    float x=atan(j.z,k.z), z=atan(i.y,i.x), y=atan(-i.z,length(i.xy));\n    return mat3(cos(z),sin(z),0,-sin(z),cos(z),0,0,0,1)\n         * mat3(cos(y),0,-sin(y),0,1,0,sin(y),0,cos(y))\n         * mat3(1,0,0,0,cos(x),sin(x),0,-sin(x),cos(x));\n}\n\nvoid mainImage( out vec4 fragColor, in vec2 fragCoord )\n{\n    float t=0.05*iTime;\n    vec3 pos = 1.3*vec3(cos(t),0.0,sin(t));\n    vec3 dir = 1.22*vec3(cos(t+0.1),0.0,sin(t+0.1))-pos;\n    \n    mat3 M=setcamera(dir,pos+vec3(0.0,0.05,0.0));\n    \n    float unit=1.0*length(iResolution.xy);\n    vec3 col=vec3(0.0);\n    for (int u=0;u<AA;u++){\n        for (int v=0;v<AA;v++){\n            vec2 f=fragCoord+vec2(u,v)/float(AA)-0.5*iResolution.xy;\n            vec3 d = normalize(M*vec3(f,-unit));\n    \t\tcol+=clamp(calccol(pos,d),0.0,1.0);\n        }\n    }\n    fragColor=vec4(col/float(AA*AA),1.0);\n}\n",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    },
+    {
+     "inputs": [],
+     "outputs": [],
+     "code": "// starry sky: https://www.shadertoy.com/view/4dffRH\nvec3 hash33(vec3 p) {\n\tp = vec3( dot(p,vec3(127.1,311.7, 74.7)),\n\t\t\t  dot(p,vec3(269.5,183.3,246.1)),\n\t\t\t  dot(p,vec3(113.5,271.9,124.6)));\n\treturn -1.0 + 2.0*fract(sin(p)*43758.5453123);\n}\nvec4 noise3(in vec3 x) {\n    // grid\n    vec3 p = floor(x);\n    vec3 w = fract(x);\n    \n    #if 1\n    // quintic interpolant\n    vec3 u = w*w*w*(w*(w*6.0-15.0)+10.0);\n    vec3 du = 30.0*w*w*(w*(w-2.0)+1.0);\n    #else\n    // cubic interpolant\n    vec3 u = w*w*(3.0-2.0*w);\n    vec3 du = 6.0*w*(1.0-w);\n    #endif    \n    \n    // gradients\n    vec3 ga = hash33( p+vec3(0.0,0.0,0.0) );\n    vec3 gb = hash33( p+vec3(1.0,0.0,0.0) );\n    vec3 gc = hash33( p+vec3(0.0,1.0,0.0) );\n    vec3 gd = hash33( p+vec3(1.0,1.0,0.0) );\n    vec3 ge = hash33( p+vec3(0.0,0.0,1.0) );\n\tvec3 gf = hash33( p+vec3(1.0,0.0,1.0) );\n    vec3 gg = hash33( p+vec3(0.0,1.0,1.0) );\n    vec3 gh = hash33( p+vec3(1.0,1.0,1.0) );\n    \n    // projections\n    float va = dot( ga, w-vec3(0.0,0.0,0.0) );\n    float vb = dot( gb, w-vec3(1.0,0.0,0.0) );\n    float vc = dot( gc, w-vec3(0.0,1.0,0.0) );\n    float vd = dot( gd, w-vec3(1.0,1.0,0.0) );\n    float ve = dot( ge, w-vec3(0.0,0.0,1.0) );\n    float vf = dot( gf, w-vec3(1.0,0.0,1.0) );\n    float vg = dot( gg, w-vec3(0.0,1.0,1.0) );\n    float vh = dot( gh, w-vec3(1.0,1.0,1.0) );\n\t\n    // interpolations\n    return vec4( va + u.x*(vb-va) + u.y*(vc-va) + u.z*(ve-va) + u.x*u.y*(va-vb-vc+vd) + u.y*u.z*(va-vc-ve+vg) + u.z*u.x*(va-vb-ve+vf) + (-va+vb+vc-vd+ve-vf-vg+vh)*u.x*u.y*u.z,    // value\n                 ga + u.x*(gb-ga) + u.y*(gc-ga) + u.z*(ge-ga) + u.x*u.y*(ga-gb-gc+gd) + u.y*u.z*(ga-gc-ge+gg) + u.z*u.x*(ga-gb-ge+gf) + (-ga+gb+gc-gd+ge-gf-gg+gh)*u.x*u.y*u.z +   // derivatives\n                 du * (vec3(vb,vc,ve) - va + u.yzx*vec3(va-vb-vc+vd,va-vc-ve+vg,va-vb-ve+vf) + u.zxy*vec3(va-vb-ve+vf,va-vb-vc+vd,va-vc-ve+vg) + u.yzx*u.zxy*(-va+vb+vc-vd+ve-vf-vg+vh) ));\n}\n\n\n\n\n\n\n//====================================================================================\n\n\n\n\n\n// clouds: https://www.shadertoy.com/view/4tdSWr\nconst float cloudscale = 1.1;\nconst float speed = 0.03;\nconst float clouddark = 0.5;\nconst float cloudlight = 0.3;\nconst float cloudcover = 0.2;\nconst float cloudalpha = 8.0;\nconst float skytint = 0.5;\nconst vec3 skycolour1 = vec3(0.2, 0.4, 0.6);\nconst vec3 skycolour2 = vec3(0.4, 0.7, 1.0);\n\nconst mat2 m = mat2( 1.6,  1.2, -1.2,  1.6 );\n\nvec2 hash2( vec2 p ) {\n\tp = vec2(dot(p,vec2(127.1,311.7)), dot(p,vec2(269.5,183.3)));\n\treturn -1.0 + 2.0*fract(sin(p)*43758.5453123);\n}\n\nfloat noise2( in vec2 p ) {\n    const float K1 = 0.366025404; // (sqrt(3)-1)/2;\n    const float K2 = 0.211324865; // (3-sqrt(3))/6;\n\tvec2 i = floor(p + (p.x+p.y)*K1);\t\n    vec2 a = p - i + (i.x+i.y)*K2;\n    vec2 o = (a.x>a.y) ? vec2(1.0,0.0) : vec2(0.0,1.0); //vec2 of = 0.5 + 0.5*vec2(sign(a.x-a.y), sign(a.y-a.x));\n    vec2 b = a - o + K2;\n\tvec2 c = a - 1.0 + 2.0*K2;\n    vec3 h = max(0.5-vec3(dot(a,a), dot(b,b), dot(c,c) ), 0.0 );\n\tvec3 n = h*h*h*h*vec3( dot(a,hash2(i+0.0)), dot(b,hash2(i+o)), dot(c,hash2(i+1.0)));\n    return dot(n, vec3(70.0));\t\n}\n\nfloat fbm(vec2 n) {\n\tfloat total = 0.0, amplitude = 0.1;\n\tfor (int i = 0; i < 7; i++) {\n\t\ttotal += noise2(n) * amplitude;\n\t\tn = m * n;\n\t\tamplitude *= 0.4;\n\t}\n\treturn total;\n}\n\nfloat cloud(vec2 p, float t) {\n\tvec2 uv = p;\n    float time = t * speed;\n    float q = fbm(uv * cloudscale * 0.5);\n    \n    //ridged noise shape\n\tfloat r = 0.0;\n\tuv *= cloudscale;\n    uv -= q - time;\n    float weight = 0.8;\n    for (int i=0; i<8; i++){\n\t\tr += abs(weight*noise2( uv ));\n        uv = m*uv + time;\n\t\tweight *= 0.7;\n    }\n    \n    //noise shape\n\tfloat f = 0.0;\n    uv = p;\n\tuv *= cloudscale;\n    uv -= q - time;\n    weight = 0.7;\n    for (int i=0; i<8; i++){\n\t\tf += weight*noise2( uv );\n        uv = m*uv + time;\n\t\tweight *= 0.6;\n    }\n    \n    f *= r + f;\n    \n    //noise colour\n    float c = 0.0;\n    time = t * speed * 2.0;\n    uv = p;\n\tuv *= cloudscale*2.0;\n    uv -= q - time;\n    weight = 0.4;\n    for (int i=0; i<7; i++){\n\t\tc += weight*noise2( uv );\n        uv = m*uv + time;\n\t\tweight *= 0.6;\n    }\n    \n    //noise ridge colour\n    float c1 = 0.0;\n    time = t * speed * 3.0;\n    uv = p;\n\tuv *= cloudscale*3.0;\n    uv -= q - time;\n    weight = 0.4;\n    for (int i=0; i<7; i++){\n\t\tc1 += abs(weight*noise2( uv ));\n        uv = m*uv + time;\n\t\tweight *= 0.6;\n    }\n\t\n    c += c1;\n    \n    f = cloudcover + cloudalpha*f*r;\n    \n    return clamp(f + c, 0.0, 1.0);\n    \n}\n\n",
+     "name": "Common",
+     "description": "",
+     "type": "common"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "3tG3Dc",
+    "date": "0",
+    "viewed": 0,
+    "name": "Untitled 0x0000000F",
+    "description": "temp",
+    "likes": 0,
+    "published": "Private",
+    "tags": [
+     "temp"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "vec2 map(float t) {\n    /*const int N = 20;\n    vec2 path[N];\n    path[0] = vec2(2.4998, 0.0106), \n    path[1] = vec2(2.5038, 2.0531), \n    path[2] = vec2(1.7621, 2.0475), \n    path[3] = vec2(1.7621, 0.8170), \n    path[4] = vec2(1.4807, 0.8133), \n    path[5] = vec2(1.4748, 1.1497), \n    path[6] = vec2(1.3597, 1.1498), \n    path[7] = vec2(1.3599, 1.2760), \n    path[8] = vec2(1.5630, 1.2791), \n    path[9] = vec2(1.5802, 1.5380), \n    path[10] = vec2(1.0455, 1.5369), \n    path[11] = vec2(1.0561, 1.2715), \n    path[12] = vec2(1.2675, 1.2713), \n    path[13] = vec2(1.2702, 1.1536), \n    path[14] = vec2(1.1700, 1.1492), \n    path[15] = vec2(1.1626, 0.8191), \n    path[16] = vec2(0.8519, 0.8170), \n    path[17] = vec2(0.8519, 2.0475), \n    path[18] = vec2(0.0037, 2.0509), \n    path[19] = vec2(0.0104, 0.0215);\n    for (int i=0; i<N; i++) path[i]+=vec2(-1.3,-1.1);*/\n    \n    const int N = 23;\n    vec2 path[N];\n\tpath[0] = vec2(0.5952, -0.0063), \n\tpath[1] = vec2(0.9413, 0.0258), \n\tpath[2] = vec2(1.0070, 0.7192), \n\tpath[3] = vec2(0.3847, 0.6577), \n\tpath[4] = vec2(0.2150, -0.0698), \n\tpath[5] = vec2(0.3247, -0.1110), \n\tpath[6] = vec2(0.1134, 0.7722), \n\tpath[7] = vec2(-0.7288, 0.8364), \n\tpath[8] = vec2(-1.0633, 0.1866), \n\tpath[9] = vec2(-0.5052, -0.0586), \n\tpath[10] = vec2(-0.1050, 0.5325), \n\tpath[11] = vec2(-0.4391, 0.4664), \n\tpath[12] = vec2(-0.4318, -0.0109), \n\tpath[13] = vec2(-0.7769, -0.8480), \n\tpath[14] = vec2(-1.0486, -0.5102), \n\tpath[15] = vec2(-0.7907, -0.0711), \n\tpath[16] = vec2(-0.1821, -0.2703), \n\tpath[17] = vec2(0.4163, -1.0536), \n\tpath[18] = vec2(0.2511, -0.9912), \n\tpath[19] = vec2(0.2841, -0.4992), \n\tpath[20] = vec2(0.5632, -0.1908), \n\tpath[21] = vec2(0.7651, 0.3746), \n\tpath[22] = vec2(0.5008, 0.2608);\n    \n    \n    t*=float(N);\n    int d = int(floor(t));\n    t = fract(t);\n    vec2 A = path[d%N], B = path[(d+1)%N], C = path[(d+2)%N], D = path[(d+3)%N];\n    vec2 C3 = (D-C*3.+B*3.-A)/6., C2 = (A-B*2.+C)*.5, C1 = (C-A)*.5, C0 = (A+B*4.+C)/6.;\n    return ((C3*t + C2)*t + C1)*t + C0;\n}\n\nfloat sdSqSegment( in vec2 p, in vec2 a, in vec2 b ) {\n\tvec2 pa = p - a, ba = b - a;\n\tvec2 q = pa - ba*clamp( dot(pa,ba)/dot(ba,ba), 0.0, 1.0 );\n    return dot(q,q);\n}\n\nfloat sd(vec2 p) { \t// from iq's https://www.shadertoy.com/view/Xlf3zl\n    float h = 0.005;\n    float t_max = min(1.5*fract(0.15*iTime),1.0);\n    t_max += h;\n\tfloat t = 0.0;\n    vec2  a = map(t), b;\n    float d = dot(p-a,p-a);\n    t += h;\n    while (t < t_max) {\n        b = map(t);\n        d = min( d, sdSqSegment( p, a, b ) );\n\t\tt += clamp( 0.003*length(a-p)/length(a-b), 0.002, 0.01 );\n        a = b;\n\t}\n\td = min(sqrt(d), abs(length(p-vec2(-0.05,0.))-0.15));\n    return d;\n}\n\nvoid mainImage( out vec4 fragColor, in vec2 fragCoord ) {\n    vec2 res = iResolution.xy;\n    vec2 p = 5.0 * (fragCoord-0.5*res) / length(res);\n    float d = sd(p);\n    vec3 col = vec3(clamp(100.0*d-0.1,0.0,1.0));\n    fragColor = vec4(col, 1.0);\n}",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "3tcSzn",
+    "date": "0",
+    "viewed": 0,
+    "name": "Untitled 0x00000011",
+    "description": "temp",
+    "likes": 0,
+    "published": "Private",
+    "tags": [
+     "temp"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "#define S 5.0\n\nvec3 color(in float d){\n    vec3 col = vec3(1.0) - sign(d)*vec3(0.1,0.4,0.7);\n\tcol *= 1.0 - exp(-2.0*abs(d));\n\tcol *= 0.8 + 0.2*cos(600.0*d/S);\n\tcol = mix(col, vec3(1.0), 1.0-smoothstep(0.0,0.02,abs(5.0*d/S)));\n\treturn col;\n}\n\nfloat sd(vec2 p){\n    p = abs(p);\n    float d2 = length(p)-1.0;\n    float d4 = sqrt(length(p*p))-1.0;\n    float d6 = pow(length(p*p*p),1./3.)-1.0;\n    float d8 = pow(length(p*p*p*p),0.25)-1.0;\n    float d0 = max(abs(p.x),abs(p.y))-1.0;\n    return mix(d2,d6,cos(iTime)*cos(iTime));\n}\n\n// the usual way for bezier sdf by iq\nfloat SDBezier( in vec2 pos, in vec2 A, in vec2 B, in vec2 C )\n{    \n    vec2 a = B - A;\n    vec2 b = A - 2.0*B + C;\n    vec2 c = a * 2.0;\n    vec2 d = A - pos;\n    float kk = 1.0 / dot(b,b);\n    float kx = kk * dot(a,b);\n    float ky = kk * (2.0*dot(a,a)+dot(d,b)) / 3.0;\n    float kz = kk * dot(d,a);      \n    float res = 0.0;\n    float p = ky - kx*kx;\n    float p3 = p*p*p;\n    float q = kx*(2.0*kx*kx - 3.0*ky) + kz;\n    float h = q*q + 4.0*p3;\n    if( h >= 0.0) \n    { \n        h = sqrt(h);\n        vec2 x = (vec2(h, -h) - q) / 2.0;\n        vec2 uv = sign(x)*pow(abs(x), vec2(1.0/3.0));\n        float t = uv.x + uv.y - kx;\n        t = clamp( t, 0.0, 1.0 );\n        vec2 qos = d + (c + b*t)*t;\n        res = dot(qos,qos);\n    }\n    else\n    {\n        float z = sqrt(-p);\n        float v = acos( q/(p*z*2.0) ) / 3.0;\n        float m = cos(v);\n        float n = sin(v)*1.732050808;\n        vec3 t = vec3(m + m, -n - m, n - m) * z - kx;\n        t = clamp( t, 0.0, 1.0 );\n        vec2 qos = d + (c + b*t.x)*t.x;\n        res = dot(qos,qos);\n        qos = d + (c + b*t.y)*t.y;\n        res = min(res,dot(qos,qos));\n        qos = d + (c + b*t.z)*t.z;\n        res = min(res,dot(qos,qos));\n    }\n    return sqrt( res );\n}\n\nfloat sdBezier(vec2 A, vec2 B, vec2 C, vec2 p){\n    float sd = 1e+8;\n    //sd = SDBezier(p, A, B, C);\n    sd = min(sd,max(min(length(p-B), min(length(p-A),length(p-C)))-0.05,0.0));\n    vec2 A2 = A - 2.0*B + C, A1 = B - A; \t// P = A2 t² + 2 A1 t + A\n    float t = -dot(A2,A1)/dot(A2,A2);\n    vec2 V = (A2*t+2.0*A1)*t+A;\n    sd = min(sd,max(length(p-V)-0.05,0.0));\n    return sd;\n}\n\n\n\nvoid mainImage(out vec4 Col, in vec2 Pos) {\n    vec2 p = S*(Pos-0.5*iResolution.xy)/length(iResolution.xy);\n    \n    float d = sdBezier(vec2(0,1), vec2(2.0*sin(2.0*iTime),0), vec2(0,-1), p);\n    vec3 col = color(d);\n    \n    Col = vec4(col,1.0);\n}",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "WldSD4",
+    "date": "0",
+    "viewed": 0,
+    "name": "Untitled 0x00000012",
+    "description": " smoothed boolean operations of sdf",
+    "likes": 0,
+    "published": "Private",
+    "tags": [
+     "temp"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "vec2 Mouse;\n\nfloat smax(float a, float b, float k){\n    float d = a-b;\n    return abs(d)>k?max(a,b):.5*(.5/k*d*d+a+b+.5*k);\n}\nfloat smin(float a, float b, float k){\n    float d = a-b;\n    return abs(d)>k?min(a,b):.5*(-0.5/k*d*d+a+b-.5*k);\n}\nfloat ssub(float a, float b, float k){\n    float d = a+b;\n    return abs(d)>k?max(a,-b):.5*(.5/k*d*d+a-b+.5*k);\n}\n\nfloat sd(vec2 p){\n    float a = p.y;\n    float b = length(p-Mouse)-1.0;\n    return smin(a,b,0.5);\n}\n\n#define S 10.0\nvoid mainImage(out vec4 Col, in vec2 Pos) {\n    vec2 p = S * (Pos-0.5*iResolution.xy)/length(iResolution.xy);\n    Mouse = S * (iMouse.xy-0.5*iResolution.xy)/length(iResolution.xy);\n    float d = sd(p);\n    d /= S;\n    vec3 col = vec3(1.0) - sign(d)*vec3(0.1,0.4,0.7);\n\tcol *= 1.0 - exp(-10.0*abs(d));\n\tcol *= 0.8 + 0.2*cos(600.0*d);\n\tcol = mix(col, vec3(1.0), 1.0-smoothstep(0.0,0.02,abs(5.0*d)));\n    Col = vec4(col,1.0);\n}\n",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "WtcSR2",
+    "date": "0",
+    "viewed": 0,
+    "name": "Untitled 0x00000013",
+    "description": "diving down",
+    "likes": 0,
+    "published": "Private",
+    "tags": [
+     "temp"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [
+      {
+       "id": "XsX3Rn",
+       "filepath": "/media/a/92d7758c402f0927011ca8d0a7e40251439fba3a1dac26f5b8b62026323501aa.jpg",
+       "type": "texture",
+       "channel": 1,
+       "sampler": {
+        "filter": "mipmap",
+        "wrap": "repeat",
+        "vflip": "true",
+        "srgb": "false",
+        "internal": "byte"
+       },
+       "published": 1
+      },
+      {
+       "id": "4df3Rr",
+       "filepath": "/media/a/3871e838723dd6b166e490664eead8ec60aedd6b8d95bc8e2fe3f882f0fd90f0.jpg",
+       "type": "texture",
+       "channel": 0,
+       "sampler": {
+        "filter": "mipmap",
+        "wrap": "repeat",
+        "vflip": "true",
+        "srgb": "false",
+        "internal": "byte"
+       },
+       "published": 1
+      }
+     ],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "#define _13 0.333333333\n#define _23 0.666666667\n#define rt3 1.732050808\n#define r3_2 0.866025404\n#define r3_3 0.577350269\n#define r3_6 0.288675135\n#define _23r3 1.154700538\n#define _43r3 2.309401077\n\n#define eps 0.01\n\nfloat smin(float a, float b, float k){\n    float d = a-b;\n    return abs(d)>k?min(a,b):.5*(-0.5/k*d*d+a+b-.5*k);\n}\n\nfloat map4(vec3 p){\n    p = abs(mod(p,2.0)-1.0);\n    float a = length(p)-0.2;\n    float b = sqrt(min(dot(p.xy,p.xy),min(dot(p.xz,p.xz),dot(p.yz,p.yz))))-0.1;\n    return smin(a,b,0.1);\n}\n\nfloat map3(vec3 p){\n\tp.xy = mod(p.xy + vec2(_23r3,_23), vec2(_43r3,4.0));\n\tif (p.y > 2.0) p.y = 4.0 - p.y;\n\tif (p.x > _23r3) p.x = _43r3 - p.x;\n\tif (p.y > rt3*p.x) p.x = _23r3 - p.x, p.y = 2.0 - p.y;\n    float g = rt3*p.y<p.x ? p.y : 0.5*(rt3*p.x - p.y);\n    float v = p.x+rt3*p.y<_43r3 ? length(p.xy) : length(p.xy - vec2(_23r3,2.0));\n    p.z = mod(p.z,2.0)-1.0; p.z*=p.z;\n    //return smin(min(sqrt(g*g+p.z),v-0.02)-0.1,sqrt(v*v+p.z)-0.2,0.1);\n    return smin(sqrt(g*g+p.z),v-0.02,0.1)-0.08;\n}\n\nfloat map(vec3 p){\n    return mix(map3(p),map4(p),clamp(cos(iTime)+0.5,0.0,1.0));\n    return map3(p);\n}\n\nvec3 grad(vec3 p){\n\tfloat a = map(vec3(p.x+eps,p.y+eps,p.z+eps));\n\tfloat b = map(vec3(p.x+eps,p.y-eps,p.z-eps));\n\tfloat c = map(vec3(p.x-eps,p.y+eps,p.z-eps));\n\tfloat d = map(vec3(p.x-eps,p.y-eps,p.z+eps));\n\treturn normalize(vec3(a+b-c-d,a-b+c-d,a-b-c+d));\n}\n\nbool intCirc(vec2 d, vec2 c, float r, out float t, out vec2 n){\n    if (dot(c,d)<=0.0) return false;\n\tfloat d2 = c.x*d.y-c.y*d.x; if ((d2*=d2) >= r*r) return false;\n\td2 = sqrt(dot(c,c) - d2) - sqrt(r*r - d2);\n    if (d2>t) return false; else t = d2;\n\tn = (d*t-c)/r; return true;\n}\n\nvec3 getTexture(sampler2D G, vec3 p, vec3 n){\n    return ((n=abs(n)).x*texture(G,p.yz)+n.y*texture(G,p.xz)+n.z*texture(G,p.xy)).rgb/(n.x+n.y+n.z);\n}\n\nvoid mainImage(out vec4 fcol, in vec2 coord){\n    float t = -2.0*iTime;\n    vec3 p = vec3(0,0,t+1.0);\n    vec2 uv = (coord - 0.5*iResolution.xy) / length(iResolution.xy);\n    vec3 d = normalize(vec3(uv,t)-p);\n    float dk = 1.0/length(d.xy); vec2 d0 = d.xy*dk;\n    \n    vec3 n, k;\n    t = 1e8;\n    if (intCirc(d0,vec2(-0.06,-0.25),0.05,t,n.xy)\n       ||intCirc(d0,vec2(0.06,-0.25),0.05,t,n.xy)) {\n        p += (t*=dk)*d;\n    \tk = mix(vec3(0.2),vec3(1.0),max(n.y,0.));\n    \tk *= 2.0*getTexture(iChannel1,2.0*p,n);\n    }\n    else {\n    \tt = 0.0; float dt;\n    \tfor (int i=0;i<64;i++){\n    \t    dt = map(p+t*d);\n    \t    t += dt;\n    \t    if (dt<eps || t>40.) break;\n    \t    float a = 0.05*dt, c=cos(a),s=sin(a);\n    \t    d.xy = mat2(c,s,-s,c)*d.xy;\n    \t}\n    \tp += d*t;\n    \tn = grad(p);\n    \tk = mix(vec3(0.2),vec3(1.0),max(n.z,0.));\n    \tk *= 3.0*getTexture(iChannel0,p,n);\n    }\n    fcol.xyz = k*exp(-0.2*t*vec3(1.0,0.8,0.6));\n}\n",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "wtcXz2",
+    "date": "0",
+    "viewed": 0,
+    "name": "Untitled 0x00000014",
+    "description": "grid436",
+    "likes": 0,
+    "published": "Private",
+    "tags": [
+     "temp"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "#define _13 0.333333333\n#define _23 0.666666667\n#define _43 1.333333333\n#define rt3 1.732050808\n#define r3_2 0.866025404\n#define r3_3 0.577350269\n#define r3_4 0.433012702\n#define r3_6 0.288675135\n#define _23r3 1.154700538\n#define _43r3 2.309401077\n\n// map functions: return vec2(grid_distance, vertex_distance)\n\nvec2 map4(vec2 p){\n    p = abs(mod(p,2.0)-1.0);\n    return vec2(min(p.x,p.y),length(p));\n}\n\n// should have better ways\nvec2 map3(vec2 p){\n#if 0\n    // distance to vertex by iq: https://www.shadertoy.com/view/Xd2GR3 (not exact); a little faster\n\tvec2 q = vec2(p.x*r3_2+floor(0.5+0.5*p.y+_13)+1.0, p.y+_23)*0.5 + 0.5;\n    p = fract(vec2(r3_4*p.x-0.25*p.y+_13,0.5*p.y+_13));\n    if (p.x+p.y>1.0) p=1.0-p;\n    return vec2(2.0*min(min(p.x,p.y),1.0-p.x-p.y), length((fract(q)-0.5)*vec2(_43r3,2.0)));\n#else\n\tp = mod(p + vec2(_23r3,_23), vec2(_43r3,4.0));\n\tif (p.y > 2.0) p.y = 4.0 - p.y;\n\tif (p.x > _23r3) p.x = _43r3 - p.x;\n\tif (p.y > rt3*p.x) p.x = _23r3 - p.x, p.y = 2.0 - p.y;\n\treturn vec2(rt3*p.y<p.x ? p.y : 0.5*(rt3*p.x - p.y),\n\t\tp.x+rt3*p.y<_43r3 ? length(p) : length(p - vec2(_23r3,2.0)));\n#endif\n}\n\n// by iq\nfloat map6f(vec2 p) {\n\t//p = vec2(p.x, 0.5*p.x+r3_2*p.y);\n    //p = mat2(1,0.5,0,r3_2)*p;\n\tvec2 pi = floor(p), pf = fract(p);\n\tfloat v = mod(pi.x + pi.y, 3.0);\n\tfloat ca = step(1.0,v), cb = step(2.0,v);\n\tvec2 ma = step(pf.xy,pf.yx);\n    float sd = dot( ma, 1.0-pf.yx + ca*(pf.x+pf.y-1.0) + cb*(pf.yx-2.0*pf.xy));\n    return sd;\n\t//return _23r3*sd;\n}\n\nvec2 map6(vec2 p){\n    //if (p.x+p.y<0.0) p=p.yx;\n    return vec2(map6f(p));\n\tp = fract(p);\n    if (p.x>0.5) p=1.0-p;\n    float g = min(min(p.x,p.y),abs(p.x-p.y+0.5));\n    return vec2(g);\n}\n\n\nfloat map(vec2 p){\n    //return map3(p).y;\n    //return map6f(p);\n    vec2 d = map3(p);\n    //return d.x;\n    return mix(d.x,d.y,clamp(cos(iTime)+0.5,0.0,1.0));\n}\n\nvec2 grad(vec2 p){\n    const float e = 0.01;\n    float dx = map(vec2(p.x+e,p.y))-map(vec2(p.x-e,p.y));\n    float dy = map(vec2(p.x,p.y+e))-map(vec2(p.x,p.y-e));\n    return vec2(dx,dy)/(2.0*e);\n}\n\n#define S 15.0\nvec3 calcCol(in vec2 pos){\n    vec2 p = S * (pos-0.5*iResolution.xy)/length(iResolution.xy);\n    float d = map(p) / S;\n\tvec3 col = d>0.0?vec3(0.7):vec3(0.3);\n\tcol *= 1.0 - exp(-20.0*abs(d));\n\tcol *= 0.8 + 0.2*cos(600.0*d);\n\tcol = mix(col, vec3(1.0), 1.0-smoothstep(0.0,0.02,abs(5.0*d)));\n    col = clamp(col,0.0,1.0);\n    float g = 100.0*(0.5*length(grad(p))-0.5);\n    return col + vec3(g,0.0,-g);\n}\n\n// just make it slow so I can find out which way is better\n// the number of evaluations in raymarching is around 8^2\n#define AA 1\nvoid mainImage(out vec4 Col, in vec2 Pos) {\n    Col.xyz = vec3(0.0);\n    for (int i=0;i<AA;i++) for (int j=0;j<AA;j++)\n        Col.xyz += calcCol(Pos+vec2(i,j)/float(AA));\n    Col.xyz /= float(AA*AA);\n    //Col.xyz = mix(vec3(1.0),Col.xyz,0.4);\n}\n",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    }
+   ]
+  },
+  {
+   "ver": "0.1",
+   "info": {
+    "id": "ttcSWM",
+    "date": "1581034919",
+    "viewed": 4,
+    "name": "Web Camera",
+    "description": "something I made for myself, since the camera app doesn't work properly.",
+    "likes": 0,
+    "published": "Unlisted",
+    "tags": [
+     "temp"
+    ]
+   },
+   "renderpass": [
+    {
+     "inputs": [
+      {
+       "id": "4sf3zn",
+       "filepath": "/presets/webcam.png",
+       "type": "webcam",
+       "channel": 0,
+       "sampler": {
+        "filter": "linear",
+        "wrap": "clamp",
+        "vflip": "true",
+        "srgb": "false",
+        "internal": "byte"
+       },
+       "published": 1
+      }
+     ],
+     "outputs": [
+      {
+       "id": "4dfGRr",
+       "channel": 0
+      }
+     ],
+     "code": "#define mainImage(c, p) \\\n\tc = texture(iChannel0,p/iResolution.xy);",
+     "name": "Image",
+     "description": "",
+     "type": "image"
+    }
+   ]
+  }
+ ]
+}
