@@ -35,8 +35,8 @@ void initTree(segtree *R, int a, int b) {
 	}
 }
 datatype queryTree(const segtree *R, int a, int b) {  // [a,b)
-	if (R->a >= a && R->b <= b) return R->val;
-	if (R->a >= b || R->b <= a) return 0;  // unit element
+	if (R->a >= a && R->b <= b) return R->val;  // completely inside the interval
+	if (R->a >= b || R->b <= a) return unit_element;  // completely outside the interval
 	return queryTree(R->r, a, b) + queryTree(R->l, a, b);  // sum or prod
 }
 
