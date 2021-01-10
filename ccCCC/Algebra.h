@@ -88,6 +88,7 @@ int Combination(int n, int k) {
 // matrix operations
 
 #define Mod 1000000007ll
+#define ModInv(x) pow(x,Mod-2,Mod)
 #define matcpy(N, src,tgt) \
 	for (int i=0;i<N;i++) { \
 		auto ti=tgt[i], si=src[i]; \
@@ -115,6 +116,25 @@ lint MP[MAXN][MAXN], TP[MAXN][MAXN];
 		}
 	}
 }
+
+
+// 2x2 matrix
+struct ivec2l {
+	lint x, y;
+	ivec2l() {}
+	ivec2l(lint x, lint y) :x(x%Mod), y(y%Mod) {}
+};
+struct imat2 {
+	lint a, b, c, d;
+	imat2() {}
+	imat2(lint a, lint b, lint c, lint d) :a(a%Mod), b(b%Mod), c(c%Mod), d(d%Mod) {}
+	imat2 operator * (const imat2 &A) const { return imat2(a*A.a + b * A.c, a*A.b + b * A.d, c*A.a + d * A.c, c*A.b + d * A.d); }
+	imat2 inverse() const { lint m = ModInv(a * d - b * c); return imat2(m*d, m*-b, m*-c, m*a); }  // lint must be signed
+	ivec2l operator * (const ivec2l &v) const { return ivec2l(a*v.x + b * v.y, c*v.x + d * v.y); }
+	friend imat2 pow(imat2 x, lint e) { imat2 r(1, 0, 0, 1); while (e) { if (e & 1) r = r * x; if (e >>= 1) x = x * x; } return r; }
+};
+
+
 
 
 
