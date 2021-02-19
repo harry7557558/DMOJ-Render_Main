@@ -50,7 +50,8 @@ comments = [
     "https://dmoj.ca/problem/ccc11s3#comment-11818",
     "https://dmoj.ca/problem/det#comment-12184",
     "https://dmoj.ca/problem/ccc19s3/editorial#comment-12560",
-    "https://dmoj.ca/contest/dmopc20c2#comment-13859"
+    "https://dmoj.ca/contest/dmopc20c2#comment-13859",
+    "https://dmoj.ca/problem/wac6p4/editorial#comment-14260"
     ],
     [
     "https://dmoj.ca/problem/piggy#comment-12480",
