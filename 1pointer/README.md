@@ -56,6 +56,10 @@ This problem asks you to read paragraphs from `stdin` and count the occurrences 
 
 All inputs can fit into 64-bit unsigned integers. Your task is to output ~A+B+C~, modulo ~42069900169420~.
 
+**https://dmoj.ca/problem/cccjqrp4**:
+
+For the ~i~th ~(1 \leq i \leq 10^6)~ integer pair ~(A,B)~, output ~A-B~ if and only if there exists a non-negative integer ~n~ such that ~i=\dbinom{2n}{n}~.
+
 **https://dmoj.ca/problem/bf1easy**:
 
 Read the problem statement carefully. It tells you to output the integers from ~1~ to ~N~.
@@ -113,8 +117,6 @@ Notice problem statement:
 **https://dmoj.ca/problem/osf**
 
 **https://dmoj.ca/problem/osf2**
-
-**https://dmoj.ca/problem/cccjqrp4**
 
 **https://dmoj.ca/problem/tle18p4**
 
