@@ -28,13 +28,7 @@ Output the numbers in the input order will make you pass.
 
 **https://dmoj.ca/problem/acc4p6**:
 
-The function to implement is to return `true` if ~n~ is happy. The definition of happy numbers can be found at https://en.wikipedia.org/wiki/Happy_number.
-
-**https://dmoj.ca/problem/piggy**:
-
-If your submission gets partial AC, the grader's feedback will be `(amaze!!1)`. Submitting it in Text will *likely* make you pass.
-
-Other full-point short Text submissions include `print('Moana')`, `Unicode`, `:Xyene`, `12`, `KFC`, `youtube`, etc.
+The function to implement is to return `true` iff ~n~ is happy. The definition of happy numbers can be found at https://en.wikipedia.org/wiki/Happy_number.
 
 **https://dmoj.ca/problem/scroll**:
 
@@ -54,7 +48,7 @@ This problem asks you to read paragraphs from `stdin` and count the occurrences 
 
 **https://dmoj.ca/problem/cccjqrp3**:
 
-All inputs can fit into 64-bit unsigned integers. Your task is to output ~A+B+C~, modulo ~42069900169420~.
+All inputs can fit into 64-bit unsigned integers. Output ~A+B+C~, modulo ~42069900169420~.
 
 **https://dmoj.ca/problem/cccjqrp4**:
 
