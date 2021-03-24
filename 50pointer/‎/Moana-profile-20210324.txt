@@ -1,0 +1,60 @@
+Self-taught ~~graphics~~ programmer.
+
+Enjoys linear algebra, calculus, numerical algorithms, physics, etc. Sometimes needs help with usual competitive programming problems like DS/DP/GT.
+
+Name: ![enter image description here](https://harry7557558.github.io/https:/gpvc.arturio.dev/dmojmoana) ~\tiny\color{#00000000}{\text{(not a secondary account)}}~
+
+Age: ~\approx 5{\sqrt{-1}}^{-1}{\ln(-1)}-(-1)~
+
+Location: somewhere on the Internet
+
+Don't like to meet people due to certain ~~mental illness~~.
+
+[Promo #1](https://harry7557558.github.io/)
+[Promo #2](https://www.shadertoy.com/user/harry7557558)
+[Promo #3](https://github.com/Harry7557558/DMOJ-Render_Main/tree/master/1pointer#unofficial-explanations-for-dmoj-meme-problems)
+
+Best friend: Google
+
+--------
+
+I try to learn:
+
+- Fourier stuff (needs help)
+- Rigid body / continuum / fluid dynamics
+- Machine Learning / Neural Network
+- Numerical Recipes
+- Electromagnetism / Maxwell's equations
+
+--------
+
+[To-do](https://docs.google.com/document/d/1xdJfVFV0bo8dZDvf2vMuDvsxw-24_l99ezHr-nSUhc8/mobilebasic):
+
+- Talk less and think more.
+- Keep DMOJ blocked before finishing my work.
+- Stop being stupid.
+
+--------
+
+> Just stay away and you'll be safe from me!  - Queen Elsa from *Frozen*
+
+--------
+
+# Social
+
+[~\mathsf{\color{purple}{Moana}}~](https://dmoj.ca/user/Moana) becomes my primary account after losing my initial account for being stupid.
+
+Friends: [~\mathsf{\color{blue}{harry7557558}}~](https://dmoj.ca/user/harry7557558), [~\mathsf{\color{#999}{Render\_Main}}~](https://dmoj.ca/user/Render_Main)
+
+Enemies: [~\mathsf{\color{#ffb100}{Tomorrow}}~](https://dmoj.ca/user/Tomorrow), [~\mathsf{\color{#000}{DMOZ}}~](https://dmoj.ca/user/DMOZ)
+
+Why can't I merge [user:Harry7557558_wcipeg]??
+
+[Guide #0](https://github.com/DMOJ/online-judge/pull/1384)
+[Guide #1](https://github.com/DMOJ/online-judge/blob/master/judge/comments.py#L46-L47)
+[Guide #2](https://github.com/DMOJ/online-judge/blob/master/judge/views/user.py#L358-L360)
+[Guide #3](https://github.com/DMOJ/online-judge/blob/master/judge/views/problem.py#L611-L614)
+
+![visitors](https://visitor-badge.glitch.me/badge?page_id=dmoj.user.Moana)
+
+--------

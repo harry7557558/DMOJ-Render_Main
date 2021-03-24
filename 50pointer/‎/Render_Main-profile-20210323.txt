@@ -1,0 +1,73 @@
+Alternate account of a self-taught ~~graphics~~ programmer. Use to hack problems + vote comments.
+
+Trying to find CP problems to practice polygon mesh DS + dynamic BVH, and those require heavy numerical algorithms that I can see other people's code after solved on my own.
+
+**Not to be confused with [RenderMan](https://player.vimeo.com/video/388365999).**
+~\href{https://player.vimeo.com/video/148751763}{\color{#00000000}{Never Gonna Give You Up}}~
+
+================================================================
+
+
+## Is [DMOJ logo](https://dmoj.algome.me/texoid/bcbb015731331ea2276676e75931bfd32868d15b/svg) symmetrical?  - Yes!
+
+1KB Pure C++:
+
+    #include <stdio.h>
+    #include <cmath>
+    #include <algorithm>
+
+    double Render_Main(double x, double y) {
+    	double m = x * x + y * y, t = atan2(x, y);
+    	double magic = 0.5221-0.2944*cos(5*t)-0.02483*cos(10*t)+0.05337*cos(15*t)-0.01529*cos(20*t)-0.0195*cos(25*t)+0.01284*cos(30*t)+0.003285*cos(35*t)-0.009388*cos(40*t)+0.001775*cos(45*t)+0.004718*cos(50*t);
+    	return 60 * std::min(std::max(m-1.7,1.45-m), sqrt(m)-magic);
+    }
+    
+    int main(int argc, char *argv[]) {
+    	FILE* fp = fopen(argv[1], "wb");
+    	fwrite("\x89PNG\r\n\x1A\n\0\0\0\rIHDR\0\0\2X\0\0\x1\x90\x8\2\0\0\0\xFDW\x89\xCF\0\xB\5\xE6IDATx\x1", 1, 43, fp);
+    	for (int j = 0; j < 400; j++) {
+    		fwrite("\0\x9\7\xF6\xF8\0", 1, 6, fp);
+    		for (int i = 0; i < 600; i++) {
+    			double t = Render_Main(0.01*(i-300), 0.01*(j-200));
+    			t = (t > 1 ? 0 : t < 0 ? 1 : 1 - t);
+    			fputc(250*t,fp); fputc(220*t,fp); fputc(5*t,fp);
+    		}
+    	}
+    	fwrite("V2'\xAF\x65\xCE\x18\r\0\0\0\0IEND\xAE\x42`\x82", 1, 20, fp);
+    	fclose(fp); return 0;
+    }
+
+Output:
+
+[![DMOJ logo](https://raw.githubusercontent.com/Harry7557558/DMOJ-Render_Main/master/Render_Main/dmoj01-min.png)](https://github.com/Harry7557558/DMOJ-Render_Main)
+
+--------
+
+free high pointers: [~~50p~~](https://dmoj.ca/problem/noi05p6) [~~40p~~](https://dmoj.ca/problem/ccoprep3p3) [~~30p~~](https://dmoj.ca/problem/det) [20p](https://dmoj.ca/problem/python3) [10p](https://dmoj.ca/problem/fastbit) [1p](https://dmoj.ca/problem/scroll) never forget 2021/03/15
+
+[![visitors](https://visitor-badge.glitch.me/badge?page_id=dmoj.user.Moana)](https://dmoj.ca/user/Moana)
+
+To-do list: https://docs.google.com/document/d/1xdJfVFV0bo8dZDvf2vMuDvsxw-24_l99ezHr-nSUhc8/mobilebasic
+
+--------
+
+## 2021-03-15 high-pp-rebalancing-requests aftermath:
+
+    point	count	graph
+    1		19		**
+    3		429		*****************************************************
+    5		564		**********************************************************************
+    7		499		**************************************************************
+    10		468		**********************************************************
+    12		263		********************************
+    15		467		**********************************************************
+    17		113		**************
+    20		362		*********************************************
+    25		218		***************************
+    30		113		**************
+    35		21		**
+    40		46		*****
+    50		8		*
+    
+    Maximum possible point for a single user:
+    P + B = 855.36 + 150.00 = 1005.36
