@@ -1,0 +1,7 @@
+# M = 14
+# writeDataToCSV(MNIST_TEST_FILES, "mnist/mnist_test_2.csv");
+
+mnist_train.csv
+mnist_test.csv
+mnist_train_2.csv
+mnist_test_2.csv

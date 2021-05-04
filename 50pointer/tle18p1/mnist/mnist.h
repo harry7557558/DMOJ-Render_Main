@@ -92,3 +92,29 @@ void writeAverage(const char* filename, const mnist_img *v, int N) {
 	}
 	writeImage(filename, p);
 }
+
+
+#include <random>
+void writeDataToCSV(const char* FILES[], const char* filename) {
+	struct _case {
+		mnist_img img;
+		int d;
+	};
+	std::vector<_case> cases;
+	for (int d = 0; d < 10; d++) {
+		std::vector<mnist_img> cs;
+		loadData(FILES[d], cs);
+		for (mnist_img img : cs) {
+			cases.push_back(_case{ img, d });
+		}
+	}
+	std::shuffle(cases.begin(), cases.end(), std::default_random_engine(1));
+	FILE* fp = fopen(filename, "wb");
+	for (_case c : cases) {
+		for (int i = 0; i < M*M; i++)
+			fprintf(fp, "%.3lf,", (&c.img.data[0][0])[i]);
+		for (int i = 0; i < 10; i++)
+			fprintf(fp, "%d%c", i == c.d ? 1 : 0, i == 9 ? '\n' : ',');
+	}
+	fclose(fp);
+}
