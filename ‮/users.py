@@ -60,6 +60,7 @@ def plot_rating_pp_graph(data):
     plt.savefig("users/plot_rating_pp_graph.png", dpi=150)
     if DISPLAY: plt.show()
 
+
 def plot_pp_points_graph(data):
     users = []
     for user in data:
@@ -72,6 +73,7 @@ def plot_pp_points_graph(data):
     plt.plot([u[0] for u in users], [u[1] for u in users], "ro", markersize=3)
     plt.savefig("users/plot_pp_points_graph.png", dpi=150)
     if DISPLAY: plt.show()
+
 
 def plot_points_solved_graph(data):
     users = []
@@ -86,6 +88,7 @@ def plot_points_solved_graph(data):
     plt.savefig("users/plot_points_solved_graph.png", dpi=150)
     if DISPLAY: plt.show()
 
+
 def plot_pp_solved_graph(data):
     users = []
     for user in data:
@@ -99,20 +102,6 @@ def plot_pp_solved_graph(data):
     plt.savefig("users/plot_pp_solved_graph.png", dpi=150)
     if DISPLAY: plt.show()
 
-def plot_volatility_rating_graph(data):
-    users = []
-    for user in data:
-        if user['rating']!=None:
-            users.append((user['rating'],user['volatility']))
-    plt.clf()
-    plt.title("DMOJ Users Volatility-Rating Graph" + date)
-    plt.xlabel("Rating")
-    plt.ylabel("Volatility")
-    plt.plot([0,3600],[385,385], "--", color='#1f77b4')
-    plt.text(3000,390,"volatility=385")
-    plt.plot([u[0] for u in users], [u[1] for u in users], "ro", markersize=3)
-    plt.savefig("users/plot_volatility_rating_graph.png", dpi=150)
-    if DISPLAY: plt.show()
 
 def plot_pp_rank_graph(data):
     users = []
@@ -133,6 +122,7 @@ def plot_pp_rank_graph(data):
     plt.savefig("users/plot_pp_rank_graph.png", dpi=150)
     if DISPLAY: plt.show()
 
+
 def plot_rating_rank_graph(data):
     users = []
     for user in data:
@@ -145,6 +135,7 @@ def plot_rating_rank_graph(data):
     plt.plot(sorted(users, reverse=True), "r")
     plt.savefig("users/plot_rating_rank_graph.png", dpi=150)
     if DISPLAY: plt.show()
+
 
 def plot_solved_rank_graph(data):
     users = []
@@ -165,33 +156,23 @@ def plot_solved_rank_graph(data):
     plt.savefig("users/plot_solved_rank_graph.png", dpi=150)
     if DISPLAY: plt.show()
 
+
 def plot_rating_histogram(data):
     users = []
     for user in data:
         if user['rating'] != None:
             users.append(user['rating'])
     plt.clf()
-    plt.title("DMOJ Rating Distribution" + date)
+    plt.title("DMOJ Rating Histogram" + date)
     bins = list(range(50*(min(users)//50-1),50*(max(users)//50+1),50))
     plt.hist(list(filter(lambda x: x<1000, users)), bins, color='#999')
-    plt.hist(list(filter(lambda x: 1000<=x<1200, users)), bins, color='#00a900')
-    plt.hist(list(filter(lambda x: 1200<=x<1500, users)), bins, color='blue')
-    plt.hist(list(filter(lambda x: 1500<=x<1800, users)), bins, color='purple')
-    plt.hist(list(filter(lambda x: 1800<=x<2200, users)), bins, color='#ffb100')
-    plt.hist(list(filter(lambda x: x>=2200, users)), bins, color='red')
+    plt.hist(list(filter(lambda x: 1000<=x<1300, users)), bins, color='#00a900')
+    plt.hist(list(filter(lambda x: 1300<=x<1600, users)), bins, color='blue')
+    plt.hist(list(filter(lambda x: 1600<=x<1900, users)), bins, color='purple')
+    plt.hist(list(filter(lambda x: 1900<=x<2400, users)), bins, color='#ffb100')
+    plt.hist(list(filter(lambda x: 2400<=x<3000, users)), bins, color='red')
+    plt.hist(list(filter(lambda x: x>3000, users)), bins, color='darkred')
     plt.savefig("users/plot_rating_histogram.png", dpi=150)
-    if DISPLAY: plt.show()
-
-def plot_volatility_histogram(data):
-    users = []
-    for user in data:
-        if user['rating'] != None and user['volatility']!=385:
-            users.append(user['volatility'])
-    plt.clf()
-    plt.title("DMOJ Volatility Distribution" + date)
-    plt.hist(users, list(range(0,1000,20)), color='#999')
-    plt.text(385,200,"Excluding volatility=385")
-    plt.savefig("users/plot_volatility_histogram.png", dpi=150)
     if DISPLAY: plt.show()
 
 
@@ -204,9 +185,7 @@ if not DISPLAY:
     plot_pp_points_graph(data)
     plot_points_solved_graph(data)
     plot_pp_solved_graph(data)
-    plot_volatility_rating_graph(data)
     plot_pp_rank_graph(data)
     plot_rating_rank_graph(data)
     plot_solved_rank_graph(data)
     plot_rating_histogram(data)
-    plot_volatility_histogram(data)

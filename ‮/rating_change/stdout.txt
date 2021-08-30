@@ -1,0 +1,45 @@
+acc7
+Average rating change: 22.85
+Rating change sigma: 226.86195595300578
+Regression slope: -0.030367101157040666
+
+dmopc20c5
+Average rating change: -25.764423076923077
+Rating change sigma: 203.5060261749529
+Regression slope: 0.033668657054504114
+
+aac2
+Average rating change: 2.1242603550295858
+Rating change sigma: 235.95066562803495
+Regression slope: 0.02631428035027065
+
+dmopc20c6
+Average rating change: 3.740506329113924
+Rating change sigma: 184.8352745851078
+Regression slope: 0.010519089750338996
+
+dmopc20c7
+Average rating change: 31.223529411764705
+Rating change sigma: 279.26305710636456
+Regression slope: -0.045530546466987176
+
+canada21
+Average rating change: 92.61023622047244
+Rating change sigma: 293.86952560043346
+Regression slope: -0.08555800793140286
+
+cpc21c1
+Average rating change: -8.462311557788945
+Rating change sigma: 216.69777710606664
+Regression slope: 0.043870729826154344
+
+aac3
+Average rating change: 33.0763358778626
+Rating change sigma: 258.3818528650397
+Regression slope: -0.03212982681539789
+
+acc8
+Average rating change: 16.570247933884296
+Rating change sigma: 251.6966701688854
+Regression slope: -0.02541934238349289
+
