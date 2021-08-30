@@ -1,3 +1,13 @@
+/*
+  National Olympiad in Informatics, China, 2010
+  Day 2, Problem 3 - Happily Growing
+
+  Solution Grader by Alex Li <alextrovert@gmail.com>
+*/
+
+#include <cstdio>
+#include <cmath>
+
 //#define return(x) { printf("Returned %d\n", x); return x; }
 
 const int MAX_N = 10005;
