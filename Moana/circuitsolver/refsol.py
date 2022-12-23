@@ -78,7 +78,7 @@ sol = I_overall * x[:M]
 print('\n'.join(map(str, sol)))
 
 
-if __name__ == "__main__":
+if False:
     import matplotlib.pyplot as plt
     precond = np.diag([1/r**0.5 for r in R]+[5e4]*N)
     A = A.todense()

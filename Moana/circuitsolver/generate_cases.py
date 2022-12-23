@@ -144,20 +144,26 @@ def strand(N, MAXR, variance, more_wire):
     shuffle(rs)
     for a, b, r in rs:
         print(mp[a], mp[b], r)
-        
+
 
 def run_case(case_id, fun):
-    print("Case", case_id)
+    #if not 14 <= int(case_id) <= 14: return
+    print("Case", case_id, '-', end=' ')
     old_stdout = sys.stdout
     fp = open('data/'+case_id+'.in', 'w')
     sys.stdout = fp
     fun()
     fp.close()
     sys.stdout = old_stdout
+    print(open('data/'+case_id+'.in').readline().strip())
     proc = subprocess.Popen(
-        ['python', 'refsol.py'],
+        [
+            'python3',
+            #'refsol.py',
+            'refsol2.py',  # faster
+        ],
         stdin=open('data/'+case_id+'.in', 'r'),
-        stdout=subprocess.PIPE
+        stdout=subprocess.PIPE,
     )
     srand(case_id)
     output = proc.communicate()[0]
@@ -166,21 +172,31 @@ def run_case(case_id, fun):
 if __name__ == "__main__":
     run_case('01', lambda: rect_grid(2, 4, 1000, 0.05))
     run_case('02', lambda: torus_grid(2, 7, 2000, 0.2))
-    run_case('03', lambda: torus_grid(5, 5, 2000, 0.3))
-    run_case('04', lambda: rect_grid(4, 9, 100000, 1.1))
+    run_case('03', lambda: torus_grid(8, 7, 10, 0.3))
+    run_case('04', lambda: rect_grid(10, 9, 100000, 1.1))
     run_case('05', lambda: strand(110, 100000, 10.0, 1.1))
-    run_case('06', lambda: torus_grid_3d(2, 3, 2, 100000, 6.0))
-    run_case('07', lambda: torus_grid_3d(2, 3, 4, 100000, 4.0))
-    run_case('08', lambda: dense_neural([2, 20, 20, 3], 100000, 0.0))
-    run_case('09', lambda: rect_grid(7, 9, 100000, 5.5))
-    run_case('10', lambda: torus_grid(9, 11, 100000, 5.5))
-    run_case('11', lambda: dense_neural([30, 35, 32], 100000, 0.577))
-    run_case('12', lambda: dense_neural([45, 32, 43], 100000, 0.871))
-    run_case('13', lambda: torus_grid_3d(3, 3, 3, 100000, 67.3))
-    run_case('14', lambda: torus_grid_3d(3, 4, 5, 100000, 53.1))
-    run_case('15', lambda: torus_grid_3d(5, 5, 5, 100000, 53.3))
-    run_case('16', lambda: dense_neural([20, 40, 60, 50, 20, 140], 100000, 2.0))
-    run_case('17', lambda: rect_grid(56, 47, 1000, 0.05))
-    run_case('18', lambda: torus_grid(45, 54, 10000, 0.05))
-    run_case('19', lambda: strand(4356, 100000, 50.0, 1.1))
-    run_case('20', lambda: strand(7125, 100000, 10.0, 2.33))
+    run_case('06', lambda: strand(240, 1, 5.0, 0.2))
+    run_case('07', lambda: torus_grid_3d(8, 15, 3, 100000, 0.1))
+    run_case('08', lambda: dense_neural([10, 585, 5], 2, 0.1))
+    run_case('09', lambda: torus_grid(26, 167, 10, 1.3))
+    run_case('10', lambda: rect_grid(3, 1647, 10, 1.1))
+    run_case('11', lambda: dense_neural([5]*5+[2]*700+[10]*200+[2]*500, 100, 0.0))
+    run_case('12', lambda: dense_neural([2+randu()%8 for _ in range(900)], 300, 0.01))
+    run_case('13', lambda: torus_grid_3d(13, 17, 25, 100, 0.5))
+    run_case('14', lambda: torus_grid_3d(2, 40, 80, 50, 0.55))
+    run_case('15', lambda: torus_grid_3d(3, 2, 1240, 23, 0.01))
+    run_case('16', lambda: dense_neural([1, 3]*2500, 100000, 1.00045))
+    run_case('17', lambda: strand(4356, 100000, 50.0, 1.1))
+    run_case('18', lambda: strand(7125, 100000, 10.0, 2.33))
+    run_case('19', lambda: strand(9356, 5, 4.0, 0.2))
+    run_case('20', lambda: strand(10000, 2, 1.0, 2.00035))
+
+    import zipfile
+    import os
+    with zipfile.ZipFile("data.zip", 'w', zipfile.ZIP_DEFLATED) as zipf:
+        for file in os.listdir("data/"):
+            content = open('data/'+file, 'r').read()
+            content = content.replace('\r\n', '\n')
+            content = content.strip() + '\n'
+            open('data/'+file, 'wb').write(bytearray(content, 'ascii'))
+            zipf.write("data/"+file, file)

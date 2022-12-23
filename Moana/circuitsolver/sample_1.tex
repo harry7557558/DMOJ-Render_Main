@@ -1,0 +1,21 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shapes.geometric}
+\usepackage{amsmath}
+\begin{document}
+\begin{tikzpicture}[
+endnode/.style={diamond, draw=black, fill=none, very thick, minimum size=1em},
+node/.style={circle, draw=black, fill=none, very thick, minimum size=1em},
+]
+\node[endnode, label={$36V$}](n1){1};
+\node[node, label={$27V$}](n2)[right=of n1]{2};
+\node[node, label={$12V$}](n3)[right=of n2]{3};
+\node[endnode, label={$0V$}](n4)[right=of n3] {4};
+\draw[->] (n1.east) -- node[above]{$6\Omega$}++(0.99,0) -- node{}++(-0.99,0) -- node[below]{$1.5A$}++(0.99,0) -- (n2.west);
+\draw[->] (n2.east) -- node[above]{$10\Omega$}++(0.99,0) -- node{}++(-0.99,0) -- node[below]{$1.5A$}++(0.99,0) -- (n3.west);
+\draw[->] (n3.east) -- node[above]{$8\Omega$}++(0.99,0) -- node{}++(-0.99,0) -- node[below]{$1.5A$}++(0.99,0) -- (n4.west);
+\end{tikzpicture}
+\end{document}
+
