@@ -114,3 +114,12 @@ Contains the equation $F_A=CKC^Tu$: http://web.mit.edu/emech/admin/OldFiles/dont
  - The nonfixed part is guaranteed to be full-rank?!
 
 
+# Singular stiffness matrix?
+
+Seems like the stiffness matrix transforming deflection of nonfixed joints to their applied forces can be singular. The matrix is a linear approximation, and the "inverse" of a singular matrix has "infinity" components. Or, $\frac{\partial u_i}{\partial F_{aj}}$ is "infinity" for certain $i$, $j$. This may happen when:
+
+ - Fixed joints are collinear, the structure can rotate freely about an axis;
+
+ - All members connected to a nonfixed joint are coplanar, a small force component perpendicular to the plane can result in a large deformation;
+
+ - 

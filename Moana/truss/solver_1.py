@@ -11,57 +11,66 @@ def cross_product_matrix(r):
     ])
 
 
-def solve_reactions_check(joints, forces, fixed):
-    """Check the attempt to solve for all reaction forces,
-        seems like the rank of the matrix is
-        at most 5 for two pins and at most 6 for >=3 pins
-    Intuition:
-        Can rotate about an axis for 2 pins;
-        3N variables and 6 equations for N pins."""
-
-    # solve for reaction forces
-    # net force = 0, net moment = 0
-    A = np.zeros((3*len(fixed)+3, 3*len(fixed)))
-    b = np.zeros(3*len(fixed)+3)
-
-    # moment equations
-    for j0 in range(len(fixed)):
-        xj0 = joints[fixed[j0]]#*0
-        for j in range(len(fixed)):
-            xj = joints[fixed[j]]
-            r = cross_product_matrix(xj - xj0)
-            A[3*j0:3*j0+3, 3*j:3*j+3] = r
-        for i in range(len(forces)):
-            xi = joints[i]
-            r = cross_product_matrix(xi - xj0)
-            b[3*j0:3*j0+3] -= r @ forces[i]
-
-    # equilibrium equations
-    for j in range(len(fixed)):
-        A[3*len(fixed):, 3*j:3*j+3] = np.eye(3)
-    for i in range(len(forces)):
-        b[3*len(fixed):] -= forces[i]
-
-    # balance
-    for i in range(0, len(A), 3):
-        A[i:i+3, :] /= np.mean(A[i:i+3, :]**2)**0.5
-
-    fig, (ax1, ax2) = plt.subplots(1, 2)
-    ax1.matshow(abs(A))
-
-    # solve Ax=b
-    A, b = A.T@A, A.T@b
-    print(sorted(np.linalg.eig(A)[0].real))
-
-    ax2.matshow(abs(A))
-    plt.show()
+def format_float(x, s=3):
+    """CIV102 convension"""
+    try:
+        return '[' + ' '.join([format_float(xi) for xi in iter(x)]) + ']'
+    except TypeError:
+        if not np.isfinite(x):
+            return str(x)
+        if abs(x) <= 1e-10:
+            return '0'
+        if np.log10(abs(x)) >= s:
+            return str(round(x))
+        sigfig = s+1 if np.log10(abs(x))%1.0 < np.log10(2) else s
+        return f"{{:.{sigfig}g}}".format(x)
 
 
+def disjoint_components(N, members):
+    """N=len(joints), 0-indexed members"""
+    # disjoint set
+    parent = [-1] * N
+    rank = [0] * N
+    def find_rep(i):
+        if parent[i] < 0:
+            return i
+        ans = find_rep(parent[i])
+        parent[i] = ans
+        return ans
+    # union
+    for i, j in members:
+        ir, jr = find_rep(i), find_rep(j)
+        if ir == jr:
+            continue
+        if rank[ir] < rank[jr]:
+            parent[ir] = parent[i] = jr
+        elif rank[ir] > rank[jr]:
+            parent[jr] = parent[j] = ir
+        else:
+            parent[jr] = parent[j] = ir
+            rank[ir] += 1
+    # find disjoint ones
+    res = {}
+    for i, j in members:
+        ir, jr = find_rep(i), find_rep(j)
+        assert ir == jr
+        if ir not in res:
+            res[ir] = set()
+        res[ir].add(i)
+        res[ir].add(j)
+    return [list(dj) for dj in res.values()]
 
-def solve_truss(joints, forces, fixed, members, ks, verbose=False):
-    #solve_reactions_check(joints, forces, fixed)
+
+def solve_truss(joints, weights, fixed, members, EA, verbose=''):
+    """Returns (applied_reaction_forces, member_forces, deflections)
+        1-index for `fixed` and `members`"""
     N = len(joints)
     M = len(members)
+    joints = [np.array(x, dtype=np.float64) for x in joints]
+    forces = [np.array([0, 0, -w], dtype=np.float64) for w in weights]
+    fixed = [f-1 for f in fixed]
+    members = [(a-1, b-1) for (a, b) in members]
+    ks = [EA/np.linalg.norm(joints[b]-joints[a]) for (a, b) in members]
 
     # Get stiffness matrix
     Cv, Ci, Cj = [], [], []
@@ -103,8 +112,25 @@ def solve_truss(joints, forces, fixed, members, ks, verbose=False):
             mats[i][j] = scipy.sparse.csr_matrix(
                 ([e[2] for e in m], ([e[0] for e in m], [e[1] for e in m])),
                 shape=(s[i], s[j]))
-    print(min(np.linalg.eig(mats[0][0].todense())[0].real))
-    #print(min(np.linalg.eig(mats[1][1].todense())[0].real))
+
+    # Check for singularity
+    if 'c' in verbose:
+        n = 3*len(nonfixed)
+        if n < 3000:
+            eigvals = np.linalg.eigvalsh(mats[0][0].todense())
+            #print(sorted(abs(eigvals)))
+            print("cond =", abs(max(eigvals)/min(eigvals)))
+        else:
+            M = scipy.sparse.csr_matrix(
+                (1.0/mats[0][0].diagonal(), (list(range(n)), list(range(n)))),
+                shape=(n, n))
+            X = np.random.normal(size=(n, 1))
+            mineig, _ = scipy.sparse.linalg.lobpcg(
+                mats[0][0], X, M=M, largest=False, maxiter=10000)
+            maxeig, _ = scipy.sparse.linalg.lobpcg(
+                mats[0][0], X, M=M, largest=True, maxiter=10000)
+            print("cond =", abs(maxeig[0]/mineig[0]))
+        pass
 
     # Solve
     f = np.array([forces[i] for i in nonfixed]).reshape(3*len(nonfixed))
@@ -121,57 +147,38 @@ def solve_truss(joints, forces, fixed, members, ks, verbose=False):
     fm = K * C.T * u0  # member force
     u0 = u0.reshape(N, 3)
 
-    # get the result
-    if verbose:
-
-        net_f = sum(fa)
-        assert np.linalg.norm(net_f) < 1e-8
-        net_m = sum([cross_product_matrix(joints[i])@fa[i] for i in range(N)])
-        assert np.linalg.norm(net_m) < 1e-4
+    # Correctness check
+    if 'a' in verbose:
+        fa1 = np.array(fa)
+        for l in disjoint_components(len(joints), members):
+            net_f = sum(fa1[l]) / len(l)
+            c = np.mean(np.array(joints)[l], axis=0)
+            net_m = sum([cross_product_matrix(joints[i]-c)@fa1[i] for i in l]) / len(l)
+            #print(np.linalg.norm(net_f), np.linalg.norm(net_m))
+            assert np.linalg.norm(net_f) < 1e-6
+            assert np.linalg.norm(net_m) < 1e-3
         fa_ = (C * fm).reshape(N, 3)
-        assert np.linalg.norm(fa-fa_) < 1e-6
+        #print(np.linalg.norm(fa-fa_)/len(fm))
+        assert np.linalg.norm(fa-fa_)/len(fm) < 1e-8
+        diff = ((fa-fa_).T[0]**2 + (fa-fa_).T[1]**2 + (fa-fa_).T[2]**2)**.5
+        #print(np.amax(diff))
+        assert np.amax(diff) < 1e-5
 
+    # Print result
+    if 'p' in verbose:
         print("Reaction")
         for i, fi in zip(fixed, fr):
-            print(i+1, fi)
+            print(i+1, format_float(fi))
         print("Member")
         for i, fi in zip(range(M), fm):
-            print(tuple([a+1 for a in members[i]]), fi)
+            print(tuple([a+1 for a in members[i]]), format_float(fi))
         print("Deflection")
         for i, ui in zip(nonfixed, u):
-            print(i+1, ui)
+            print(i+1, format_float(ui))
 
     return (fa, fm, u0)
 
 
-def truss_1():
-    joints = [
-        (0, 0, 0),
-        (2000, 0, 0),
-        (4000, 0, 0),
-        (0, 2000, 0),
-        (2000, 2000, 0),
-        (4000, 2000, 0),
-        (500, 1000, -1000),
-        (3500, 1000, -1000)
-    ]
-    weights = [0, 0, 0, 0, 0, 0, 5000, 1000]
-    fixed = [1, 2, 3, 5]
-    members = [
-        (1, 2), (2, 3), (1, 4), (2, 5), (3, 6), (4, 5), (5, 6),
-        (1, 7), (2, 7), (4, 7), (5, 7), (2, 8), (3, 8), (5, 8), (6, 8), (7, 8),
-        #(1, 8), (4, 8), (3, 7), (6, 7)
-    ]
-    EA = 2e5 * 100
-
-    joints = [np.array(x, dtype=np.float64) for x in joints]
-    weights = [np.array([0, 0, -w], dtype=np.float64) for w in weights]
-    fixed = [f-1 for f in fixed]
-    members = [(a-1, b-1) for (a, b) in members]
-    ks = [EA/np.linalg.norm(joints[b]-joints[a]) for (a, b) in members]
-
-    solve_truss(joints, weights, fixed, members, ks, verbose=True)
-
-
 if __name__ == "__main__":
-    truss_1()
+    import trusses
+    solve_truss(*trusses.roof(), verbose='cap')

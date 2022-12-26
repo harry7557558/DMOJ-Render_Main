@@ -1,0 +1,42 @@
+archive: data.zip
+checker:
+  args:
+    precision: 3
+  name: floats
+test_cases:
+- in: 01.in
+  out: 01.out
+  points: 1
+- in: 02.in
+  out: 02.out
+  points: 1
+- in: 03.in
+  out: 03.out
+  points: 1
+- in: 04.in
+  out: 04.out
+  points: 1
+- in: 05.in
+  out: 05.out
+  points: 1
+- in: 06.in
+  out: 06.out
+  points: 1
+- in: 07.in
+  out: 07.out
+  points: 1
+- in: 08.in
+  out: 08.out
+  points: 1
+- in: 09.in
+  out: 09.out
+  points: 1
+- in: 10.in
+  out: 10.out
+  points: 1
+- in: 11.in
+  out: 11.out
+  points: 1
+- in: 12.in
+  out: 12.out
+  points: 1

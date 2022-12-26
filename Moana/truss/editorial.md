@@ -1,0 +1,4 @@
+Let ~C~ be the matrix transforming member forces ~F~ to joint forces ~P~, and let ~C^{-1}~ be the pseudoinverse ~(C^TC)^{-1}C^T~. "Batch" applying the principle of virtual work with ~P^\ast=I~ results in deflection ~u=(C^{-1})^TK^{-1}P=(C^{-1})^TK^{-1}C^{-1}F~, or ~F=CKC^Tu~, where ~K~ is a diagonal matrix of axial stiffnesses. If we take out components of ~CKC^T~ associated with only free joints, the result matrix is guaranteed to be invertible when the constraints are satisfied. The matrix is sparse and symmetric positive definite and can be solved efficiently with methods like preconditioned conjugate gradient, successive over-relaxation, sparse LU decomposition, etc. Classic Gaussian elimination may earn partial points. Once we get ~u~ the member forces is ~KC^Tu~.
+
+Note that ~EA~ is not required to find member forces. It is given to keep deflection in a resonable range and make the test cases "intuitively make sense."
+
